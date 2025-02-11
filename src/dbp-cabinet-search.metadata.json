@@ -1,7 +1,7 @@
 {
     "element": "dbp-cabinet-search",
     "module_src": "dbp-cabinet-search.js",
-    "routing_name": "cabinet-search",
+    "routing_name": "activity-search",
     "name": {
         "de": "Studierendenakten verwalten",
         "en": "Manage student records"
