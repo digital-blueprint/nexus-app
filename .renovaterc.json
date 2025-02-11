@@ -1,0 +1,18 @@
+{
+    "extends": ["config:base", "group:allNonMajor", "schedule:weekly", "docker:disable"],
+    "ignorePresets": [":prHourlyLimit2"],
+    "rangeStrategy": "update-lockfile",
+    "composer": {
+        "enabled": false
+    },
+    "lockFileMaintenance": {
+        "enabled": true
+    },
+    "cloneSubmodules": true,
+    "packageRules": [
+        {
+            "matchPackageNames": ["pdfjs-dist"],
+            "allowedVersions": "<4.6"
+        }
+    ]
+}
