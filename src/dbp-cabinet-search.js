@@ -4,7 +4,7 @@ import {ScopedElementsMixin} from '@dbp-toolkit/common';
 import DBPCabinetLitElement from "./dbp-cabinet-lit-element";
 import * as commonUtils from '@dbp-toolkit/common/utils';
 import * as commonStyles from '@dbp-toolkit/common/styles';
-import {getCurrentRefinementCSS, getPaginationCSS} from './styles';
+import {getCurrentRefinementCSS, getPaginationCSS, getSearchGridCSS, getSelectorFixCSS} from './styles';
 import {Icon, InlineNotification, Modal} from '@dbp-toolkit/common';
 import {classMap} from "lit/directives/class-map.js";
 import {Activity} from './activity.js';
@@ -295,155 +295,10 @@ class CabinetSearch extends ScopedElementsMixin(DBPCabinetLitElement) {
             ${commonStyles.getActivityCSS()}
             ${commonStyles.getRadioAndCheckboxCss()}
             ${commonStyles.getFormAddonsCSS()}
-            ${getCurrentRefinementCSS()}
+            ${getSelectorFixCSS()}
             ${getPaginationCSS()}
-
-            .result-container {
-                margin-top: 1em;
-                display: grid;
-                grid-template-columns: 24em minmax(0, 1fr);
-                grid-template-areas: "empty header" "sidebar main";
-                gap: 0 2em;
-            }
-
-            .result-container.wide-facets {
-                grid-template-columns: 40em minmax(0, 1fr);
-            }
-
-            .result-container.no-facets {
-                grid-template-columns: minmax(0, 1fr);
-                grid-template-areas: "header" "main";
-            }
-
-            dbp-cabinet-facets {
-                grid-row-start: 2;
-            }
-
-            .results {
-                grid-area: main;
-            }
-
-            .search-box-container {
-                display: flex;
-                gap:5px;
-            }
-
-            .search-box-widget {
-                 flex: 4 1 auto;
-            }
-
-            .sort-widget .ais-SortBy-select {
-                height: 2em;
-                padding: 1px .5em;
-                padding-right: 2em;
-                /* override toolkit select style */
-                background-size: 16px;
-                background-position: right .5em center;
-                display: none;
-            }
-
-            .sort-widget .ais-SortBy-select option {
-                background-color: var(--dbp-background);
-                color: var(--dbp-content);
-            }
-
-            .ais-SearchBox-form {
-                display: flex;
-            }
-
-            .ais-SearchBox-input {
-                flex-grow: 1;
-                height: 2em;
-                background-color: var(--dbp-background);
-                color: var(--dbp-content);
-                border: var(--dbp-border);
-                padding-inline: .5em;
-                padding: 0 1.2em 0 2.2em;
-                border-radius: 0 !important;
-            }
-
-            .help-container{
-                flex: 0.5 auto 0%;
-                background-color: var(--dbp-background);
-                border: var(--dbp-border);
-                /*display:flex is none for now*/
-                display: none;
-                justify-content: center;
-                align-items: center;
-            }
-
-            .help-container svg{
-                fill:var(--dbp-override-content);
-                width:2em;
-                height:1.7em;
-            }
-
-            .ais-Hits-list {
-                display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
-                padding: 0;
-                margin-top: 0;
-                box-sizing: border-box;
-            }
-
-            .ais-Hits-item {
-                padding: 5px;
-                border: 1px solid var(--dbp-content);
-                list-style-type: none;
-                overflow: hidden;
-                min-height: calc(300px + 5vh);
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
-            }
-
-            .hits-person-footer{
-                display: grid;
-                justify-content: end;
-                gap: 5px;
-                grid-template-columns: repeat(3, 1fr);
-            }
-
-            .hits-doc-footer{
-                position: relative;
-                display: flex;
-                justify-content: flex-end;
-            }
-
-            .ais-Hits-item {
-                width: inherit;
-            }
-
-            .button-view {
-                padding: 0.3em 2em;
-                font-size: 18px;
-                background-color: var(--dbp-primary-surface);
-                color: var(--dbp-on-primary-surface);
-                text-align: center;
-                white-space: nowrap;
-                font-size: inherit;
-                font-weight: bolder;
-                font-family: inherit;
-                transition: 0.15s, color 0.15s;
-                border:none;
-            }
-
-            .dropdown-title{
-                padding: 5px;
-                align-items: center;
-                display: none;
-            }
-
-            .ais-CurrentRefinements-categoryLabel {
-                color: var(--dbp-content);
-            }
-
-            @media (max-width: 1280px) and (min-width: 768px) {
-                .ais-Hits-list  {
-                    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-                }
-            }
-
+            ${getCurrentRefinementCSS()}
+            ${getSearchGridCSS()}
         `;
     }
 

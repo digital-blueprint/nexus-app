@@ -229,3 +229,85 @@ export function getSelectorFixCSS() {
         }
     `;
 }
+
+export function getSearchGridCSS() {
+    // language=css
+    return css`
+        .search-container {
+
+        }
+
+        .result-container {
+            margin-top: 1em;
+            display: flex;
+            flex-direction: column;
+            gap: 2em;
+        }
+
+        .results {
+
+        }
+
+        .search-box-container {
+            display: flex;
+            gap: 5px;
+        }
+
+        .search-box-widget {
+            flex: 4 1 auto;
+        }
+
+        .ais-SearchBox-form {
+            display: flex;
+        }
+
+        .ais-SearchBox-input {
+            flex-grow: 1;
+            height: 2em;
+            background-color: var(--dbp-background);
+            color: var(--dbp-content);
+            border: var(--dbp-border);
+            padding-inline: .5em;
+            padding: 0 1.2em 0 2.2em;
+            border-radius: 0 !important;
+        }
+
+        .ais-Hits-list {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(250px, 1fr));
+            gap: 1rem;
+            padding: 0;
+            margin: 0;
+        }
+
+        .ais-Hits-item {
+            margin: 0;
+            width: 100%;
+        }
+
+        .ais-CurrentRefinements-categoryLabel {
+            color: var(--dbp-content);
+        }
+
+        .activity-item {
+            color: var(--dbp-content);
+            display: flex;
+            flex-direction: column;
+            gap: 1em;
+        }
+
+        .activity-name {
+            font-size: 24px;
+        }
+
+        .activity-tags {
+            display: flex;
+            gap: .5em;
+        }
+
+        .activity-tag {
+            padding: .25em .5em;
+            border: 1px solid var(--dbp-muted);
+        }
+    `;
+}
