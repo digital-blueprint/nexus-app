@@ -1,3 +1,21 @@
 [submodule "vendor/toolkit"]
 	path = vendor/toolkit
 	url = https://github.com/digital-blueprint/toolkit
+[submodule "vendor/signature"]
+	path = vendor/signature
+	url = https://github.com/digital-blueprint/esign-app
+[submodule "vendor/dispatch"]
+	path = vendor/dispatch
+	url = https://github.com/digital-blueprint/dispatch-app.git
+[submodule "vendor/formalize"]
+	path = vendor/formalize
+	url = https://github.com/digital-blueprint/formalize-app
+[submodule "vendor/lunchlottery"]
+	path = vendor/lunchlottery
+	url = https://github.com/digital-blueprint/lunchlottery-app.git
+#[submodule "vendor/activities"]
+#	path = vendor/activities
+#	url = https://github.com/digital-blueprint/activities
+#[submodule "vendor/cabinet"]
+#	path = vendor/cabinet
+#	url = https://github.com/digital-blueprint/cabinet-app.git
