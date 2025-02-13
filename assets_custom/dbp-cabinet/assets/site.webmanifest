@@ -1,6 +1,6 @@
 {
-    "short_name": "Cabinet",
-    "name": "TU Graz Cabinet",
+    "short_name": "Nexus",
+    "name": "TU Graz Nexus",
     "icons": [
         {
             "src": "local/@digital-blueprint/cabinet-app/icon/android-chrome-192x192.png",

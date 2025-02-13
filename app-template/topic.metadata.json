@@ -1,21 +1,19 @@
 {
     "name": {
-        "de": "Cabinet",
-        "en": "Cabinet"
+        "de": "Nexus",
+        "en": "Nexus"
     },
     "short_name": {
-        "de": "Cabinet",
-        "en": "Cabinet"
+        "de": "Nexus",
+        "en": "Nexus"
     },
     "description": {
         "de": "Mit dieser Applikation können Sie ......",
         "en": "With this application you can ......"
     },
-    "routing_name": "cabinet",
+    "routing_name": "nexus",
     "activities": [
-        {"path": "/app/dbp-dd-activity.metadata.json"},
-        {"path": "/app/dbp-qualified-signature-pdf-upload.metadata.json"},
-        {"path": "/app/dbp-official-signature-pdf-upload.metadata.json"}
+        {"path": "/app/dbp-dd-activity.metadata.json"}
     ],
     "attributes": []
 }

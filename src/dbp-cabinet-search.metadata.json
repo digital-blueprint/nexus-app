@@ -3,16 +3,16 @@
     "module_src": "dbp-cabinet-search.js",
     "routing_name": "activity-search",
     "name": {
-        "de": "Studierendenakten verwalten",
-        "en": "Manage student records"
+        "de": "Nexus Activity Finder",
+        "en": "Nexus Activity Finder"
     },
     "short_name": {
-      "de": "Studierendenakten verwalten",
-      "en": "Manage student records"
+      "de": "Nexus Activity Finder",
+      "en": "Nexus Activity Finder"
     },
     "description": {
-        "de": "Elektronische Studierendenakten durchsuchen und bearbeiten.",
-        "en": "Search and edit records of applicants and students."
+        "de": "Nexus Activity Finder.",
+        "en": "Nexus Activity Finder."
     },
     "subscribe": "lang,lang-dir,entry-point-url,auth,html-overrides,nextcloud-web-app-password-url,nextcloud-webdav-url,nextcloud-name,nextcloud-file-url,file-handling-enabled-targets,typesense-host,typesense-key,typesense-collection,typesense-protocol,typesense-port,typesense-path,base-path"
 }

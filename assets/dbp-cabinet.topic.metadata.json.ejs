@@ -1,19 +1,28 @@
 {
-  "name": {
-    "de": "Nexus",
-    "en": "Nexus"
-  },
-  "short_name": {
-    "de": "Nexus-Aktivitätensuche",
-    "en": "Nexus Activity Finder"
-  },
-  "description": {
-    "de": "Diese Anwendung ermöglicht es Ihnen, nach DBP-Aktivitäten zu suchen.",
-    "en": "This application enables you to search DBP activities."
-  },
-  "routing_name": "cabinet",
-  "activities": [
-    {"path": "dbp-cabinet-search.metadata.json"}
-  ],
-  "attributes": []
-}
+            "name": {
+                "de": "Nexus",
+                "en": "Nexus"
+            },
+            "short_name": {
+                "de": "Nexus-Aktivitätensuche",
+                "en": "Nexus Activity Finder"
+            },
+            "description": {
+                "de": "Diese Anwendung ermöglicht es Ihnen, nach DBP-Aktivitäten zu suchen.",
+                "en": "This application enables you to search DBP activities."
+            },
+            "routing_name": "nexus",
+            "activities": [
+                {"path":"dbp-cabinet-search.metadata.json"},
+                {"path":"dbp-create-request.metadata.json"},
+                {"path":"dbp-show-requests.metadata.json"},
+                {"path":"dbp-qualified-signature-pdf-upload.metadata.json"},
+                {"path":"dbp-official-signature-pdf-upload.metadata.json"},
+                {"path":"dbp-formalize-show-registrations.metadata.json","visible":true},
+                {"path":"dbp-formalize-render-form.metadata.json","visible":false},
+                {"path":"dbp-lunchlottery-register.metadata.json"},
+                {"path":"dbp-lunchlottery-assign-seats.metadata.json"},
+                {"path":"dbp-lunchlottery-manage.metadata.json"}
+            ],
+            "attributes": []
+            }

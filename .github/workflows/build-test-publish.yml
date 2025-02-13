@@ -2,6 +2,7 @@ name: Build, Test and Publish
 on: [push, pull_request, workflow_dispatch]
 
 jobs:
+  if: false  # This workfow is disables
   test:
     runs-on: ubuntu-latest
 
@@ -87,4 +88,4 @@ jobs:
           access_token: ${{ secrets.DEPLOY_ACCESS_TOKEN }}
           id: '21238'
           ref: 'main'
-          variables: '{"UPSTREAM_PROJECT_PATH":"dbp/cabinet/cabinet","UPSTREAM_COMMIT_BRANCH":"${{ github.ref_name }}","UPSTREAM_COMMIT_SHA":"${{ github.ref_name }}"}'
+          variables: '{"UPSTREAM_PROJECT_PATH":"dbp/nexus/nexus","UPSTREAM_COMMIT_BRANCH":"${{ github.ref_name }}","UPSTREAM_COMMIT_SHA":"${{ github.ref_name }}"}'
