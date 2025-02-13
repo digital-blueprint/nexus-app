@@ -2,7 +2,7 @@ import Typesense from 'typesense';
 
 export class TypesenseService {
     constructor(serverConfig, collectionsName) {
-        console.log('constructor serverConfig', serverConfig);
+        // console.log('constructor serverConfig', serverConfig);
 
         this.client = new Typesense.Client(serverConfig);
         this.collectionName = collectionsName;

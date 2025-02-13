@@ -1,6 +1,5 @@
 import {css, html, svg} from 'lit';
 import {ref, createRef} from 'lit/directives/ref.js';
-import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import {ScopedElementsMixin} from '@dbp-toolkit/common';
 import DBPNexusLitElement from "./dbp-nexus-lit-element.js";
 import * as commonUtils from '@dbp-toolkit/common/utils';
@@ -17,7 +16,6 @@ import {configure} from 'instantsearch.js/es/widgets';
 // import {pascalToKebab} from './utils';
 import {NexusFacets} from './components/dbp-nexus-facets.js';
 import {TypesenseService} from './services/typesense.js';
-import {BaseObject} from './baseObject.js';
 import {name as pkgName} from '../package.json';
 
 class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
@@ -86,7 +84,7 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
                     // Update the bearer token in additional headers for the Typesense Instantsearch adapter
                     this.serverConfig.additionalHeaders = { 'Authorization': 'Bearer ' + this.auth.token };
 
-                    console.log('this.serverConfig auth-update', this.serverConfig);
+                    // console.log('this.serverConfig auth-update', this.serverConfig);
 
                     // Update the Typesense Instantsearch adapter configuration with the new bearer token
                     if (this.typesenseInstantsearchAdapter) {
@@ -319,6 +317,7 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
                                 <dbp-button type="is-primary"
                                     no-spinner-on-click
                                     value="Open activity"
+                                    data-href=""
                                     onclick="${() => {
                                         console.log('activity Clicked');
                                     }}">
