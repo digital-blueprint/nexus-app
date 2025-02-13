@@ -1,0 +1,101 @@
+[
+    {
+        "activityName": "Manage student records",
+        "activityDescription": "Search and edit records of applicants and students.",
+        "activityTag": [
+            "pdf",
+            "signature"
+        ],
+        "activityIcon": "cabinet-search-icon"
+    },
+    {
+        "activityName": "Create dispatch order",
+        "activityDescription": "Allows the creation of new dispatch orders.",
+        "activityTag": [
+            "pdf",
+            "signature"
+        ],
+        "activityIcon": "create-request-icon"
+    },
+    {
+        "activityName": "Show Requests",
+        "activityDescription": "Shows a list of all dispatch orders.",
+        "activityTag": [
+            "pdf",
+            "signature"
+        ],
+        "activityIcon": "show-requests-icon"
+    },
+    {
+        "activityName": "Personally sign documents",
+        "activityDescription": "Enables you to upload PDF documents and to sign them personally",
+        "activityTag": [
+            "pdf",
+            "signature"
+        ],
+        "activityIcon": "qualified-pdf-upload-icon"
+    },
+    {
+        "activityName": "Officially sign documents",
+        "activityDescription": "Enables you to upload PDF documents and to sign them officially",
+        "activityTag": [
+            "pdf",
+            "signature"
+        ],
+        "activityIcon": "official-pdf-upload-icon"
+    },
+    {
+        "activityName": "Verify signed documents",
+        "activityDescription": "Allows verification of signed PDF-documents",
+        "activityTag": [
+            "pdf",
+            "signature"
+        ],
+        "activityIcon": "signature-verification-icon"
+    },
+    {
+        "activityName": "Show course registrations",
+        "activityDescription": "Shows a list of all available course submissions.",
+        "activityTag": [
+            "pdf",
+            "signature"
+        ],
+        "activityIcon": "show-registrations-icon"
+    },
+    {
+        "activityName": "Show form",
+        "activityDescription": "Shows a form.",
+        "activityTag": [
+            "pdf",
+            "signature"
+        ],
+        "activityIcon": "render-form-icon"
+    },
+    {
+        "activityName": "Register for The Lunch Lottery",
+        "activityDescription": "Register for The Lunch Lottery",
+        "activityTag": [
+            "pdf",
+            "signature"
+        ],
+        "activityIcon": "lunchlottery-register-icon"
+    },
+    {
+        "activityName": "Assign Lunch Lottery seats",
+        "activityDescription": "Allows to create the seat assigment for the next Lunch Lottery event",
+        "activityTag": [
+            "pdf",
+            "signature"
+        ],
+        "activityIcon": "lunchlottery-assign-seats-icon"
+    },
+    {
+        "activityName": "Manage Lunch Lottery",
+        "activityDescription": "Allows to manage Lunch Lottery",
+        "activityTag": [
+            "pdf",
+            "signature"
+        ],
+        "activityIcon": "lunchlottery-manage-icon"
+    }
+]
