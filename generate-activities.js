@@ -5,6 +5,7 @@ import { mkdir, writeFile } from 'fs/promises';
 import fetch from 'node-fetch';
 import process from 'process';
 import dotenv from 'dotenv';
+import { log } from 'console';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -16,24 +17,22 @@ if (!GITHUB_TOKEN) {
     console.error('❌ Error: GITHUB_TOKEN environment variable is not set');
     console.log('Please set your GitHub token first:');
     console.log('export GITHUB_TOKEN=your_token_here');
-    // or on Windows:
-    // console.log('set GITHUB_TOKEN=your_token_here');
     process.exit(1);
 }
 
 // Configuration - you can also load this from a config file
 const CONFIG = {
     urls: [
-        /* Don't get valid json, need to debug (dispatch has this activities) */
-        /*'https://api.github.com/repos/digital-blueprint/esign-app/contents/assets/dbp-signature.topic.metadata.json.ejs',*/
-        /*'https://api.github.com/repos/digital-blueprint/check-app/contents/assets/dbp-check.topic.metadata.json.ejs',*/
         'https://api.github.com/repos/digital-blueprint/cabinet-app/contents/assets/dbp-cabinet.topic.metadata.json.ejs',
         'https://api.github.com/repos/digital-blueprint/dispatch-app/contents/assets/dbp-dispatch.topic.metadata.json.ejs',
+        // Esign must be after dispatch and cabinet! Otherwise we try to get the activity from the wrong application git repo.
+        'https://api.github.com/repos/digital-blueprint/esign-app/contents/assets/dbp-signature.topic.metadata.json.ejs',
         'https://api.github.com/repos/digital-blueprint/formalize-app/contents/assets/dbp-formalize.topic.metadata.json.ejs',
         /* LunchLottery has special place and file-name for the topic metadata */
         'https://api.github.com/repos/digital-blueprint/lunchlottery-app/contents/src/dbp-lunchlottery-app.topic.metadata.json',
         /* Also special place for topic metadata */
-        /*'https://api.github.com/repos/digital-blueprint/activities/contents/activity-showcase/assets/dbp-activity-showcase.topic.metadata.json.ejs',*/
+        // 'https://api.github.com/repos/digital-blueprint/activities/contents/activity-showcase/assets/dbp-activity-showcase.topic.metadata.json.ejs',
+        /*'https://api.github.com/repos/digital-blueprint/check-app/contents/assets/dbp-check.topic.metadata.json.ejs',*/
     ],
     dataOutputDir: 'typesense-data',
     topicJsonOutputDir: 'assets',
@@ -70,7 +69,7 @@ async function fetchFromUrls(urls, options = {}) {
     const results = {};
 
     try {
-        let topicJsons = [];
+        let jsonsFiles = [];
         for (const url of urls) {
             try {
                 // let results = [];
@@ -88,27 +87,29 @@ async function fetchFromUrls(urls, options = {}) {
                 // Process response
                 const fileContent = data['content'];
                 const fileContentEncoding = data['encoding'];
+                const appName = data['name'].replace(/\.topic\.metadata\.json.*$/, '');
+                let re = new RegExp(String.raw`(assets|src)\/${appName}\.topic\.metadata\.json.*$`, "g");
+                const appGitUrl = data['url'].replace(re, '');
                 if (fileContentEncoding == 'base64') {
                     // Decode base64 and parse as JSON
-                    const decodedContent = atob(fileContent);
+                    let decodedContent = atob(fileContent);
+
+                    // Remove visibility property from topic json. (only in esign)
+                    decodedContent = decodedContent.replace(/,\n\s+"visible":.*\}/g, '}');
+                    console.log(decodedContent);
                     try {
                         // Parse the JSON string into an object
                         const jsonContent = JSON.parse(decodedContent);
-                        // results[url] = jsonContent; // Store the parsed JSON object
-                        topicJsons.push(jsonContent);
+                        jsonContent['appName'] = appName;
+                        jsonContent['appGitUrl'] = appGitUrl;
+                        jsonsFiles.push(jsonContent);
                     } catch (parseError) {
-                        // results[url] = {
-                        //     error: `JSON parsing error: ${parseError.message}`,
-                        //     status: 'failed'
-                        // };
-                        topicJsons.push({
+                        jsonsFiles.push({
                             error: `JSON parsing error: ${parseError.message}`,
                             status: 'failed'
                         });
                     }
                 }
-                // console.log('topicJson', topicJson);
-                // results[url] = topicJson.trim();
             } catch (error) {
                 results[url] = {
                     error: error.message,
@@ -119,7 +120,7 @@ async function fetchFromUrls(urls, options = {}) {
         return {
             success: true,
             timestamp: new Date().toISOString(),
-            results: topicJsons
+            results: jsonsFiles
         };
     } catch (error) {
         return {
@@ -128,6 +129,48 @@ async function fetchFromUrls(urls, options = {}) {
             error: error.message
         };
     }
+}
+
+async function generateTypesenseImportFile(activityJsons) {
+    console.log(activityJsons);
+    /*
+    {
+        element: "dbp-cabinet-search",
+        module_src: "dbp-cabinet-search.js",
+        routing_name: "cabinet-search",
+        name: {
+        de: "Studierendenakten verwalten",
+        en: "Manage student records",
+        },
+        short_name: {
+        de: "Studierendenakten verwalten",
+        en: "Manage student records",
+        },
+        description: {
+        de: "Elektronische Studierendenakten durchsuchen und bearbeiten.",
+        en: "Search and edit records of applicants and students.",
+        },
+        subscribe: "lang,lang-dir,entry-point-url,auth,html-overrides,nextcloud-web-app-password-url,nextcloud-webdav-url,nextcloud-name,nextcloud-file-url,file-handling-enabled-targets,typesense-host,typesense-key,typesense-collection,typesense-protocol,typesense-port,typesense-path,base-path",
+        appName: "dbp-cabinet-search.metadata.json",
+        appGitUrl: "https://api.github.com/repos/digital-blueprint/cabinet-app/contents/src/dbp-cabinet-search.metadata.json?ref=main",
+    }
+    */
+    const typesenseDocuments = [];
+    activityJsons.forEach((result) => {
+        const activity = result.results[0];
+        const typesenseDocument = {
+            activityName: activity.name.en,
+            activityDescription: activity.description.en,
+            activityTag: ["pdf", "signature"],
+            activityIcon: activity.routing_name + '-icon'
+        };
+        typesenseDocuments.push(typesenseDocument);
+    });
+
+    if (typesenseDocuments.length > 0) {
+        return JSON.stringify(typesenseDocuments);
+    }
+    return false;
 }
 
 async function main() {
@@ -146,18 +189,19 @@ async function main() {
         console.log(`📜 URLs to fetch: ${CONFIG.urls.length}`);
 
         // Fetch the data
-        const results = await fetchFromUrls(CONFIG.urls, CONFIG.fetchOptions);
+        const topicsResults = await fetchFromUrls(CONFIG.urls, CONFIG.fetchOptions);
 
-        console.log('results', results.results);
+        console.log('results', topicsResults.results);
 
         // Initialize a Map to store unique activities
         const uniqueActivitiesMap = new Map();
 
         // Loop through the results and collect unique activities
-        for (const result of results.results) {
+        for (const result of topicsResults.results) {
             if (result && result.activities && Array.isArray(result.activities)) {
                 result.activities.forEach(activity => {
-                    console.log('Map key', activity);
+                    activity.app_name = result.appName;
+                    activity.app_git_url = result.appGitUrl;
                     // Use the activity as the key in the Map to ensure uniqueness
                     uniqueActivitiesMap.set(activity.path, activity);
                 });
@@ -165,6 +209,7 @@ async function main() {
         }
         const uniqueActivitiesArray = Array.from(uniqueActivitiesMap.values());
         console.log('uniqueActivitiesArray', uniqueActivitiesArray);
+
         const nexusTopicJson = `{
             "name": {
                 "de": "Nexus",
@@ -180,11 +225,17 @@ async function main() {
             },
             "routing_name": "nexus",
             "activities": [
-                ${uniqueActivitiesArray.map(obj => JSON.stringify(obj)).join(",\n ")}
+                {"path":"dbp-nexus-search.metadata.json"},
+                ${uniqueActivitiesArray.map((obj) => {
+                    if (obj.path) {
+                        return `{"path":"${obj.path}"}\n`;
+                    }
+                }).filter(Boolean).join(",\n")}
             ],
             "attributes": []
             }
         `;
+
         console.log('nexusTopicJson', nexusTopicJson);
         // Write dbp-nexus.topic.metadata.json.ejs
         await writeFile(
@@ -193,20 +244,35 @@ async function main() {
             'utf8'
         );
 
-        //@TODO we need to fetch all activity json file to create the typesense json data file.
+        let activityJsons = [];
+        for (const activity of uniqueActivitiesArray) {
+            const activityJsonSrcFileUrl = activity.app_git_url + 'src/' + activity.path;
+            let activitiesResults = await fetchFromUrls([activityJsonSrcFileUrl], CONFIG.fetchOptions);
 
-        // Write typesense json results activities to file
-        await writeFile(
-            typeSenseOutputPath,
-            JSON.stringify(results.results, null, 2),
-            'utf8'
-        );
+            if (!activitiesResults.success || activitiesResults.results.length < 1) {
+                const activityJsonAssetsFileUrl = activity.app_git_url + 'assets/' + activity.path;
+                activitiesResults = await fetchFromUrls([activityJsonAssetsFileUrl], CONFIG.fetchOptions);
+            }
+            if (activitiesResults.results.length > 0) {
+                activityJsons.push(activitiesResults);
+            }
+        }
+
+        const typeSenseImportFile = await generateTypesenseImportFile(activityJsons);
+        if (typeSenseImportFile) {
+            // Write typesense json results activities to file
+            await writeFile(
+                typeSenseOutputPath,
+                typeSenseImportFile,
+                'utf8'
+            );
+        }
 
         console.log('✅ Fetch completed successfully');
         console.log(`📁 Results saved to: ${typeSenseOutputPath}`);
 
         // Print summary
-        const successCount = Object.values(results.results).filter(
+        const successCount = Object.values(topicsResults.results).filter(
             r => !r.error
         ).length;
         console.log(`📊 Summary: ${successCount}/${CONFIG.urls.length} successful`);

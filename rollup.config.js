@@ -161,7 +161,11 @@ let input = [
     'vendor/signature/src/dbp-official-signature-pdf-upload.js',
     'vendor/dispatch/src/dbp-create-request.js',
     'vendor/dispatch/src/dbp-show-requests.js',
-
+    'vendor/formalize/src/dbp-formalize-render-form.js',
+    'vendor/formalize/src/dbp-formalize-show-registrations.js',
+    'vendor/lunchlottery/src/dbp-lunchlottery-register.js',
+    'vendor/lunchlottery/src/dbp-lunchlottery-manage.js',
+    'vendor/lunchlottery/src/dbp-lunchlottery-assign-seats.js',
 ];
 
 export default (async () => {
