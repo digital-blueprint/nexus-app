@@ -293,11 +293,25 @@ export function getSearchGridCSS() {
             color: var(--dbp-content);
             display: flex;
             flex-direction: column;
+            height: 100%;
+            justify-content: space-between;
             gap: 1em;
+        }
+
+        .activity-header {
+            display: flex;
+            flex-direction: column;
+            gap: .5em;
         }
 
         .activity-name {
             font-size: 24px;
+        }
+
+        .activity-footer {
+            display: flex;
+            gap: 1em;
+            justify-content: space-between;
         }
 
         .activity-tags {

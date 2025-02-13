@@ -309,24 +309,26 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
                                 <div class="activity-name">
                                     ${hit.activityName}
                                 </div>
+                                <div class="activity-description">
+                                    ${hit.activityDescription}
+                                </div>
                             </div>
-                            <div class="activity-description">
-                                ${hit.activityDescription}
-                            </div>
-                            <div class="activity-open-button">
-                                <dbp-button type="is-primary"
-                                    no-spinner-on-click
-                                    value="Open activity"
-                                    data-href=""
-                                    onclick="${() => {
-                                        console.log('activity Clicked');
-                                    }}">
-                                </dbp-button>
-                            </div>
-                            <div class="activity-tags">
-                                ${hit.activityTag.map(tag => {
-                                    return html`<span class="activity-tag">${tag}</span>`;
-                                })}
+                            <div class="activity-footer">
+                                <div class="activity-tags">
+                                    ${hit.activityTag.map(tag => {
+                                        return html`<span class="activity-tag">${tag}</span>`;
+                                    })}
+                                </div>
+                                <div class="activity-open-button">
+                                    <dbp-button type="is-primary"
+                                        no-spinner-on-click
+                                        value="Launch"
+                                        data-href=""
+                                        onclick="${() => {
+                                            console.log('activity Clicked');
+                                        }}">
+                                    </dbp-button>
+                                </div>
                             </div>
                         </div>
                     `;
