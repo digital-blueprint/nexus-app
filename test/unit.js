@@ -1,13 +1,13 @@
 import {assert} from 'chai';
 
-import '../src/dbp-cabinet-search';
-import '../src/dbp-cabinet.js';
+import '../src/dbp-nexus-search';
+import '../src/dbp-nexus.js';
 
-suite('dbp-cabinet-activity basics', () => {
+suite('dbp-nexus-activity basics', () => {
     let node;
 
     suiteSetup(async () => {
-        node = document.createElement('dbp-cabinet-activity');
+        node = document.createElement('dbp-nexus-activity');
         document.body.appendChild(node);
         await node.updateComplete;
     });

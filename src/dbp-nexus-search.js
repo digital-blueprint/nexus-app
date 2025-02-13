@@ -2,27 +2,25 @@ import {css, html, svg} from 'lit';
 import {ref, createRef} from 'lit/directives/ref.js';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import {ScopedElementsMixin} from '@dbp-toolkit/common';
-import DBPCabinetLitElement from "./dbp-cabinet-lit-element";
+import DBPNexusLitElement from "./dbp-nexus-lit-element.js";
 import * as commonUtils from '@dbp-toolkit/common/utils';
 import * as commonStyles from '@dbp-toolkit/common/styles';
-import {getCurrentRefinementCSS, getPaginationCSS, getSearchGridCSS, getSelectorFixCSS} from './styles';
+import {getCurrentRefinementCSS, getPaginationCSS, getSearchGridCSS, getSelectorFixCSS} from './styles.js';
 import {Icon, Button, InlineNotification, Modal} from '@dbp-toolkit/common';
 import {classMap} from "lit/directives/class-map.js";
 import {Activity} from './activity.js';
-import metadata from './dbp-cabinet-search.metadata.json';
+import metadata from './dbp-nexus-search.metadata.json';
 import instantsearch from 'instantsearch.js';
 import TypesenseInstantSearchAdapter from 'typesense-instantsearch-adapter';
 import {hits, searchBox, sortBy, stats, pagination} from 'instantsearch.js/es/widgets';
 import {configure} from 'instantsearch.js/es/widgets';
 // import {pascalToKebab} from './utils';
-import {CabinetFile} from './components/dbp-cabinet-file.js';
-import {CabinetViewPerson} from './components/dbp-cabinet-view-person.js';
-import {CabinetFacets} from './components/dbp-cabinet-facets.js';
+import {NexusFacets} from './components/dbp-nexus-facets.js';
 import {TypesenseService} from './services/typesense.js';
 import {BaseObject} from './baseObject.js';
 import {name as pkgName} from '../package.json';
 
-class CabinetSearch extends ScopedElementsMixin(DBPCabinetLitElement) {
+class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
     constructor() {
         super();
         this.activity = new Activity(metadata);
@@ -41,7 +39,7 @@ class CabinetSearch extends ScopedElementsMixin(DBPCabinetLitElement) {
             "id": "",
             "objectType": "",
         };
-        this.cabinetFacetsRef = createRef();
+        this.nexusFacetsRef = createRef();
         this.instantSearchModule = {};
         this.facetConfigs = [];
         this.search = null;
@@ -54,7 +52,7 @@ class CabinetSearch extends ScopedElementsMixin(DBPCabinetLitElement) {
             'dbp-modal': Modal,
             'dbp-button': Button,
             'dbp-inline-notification': InlineNotification,
-            'dbp-cabinet-facets': CabinetFacets,
+            'dbp-nexus-facets': NexusFacets,
         };
     }
 
@@ -158,7 +156,7 @@ class CabinetSearch extends ScopedElementsMixin(DBPCabinetLitElement) {
         ]);
 
         // if (this.facetConfigs.length === 0) {
-        //     this._('dbp-cabinet-facets').remove();
+        //     this._('dbp-nexus-facets').remove();
         //     this._('.result-container').classList.add('no-facets');
         // }
 
@@ -172,8 +170,8 @@ class CabinetSearch extends ScopedElementsMixin(DBPCabinetLitElement) {
 
         search.on('render', () => {
             // Handle gradients display on facets.
-            // this.cabinetFacetsRef.value.handleGradientDisplay();
-            // this.cabinetFacetsRef.value.hideFilterGroupIfEmpty();
+            // this.nexusFacetsRef.value.handleGradientDisplay();
+            // this.nexusFacetsRef.value.hideFilterGroupIfEmpty();
         });
 
         // TODO: Improve on workaround to show hits after the page loads
@@ -285,7 +283,7 @@ class CabinetSearch extends ScopedElementsMixin(DBPCabinetLitElement) {
 
     createSearchBox() {
         const i18n = this._i18n;
-        const placeholderText = i18n.t('search-cabinet');
+        const placeholderText = i18n.t('search-nexus');
         return searchBox({
             container: this._("#searchbox"),
             showLoadingIndicator: false,
@@ -368,7 +366,7 @@ class CabinetSearch extends ScopedElementsMixin(DBPCabinetLitElement) {
     }
 
     // createFacets() {
-    //     return this.cabinetFacetsRef.value.createFacetsFromConfig(this.facetConfigs);
+    //     return this.nexusFacetsRef.value.createFacetsFromConfig(this.facetConfigs);
     // }
 
     render() {
@@ -430,4 +428,4 @@ class CabinetSearch extends ScopedElementsMixin(DBPCabinetLitElement) {
     }
 }
 
-commonUtils.defineCustomElement('dbp-cabinet-search', CabinetSearch);
+commonUtils.defineCustomElement('dbp-nexus-search', NexusSearch);

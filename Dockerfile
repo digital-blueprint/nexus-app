@@ -6,7 +6,7 @@ COPY . /app
 #COPY ./app-template /app/app-template
 
 RUN npm ci && APP_ENV=production npm run build
-#RUN cp /app/dist/dbp-cabinet.html /app/dist/index.html
+#RUN cp /app/dist/dbp-nexus.html /app/dist/index.html
 
 #RUN export path=; cp ./app-template public -R && cd public && \
 #    sed -i 's|="/|="'"$path"'/|g' index.html && \

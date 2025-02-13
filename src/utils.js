@@ -49,5 +49,5 @@ export function getNestedProperty(obj, path) {
 }
 
 export function getIconSVGURL(name) {
-    return commonUtils.getAssetURL(pkgName, '../../@digital-blueprint/cabinet-app/icon/' + encodeURI(name) + '.svg');
+    return commonUtils.getAssetURL(pkgName, '../../@digital-blueprint/nexus-app/icon/' + encodeURI(name) + '.svg');
 }

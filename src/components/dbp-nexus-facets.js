@@ -4,10 +4,9 @@ import {ScopedElementsMixin} from '@dbp-toolkit/common';
 import {css, html, render, unsafeCSS} from 'lit';
 import * as commonStyles from '@dbp-toolkit/common/styles';
 import DBPLitElement from '@dbp-toolkit/common/dbp-lit-element';
-import DBPCabinetLitElement from '../dbp-cabinet-lit-element.js';
+import DBPNexusLitElement from '../dbp-nexus-lit-element.js';
 import {panel, refinementList } from 'instantsearch.js/es/widgets/index.js';
 import {connectCurrentRefinements, connectClearRefinements} from 'instantsearch.js/es/connectors';
-import {createDateRefinement} from './dbp-cabinet-date-facet.js';
 import {getIconSVGURL} from '../utils.js';
 import {createInstance} from '../i18n.js';
 
@@ -48,9 +47,9 @@ class FacetLabel extends DBPLitElement {
 }
 
 // FIXME: don't register globally
-customElements.define('dbp-cabinet-facet-label', FacetLabel);
+customElements.define('dbp-nexus-facet-label', FacetLabel);
 
-export class CabinetFacets extends ScopedElementsMixin(DBPCabinetLitElement) {
+export class NexusFacets extends ScopedElementsMixin(DBPNexusLitElement) {
     constructor() {
         super();
         // this.search = null;
@@ -242,7 +241,7 @@ export class CabinetFacets extends ScopedElementsMixin(DBPCabinetLitElement) {
                                 month: 'short',
                                 year: 'numeric'
                             });
-                            let operatorLabel = refinement.operator === '>=' ? i18n.t('cabinet-search.refinement-date-after-text') : i18n.t('cabinet-search.refinement-date-before-text');
+                            let operatorLabel = refinement.operator === '>=' ? i18n.t('nexus-search.refinement-date-after-text') : i18n.t('nexus-search.refinement-date-before-text');
                             label = `${operatorLabel} ${date}`;
                         }
                         break;
@@ -258,10 +257,10 @@ export class CabinetFacets extends ScopedElementsMixin(DBPCabinetLitElement) {
                         <span class="ais-CurrentRefinements-categoryLabel">${label}</span>
                         <button
                             class="ais-CurrentRefinements-delete"
-                            title="${i18n.t('cabinet-search.refinement-delete-filter-button-text')}"
+                            title="${i18n.t('nexus-search.refinement-delete-filter-button-text')}"
                             @click="${() => refine(refinement)}">
                             <span class="visually-hidden">
-                                ${i18n.t('cabinet-search.refinement-delete-filter-button-text')}
+                                ${i18n.t('nexus-search.refinement-delete-filter-button-text')}
                             </span>
                             <span class="filter-close-icon"></span>
                         </button>
@@ -293,7 +292,7 @@ export class CabinetFacets extends ScopedElementsMixin(DBPCabinetLitElement) {
             const clearButton = document.createElement('button');
             const clearButtonText = document.createElement('span');
 
-            clearButtonText.textContent = i18n.t('cabinet-search.refinement-delete-all-filters');
+            clearButtonText.textContent = i18n.t('nexus-search.refinement-delete-all-filters');
             clearButton.appendChild(clearButtonText);
             clearButton.classList.add('clear-refinements-button');
 
@@ -353,13 +352,13 @@ export class CabinetFacets extends ScopedElementsMixin(DBPCabinetLitElement) {
             const defaultPanelOptions = {
                 templates: {
                     header(options, {html}) {
-                        return i18n.t(`cabinet-search.filter-${translationKey}-title`);
+                        return i18n.t(`nexus-search.filter-${translationKey}-title`);
                     },
                     collapseButtonText(options, { html }) {
                         return html`
                           ${options.collapsed
-                            ? html`<img src="${that.basePath}local/@digital-blueprint/cabinet-app/icon/chevron-down.svg" width="16" height="16" alt="chevron-down" />`
-                            : html`<img src="${that.basePath}local/@digital-blueprint/cabinet-app/icon/chevron-up.svg" width="16" height="16" alt="chevron-up" />`}
+                            ? html`<img src="${that.basePath}local/@digital-blueprint/nexus-app/icon/chevron-down.svg" width="16" height="16" alt="chevron-down" />`
+                            : html`<img src="${that.basePath}local/@digital-blueprint/nexus-app/icon/chevron-up.svg" width="16" height="16" alt="chevron-up" />`}
                       `;
                     },
                 },
@@ -396,7 +395,7 @@ export class CabinetFacets extends ScopedElementsMixin(DBPCabinetLitElement) {
                                                 value="${item.value}"
                                                 checked=${item.isRefined} />
                                         </label>
-                                        <dbp-cabinet-facet-label subscribe="lang" class="refinement-list-item-name" title="${item.label}" namespace="${schemaField}" value="${item.value}"></dbp-cabinet-facet-label>
+                                        <dbp-nexus-facet-label subscribe="lang" class="refinement-list-item-name" title="${item.label}" namespace="${schemaField}" value="${item.value}"></dbp-nexus-facet-label>
                                     </div>
                                     <span class="refinement-list-item-count">(${item.count})</span>
                                 </div>
@@ -419,27 +418,6 @@ export class CabinetFacets extends ScopedElementsMixin(DBPCabinetLitElement) {
                 } else {
                     const PanelWidget = panel(panelOptions)(refinementList);
                     return PanelWidget(refinementListOptions);
-                }
-            }
-
-            if (schemaFieldType === 'datepicker') {
-                const defaultDateRefinementOptions = {
-                    fieldType: schemaFieldType,
-                    attribute: schemaField,
-                    container: that._(`#${cssClass}`),
-                };
-                const dateRefinementOptions = {
-                    ...defaultDateRefinementOptions,
-                    ...(facetOptions.facet || {}),
-                };
-
-                that.facets.push(dateRefinementOptions);
-
-                if (usePanel === false) {
-                    return createDateRefinement(dateRefinementOptions);
-                } else {
-                    const PanelWidget = panel(panelOptions)(createDateRefinement);
-                    return PanelWidget(dateRefinementOptions);
                 }
             }
         };
@@ -793,7 +771,7 @@ export class CabinetFacets extends ScopedElementsMixin(DBPCabinetLitElement) {
         return html`
             <div class="filters">
                 <div class="filter-header">
-                    <h2 class="filter-header__title">${i18n.t('cabinet-search.filters')}</h2>
+                    <h2 class="filter-header__title">${i18n.t('nexus-search.filters')}</h2>
                 </div>
                 <div id="filters-container" class="filters-container"></div>
             </div>

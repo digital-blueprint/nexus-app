@@ -37,7 +37,7 @@ let whitelabel;
 // path to non whitelabel assets and configs
 let customAssetsPath;
 // development path
-let devPath = 'assets_custom/dbp-cabinet/assets/';
+let devPath = 'assets_custom/dbp-nexus/assets/';
 // deployment path
 let deploymentPath = '../assets/';
 
@@ -155,13 +155,7 @@ img-src * blob: data:`;
 
 let input = [
     'src/' + pkg.internalName + '.js',
-    'src/dbp-cabinet-search.js',
-    'src/objectTypes/fileAdmissionNotice.js',
-    'src/objectTypes/fileCommunication.js',
-    'src/objectTypes/fileIdentityDocument.js',
-    'src/objectTypes/fileMinimalSchema.js',
-    'src/objectTypes/fileCitizenshipCertificate.js',
-    'src/objectTypes/person.js',
+    'src/dbp-nexus-search.js',
     // All activities from vendor directory
     'vendor/signature/src/dbp-qualified-signature-pdf-upload.js',
     'vendor/signature/src/dbp-official-signature-pdf-upload.js',
@@ -364,7 +358,7 @@ Dependencies:
                         src: await getPackagePath('instantsearch.css', 'themes/algolia-min.css'),
                         dest: 'dist/'+ (await getDistPath(pkg.name)),
                     },
-                    // the pdfjs worker is needed for signature, dispatch, pdf-viewer and the annotation loading in cabinet!
+                    // the pdfjs worker is needed for signature, dispatch, pdf-viewer and the annotation loading in nexus!
                     {
                         src: await getPackagePath('pdfjs-dist', 'legacy/build/pdf.worker.mjs'),
                         dest: 'dist/local/@digital-blueprint/esign-app/pdfjs',
@@ -448,7 +442,7 @@ Dependencies:
                         src: await getPackagePath('instantsearch.css', 'themes/algolia-min.css'),
                         dest: 'dist/'+ (await getDistPath(pkg.name)),
                     },
-                    // // the pdfjs worker is needed for signature, dispatch, pdf-viewer and the annotation loading in cabinet!
+                    // // the pdfjs worker is needed for signature, dispatch, pdf-viewer and the annotation loading in nexus!
                     // {
                     //     src: await getPackagePath('pdfjs-dist', 'legacy/build/pdf.worker.mjs'),
                     //     dest: 'dist/local/@digital-blueprint/esign-app/pdfjs',

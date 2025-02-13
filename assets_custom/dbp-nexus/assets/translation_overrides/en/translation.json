@@ -1,0 +1,16 @@
+{
+  "dbp-translation": {
+    "organization-select-description": "Please choose your organization:"
+  },
+  "dbp-nexus-search": {
+    "nexus-search": {
+      "error-no-writes": "You only have read rights for shipping orders in this organization, and therefore cannot create new orders.",
+      "create-not-allowed-text": "You only have read rights for nexus orders in the selected organization and therefore cannot change the sender.",
+      "sender-full-name": "Technische Universität Graz",
+      "default-subject": "Message from TU Graz",
+      "default-reference-number": "-"
+    },
+    "error-no-read": "You are currently not assigned to an organization in which you have read or write permissions for nexus requests.",
+    "error-no-writes": "You have read-only rights for shipping orders in this organization, and therefore cannot edit, submit, or delete nexus requests."
+  }
+}

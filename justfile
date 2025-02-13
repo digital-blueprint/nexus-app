@@ -7,19 +7,19 @@ default:
 
 # Variables
 
-zellijSession := "cabinet-app"
+zellijSession := "nexus-app"
 
-# Open a terminal with the cabinet-app session
+# Open a terminal with the nexus-app session
 [group('dev')]
 term-run:
     zellij --layout term.kdl attach {{ zellijSession }} -c
 
-# Kill the cabinet-app session
+# Kill the nexus-app session
 [group('dev')]
 term-kill:
     -zellij delete-session {{ zellijSession }} -f
 
-# Kill and run a terminal with the cabinet-app session
+# Kill and run a terminal with the nexus-app session
 [group('dev')]
 term: term-kill term-run
 

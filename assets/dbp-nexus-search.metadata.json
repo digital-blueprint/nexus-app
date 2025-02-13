@@ -1,6 +1,6 @@
 {
-    "element": "dbp-cabinet-search",
-    "module_src": "dbp-cabinet-search.js",
+    "element": "dbp-nexus-search",
+    "module_src": "dbp-nexus-search.js",
     "routing_name": "activity-search",
     "name": {
         "de": "Nexus Activity Finder",

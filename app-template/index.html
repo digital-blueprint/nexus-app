@@ -30,21 +30,21 @@
 
     <!-- Loading spinner -->
     <script type="module">
-        import {Spinner} from '/app/local/@digital-blueprint/cabinet-app/spinner.js';
+        import {Spinner} from '/app/local/@digital-blueprint/nexus-app/spinner.js';
         customElements.define('dbp-loading-spinner', Spinner);
     </script>
 
     <!-- App bundles-->
-    <script type="module" src="/app/dbp-cabinet.js"></script>
+    <script type="module" src="/app/dbp-nexus.js"></script>
 
     <!-- Prevent Chrome/Edge from suggesting to translate the page -->
     <meta name="google" content="notranslate">
 
     <!-- Font related CSS -->
     <style>
-        @import "/app/local/@digital-blueprint/cabinet-app/fonts/source-sans-pro/300.css";
-        @import "/app/local/@digital-blueprint/cabinet-app/fonts/source-sans-pro/400.css";
-        @import "/app/local/@digital-blueprint/cabinet-app/fonts/source-sans-pro/600.css";
+        @import "/app/local/@digital-blueprint/nexus-app/fonts/source-sans-pro/300.css";
+        @import "/app/local/@digital-blueprint/nexus-app/fonts/source-sans-pro/400.css";
+        @import "/app/local/@digital-blueprint/nexus-app/fonts/source-sans-pro/600.css";
 
         body {
             font-family: 'Source Sans Pro', 'Calibri', 'Arial', 'sans-serif';
@@ -53,8 +53,6 @@
         }
 
         /* style override */
-        html {
-        }
 
         .light-theme{
             --dbp-override-background: white;
@@ -106,23 +104,23 @@
 </head>
 
 <body>
-<dbp-cabinet
+<dbp-nexus
     provider-root
     id="app"
     lang="de" entry-point-url="https://api-demo.tugraz.at"
     allow-annotating
     html-overrides="global-override"
-    src="/dbp-cabinet.topic.metadata.json"
+    src="/dbp-nexus.topic.metadata.json"
     base-path="/"
     keycloak-config='{"url": "https://auth-demo.tugraz.at/auth", "realm": "tugraz-vpu", "clientId": "auth-dev-mw-frontend-local", "silentCheckSsoRedirectUri": "/app/silent-check-sso.html"}'
     env='local'
     themes='[{"class": "light-theme", "icon": "sun", "name": "Light Mode"},
             {"class": "dark-theme", "icon": "night", "name": "Dark Mode"}]'
 ><dbp-loading-spinner></dbp-loading-spinner>
-</dbp-cabinet>
+</dbp-nexus>
 
 <template id="global-override">
-    <template id="dbp-cabinet">
+    <template id="dbp-nexus">
         <div slot="name">
             DBP<br />
             <dbp-translated subscribe="lang">
@@ -138,7 +136,7 @@
 </template>
 
 <!-- Error handling for too old browsers -->
-<script src="/app/local/@digital-blueprint/cabinet-app/browser-check.js" defer></script>
+<script src="/app/local/@digital-blueprint/nexus-app/browser-check.js" defer></script>
 <noscript>Diese Applikation benötigt Javascript / This application requires Javascript</noscript>
 </body>
 </html>

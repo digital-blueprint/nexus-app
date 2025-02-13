@@ -12,21 +12,21 @@
         "pdfAsQualifiedlySigningServer": "https://sig-dev.tugraz.at",
         "hiddenActivities": [],
         "shortName": "dbp",
-        "appDomain": "https://dbp-demo.tugraz.at/apps/cabinet/",
+        "appDomain": "https://dbp-demo.tugraz.at/apps/nexus/",
         "typesense-local": {
             "host": "typesense.localhost",
             "port": "9100",
             "protocol": "http",
-            "key": "xyz",
-            "collection": "cabinet"
+            "key": "",
+            "collection": "nexus"
         },
         "typesense": {
             "host": "127.0.0.1",
-            "path": "/cabinet/typesense/",
-            "port": "8000",
+            "path": "/",
+            "port": "8108",
             "protocol": "http",
-            "key": "",
-            "collection": "cabinet"
+            "key": "rshvebw4z2k0VSRlj3KeEeNF1HH4gEEp",
+            "collection": "nexus"
         }
     },
     "localCustom": {
@@ -42,22 +42,22 @@
         "pdfAsQualifiedlySigningServer": "https://sig-dev.tugraz.at",
         "hiddenActivities": [],
         "shortName": "TU Graz",
-        "appDomain": "https://cabinet.tugraz.at/",
+        "appDomain": "https://nexus.tugraz.at/",
         "enableAnnotations": true,
         "typesense-local": {
             "host": "typesense.localhost",
             "port": "9100",
             "protocol": "http",
-            "key": "xyz",
-            "collection": "cabinet"
+            "key": "",
+            "collection": "nexus"
         },
         "typesense": {
             "host": "127.0.0.1",
             "path": "/cabinet/typesense/",
             "port": "8000",
             "protocol": "http",
-            "key": "",
-            "collection": "cabinet"
+            "key": "rshvebw4z2k0VSRlj3KeEeNF1HH4gEEp",
+            "collection": "nexus"
         }
     },
     "bs": {
@@ -74,10 +74,25 @@
         "hiddenActivities": [],
         "shortName": "dbp",
         "appDomain": "",
-        "enableAnnotations": true
+        "enableAnnotations": true,
+        "typesense-local": {
+            "host": "typesense.localhost",
+            "port": "9100",
+            "protocol": "http",
+            "key": "",
+            "collection": "nexus"
+        },
+        "typesense": {
+            "host": "127.0.0.1",
+            "path": "/cabinet/typesense/",
+            "port": "8000",
+            "protocol": "http",
+            "key": "rshvebw4z2k0VSRlj3KeEeNF1HH4gEEp",
+            "collection": "nexus"
+        }
     },
     "development": {
-        "basePath": "/apps/cabinet/",
+        "basePath": "/apps/nexus/",
         "entryPointURL": "https://api-dev.tugraz.at",
         "keyCloakBaseURL": "https://auth-dev.tugraz.at/auth",
         "keyCloakRealm": "tugraz-vpu",
@@ -89,18 +104,18 @@
         "pdfAsQualifiedlySigningServer": "https://sig-dev.tugraz.at",
         "hiddenActivities": [],
         "shortName": "dbp",
-        "appDomain": "https://dbp-demo.tugraz.at/apps/cabinet/",
+        "appDomain": "https://dbp-demo.tugraz.at/apps/nexus/",
         "typesense": {
             "host": "api-dev.tugraz.at",
             "port": "443",
             "path": "/cabinet/typesense/",
             "protocol": "https",
             "key": "",
-            "collection": "cabinet"
+            "collection": "nexus"
         }
     },
     "developmentCustom": {
-        "basePath": "/tugapps/cabinet/",
+        "basePath": "/tugapps/nexus/",
         "entryPointURL": "https://api-dev.tugraz.at",
         "keyCloakBaseURL": "https://auth-dev.tugraz.at/auth",
         "keyCloakRealm": "tugraz-vpu",
@@ -112,7 +127,7 @@
         "pdfAsQualifiedlySigningServer": "https://sig-dev.tugraz.at",
         "hiddenActivities": [],
         "shortName": "TU Graz",
-        "appDomain": "https://cabinet.tugraz.at/",
+        "appDomain": "https://nexus.tugraz.at/",
         "enableAnnotations": true,
         "typesense": {
             "host": "api-dev.tugraz.at",
@@ -120,11 +135,11 @@
             "path": "/cabinet/typesense/",
             "protocol": "https",
             "key": "",
-            "collection": "cabinet"
+            "collection": "nexus"
         }
     },
     "demo": {
-        "basePath": "/apps/cabinet/",
+        "basePath": "/apps/nexus/",
         "entryPointURL": "https://api-demo.tugraz.at",
         "keyCloakBaseURL": "https://auth-demo.tugraz.at/auth",
         "keyCloakRealm": "tugraz-vpu",
@@ -136,18 +151,18 @@
         "pdfAsQualifiedlySigningServer": "https://sig-test.tugraz.at",
         "hiddenActivities": [],
         "shortName": "dbp",
-        "appDomain": "https://dbp-demo.tugraz.at/apps/cabinet/",
+        "appDomain": "https://dbp-demo.tugraz.at/apps/nexus/",
         "typesense": {
             "host": "api-demo.tugraz.at",
             "port": "443",
             "path": "/cabinet/typesense/",
             "protocol": "https",
             "key": "",
-            "collection": "cabinet"
+            "collection": "nexus"
         }
     },
     "demoCustom": {
-        "basePath": "/tugapps/cabinet/",
+        "basePath": "/tugapps/nexus/",
         "entryPointURL": "https://api-demo.tugraz.at",
         "keyCloakBaseURL": "https://auth-demo.tugraz.at/auth",
         "keyCloakRealm": "tugraz-vpu",
@@ -159,7 +174,7 @@
         "pdfAsQualifiedlySigningServer": "https://sig-test.tugraz.at",
         "hiddenActivities": [],
         "shortName": "TU Graz",
-        "appDomain": "https://cabinet.tugraz.at/",
+        "appDomain": "https://nexus.tugraz.at/",
         "enableAnnotations": true,
         "typesense": {
             "host": "api-demo.tugraz.at",
@@ -167,7 +182,7 @@
             "path": "/cabinet/typesense/",
             "protocol": "https",
             "key": "",
-            "collection": "cabinet"
+            "collection": "nexus"
         }
     },
     "production": {
@@ -191,7 +206,7 @@
             "path": "/cabinet/typesense/",
             "protocol": "https",
             "key": "",
-            "collection": "cabinet"
+            "collection": "nexus"
         }
     }
 }

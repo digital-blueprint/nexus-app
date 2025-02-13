@@ -3,7 +3,7 @@ import {IconButton} from "@dbp-toolkit/common";
 import {Translated} from "@dbp-toolkit/common";
 import {createInstance} from './i18n';
 
-export default class DBPCabinetLitElement extends DBPLitElement {
+export default class DBPNexusLitElement extends DBPLitElement {
     constructor() {
         super();
         this.auth = {};

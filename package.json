@@ -1,9 +1,9 @@
 {
-    "name": "@digital-blueprint/cabinet-app",
-    "internalName": "dbp-cabinet",
+    "name": "@digital-blueprint/nexus-app",
+    "internalName": "dbp-nexus",
     "type": "module",
-    "version": "0.0.2",
-    "main": "src/dbp-cabinet.js",
+    "version": "0.0.1",
+    "main": "src/dbp-nexus.js",
     "license": "LGPL-2.1-or-later",
     "private": true,
     "publishConfig": {
@@ -90,6 +90,6 @@
         "lint": "eslint .",
         "tsc": "tsc -p jsconfig.json",
         "publish": "sed -i 's/\"private\": true/\"private\": false/' package.json && can-npm-publish --verbose 2>&1 && npm publish --access public 2>&1; sed -i 's/\"private\": false/\"private\": true/' package.json",
-        "fetch-activities": "node fetch-activities.js"
+        "generate-activities": "node generate-activities.js"
     }
 }
