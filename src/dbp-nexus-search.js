@@ -165,7 +165,7 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
             this.createConfigureWidget(),
             this.createSearchBox(),
             this.createHits(),
-            this.createSortBy(),
+            // this.createSortBy(),
             this.createStats(),
             // this.createPagination('#pagination-bottom'),
         ]);
@@ -391,6 +391,12 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
         });
     }
 
+    toggleFavorites(e) {
+        console.log('toggle fav event', e);
+        const favoritContainer = this._('.favorite-activities-container');
+        favoritContainer.classList.toggle('closed');
+    }
+
     // createPagination(id) {
     //     return pagination({
     //         container: this._(id),
@@ -426,6 +432,10 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
 
             <div class="main-container">
                 <aside class="favorite-activities-container">
+                    <div class="toggle-favorites">
+                        <dbp-icon name="chevron-down"
+                        @click="${(e) => this.toggleFavorites(e)}"></dbp-icon>
+                    </div>
                     <h3>My Favorites</h3>
                     <ul class="favorite-list">
                         ${this.favoriteActivities.map(activity => {
@@ -437,7 +447,7 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
 
                     <div class="search-box-container">
                         <div id="searchbox" class="search-box-widget"></div>
-                        <div id="sort-by" class="sort-widget"></div>
+                        <!-- <div id="sort-by" class="sort-widget"></div> -->
                     </div>
                     <div class="result-container">
                         <div id="result-count"></div>

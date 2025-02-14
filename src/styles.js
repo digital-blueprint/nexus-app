@@ -239,10 +239,39 @@ export function getSearchGridCSS() {
             gap: 1em;
         }
 
+        @media (width < 768px) {
+            .main-container {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 1em;
+            }
+
+            .favorite-activities-container.closed h3 {
+                margin-bottom: 0;
+            }
+
+            .favorite-activities-container.closed .favorite-list  {
+                height: 0;
+                overflow: hidden;
+            }
+
+            .toggle-favorites {
+                display: block !important;
+            }
+        }
+
         .favorite-activities-container {
             padding: 1em;
             border: 1px solid #c4c8d8;
             box-shadow: 0 2px 5px 0px #e3e5ec;
+            position: relative;
+        }
+
+        .toggle-favorites {
+            position: absolute;
+            top: 1em;
+            right: 1em;
+            display: none;
         }
 
         .favorite-activities-container h3 {
@@ -251,6 +280,7 @@ export function getSearchGridCSS() {
 
         .favorite-list {
             padding: 0;
+            margin: 0;
             list-style: none;
             display: flex;
             flex-direction: column;

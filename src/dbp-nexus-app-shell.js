@@ -25,7 +25,7 @@ export class NexusAppShell extends AppShell {
 
     openActivity(e) {
         console.log('openActivity', e);
-        e.preventDefault();
+        // e.preventDefault();
 
         const link = e.composedPath()[0];
         const href = link.getAttribute('data-nav');
@@ -322,9 +322,21 @@ export class NexusAppShell extends AppShell {
             `;
         } else {
             style = html`<style>
-            #main {
-
-            }
+                #root {
+                    #main {
+                        grid-template-columns: 1fr;
+                        grid-template-areas: 'header' 'headline' 'main' 'footer';
+                    }
+                    header {
+                        max-width: 1400px;
+                    }
+                    main {
+                        max-width: 1400px;
+                    }
+                    header .hd2-left .header {
+                        margin: 0 0 0 1em;
+                    }
+                }
             </style>
             `;
         }
