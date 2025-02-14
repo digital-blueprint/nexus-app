@@ -227,7 +227,7 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
     getSearchParameters() {
         // https://typesense.org/docs/0.25.1/api/search.html#ranking-and-sorting-parameters
         let searchParameters = {
-            query_by: "activityName",
+            query_by: "activityName,activityTag",
             // query_by: "person.familyName,person.givenName,file.base.fileName,objectType,person.stPersonNr,person.studId,person.identNrObfuscated,person.birthDate",
             // @TODO we should set typo tolerance by field. ex.: birthdate or identNrObfuscated dont need typo tolerance
             // sort_by: "@type:desc,_text_match:desc,person.familyName:asc",
