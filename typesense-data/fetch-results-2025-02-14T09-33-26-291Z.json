@@ -2,6 +2,7 @@
     {
         "activityName": "Manage student records",
         "activityDescription": "Search and edit records of applicants and students.",
+        "activityRoutingName": "cabinet-search",
         "activityTag": [
             "pdf",
             "signature"
@@ -11,6 +12,7 @@
     {
         "activityName": "Create dispatch order",
         "activityDescription": "Allows the creation of new dispatch orders.",
+        "activityRoutingName": "create-request",
         "activityTag": [
             "pdf",
             "signature"
@@ -20,6 +22,7 @@
     {
         "activityName": "Show Requests",
         "activityDescription": "Shows a list of all dispatch orders.",
+        "activityRoutingName": "show-requests",
         "activityTag": [
             "pdf",
             "signature"
@@ -27,35 +30,9 @@
         "activityIcon": "show-requests-icon"
     },
     {
-        "activityName": "Personally sign documents",
-        "activityDescription": "Enables you to upload PDF documents and to sign them personally",
-        "activityTag": [
-            "pdf",
-            "signature"
-        ],
-        "activityIcon": "qualified-pdf-upload-icon"
-    },
-    {
-        "activityName": "Officially sign documents",
-        "activityDescription": "Enables you to upload PDF documents and to sign them officially",
-        "activityTag": [
-            "pdf",
-            "signature"
-        ],
-        "activityIcon": "official-pdf-upload-icon"
-    },
-    {
-        "activityName": "Verify signed documents",
-        "activityDescription": "Allows verification of signed PDF-documents",
-        "activityTag": [
-            "pdf",
-            "signature"
-        ],
-        "activityIcon": "signature-verification-icon"
-    },
-    {
         "activityName": "Show course registrations",
         "activityDescription": "Shows a list of all available course submissions.",
+        "activityRoutingName": "show-registrations",
         "activityTag": [
             "pdf",
             "signature"
@@ -65,6 +42,7 @@
     {
         "activityName": "Show form",
         "activityDescription": "Shows a form.",
+        "activityRoutingName": "render-form",
         "activityTag": [
             "pdf",
             "signature"
@@ -74,6 +52,7 @@
     {
         "activityName": "Register for The Lunch Lottery",
         "activityDescription": "Register for The Lunch Lottery",
+        "activityRoutingName": "lunchlottery-register",
         "activityTag": [
             "pdf",
             "signature"
@@ -83,6 +62,7 @@
     {
         "activityName": "Assign Lunch Lottery seats",
         "activityDescription": "Allows to create the seat assigment for the next Lunch Lottery event",
+        "activityRoutingName": "lunchlottery-assign-seats",
         "activityTag": [
             "pdf",
             "signature"
@@ -92,6 +72,7 @@
     {
         "activityName": "Manage Lunch Lottery",
         "activityDescription": "Allows to manage Lunch Lottery",
+        "activityRoutingName": "lunchlottery-manage",
         "activityTag": [
             "pdf",
             "signature"

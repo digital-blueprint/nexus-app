@@ -74,6 +74,18 @@ Add a schema:
       "store": true
     },
     {
+      "name": "activityRoutingName",
+      "type": "string",
+      "facet": false,
+      "optional": false,
+      "index": false,
+      "sort": false,
+      "infix": false,
+      "locale": "",
+      "stem": false,
+      "store": true
+    },
+    {
       "name": "activityTag",
       "type": "string[]",
       "facet": false,

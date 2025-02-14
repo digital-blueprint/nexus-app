@@ -5,7 +5,6 @@ import { mkdir, writeFile } from 'fs/promises';
 import fetch from 'node-fetch';
 import process from 'process';
 import dotenv from 'dotenv';
-import { log } from 'console';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -47,10 +46,11 @@ const CONFIG = {
 /**
  * Fetches data from multiple URLs and combines results into a single object
  * @param {string[]} urls - Array of URLs to fetch from
+ * @param {boolean} topic - Are we looking for topics metadata or not
  * @param {object} options - Optional fetch configuration
  * @returns {Promise<object>} Combined results from all URLs
  */
-async function fetchFromUrls(urls, options = {}) {
+async function fetchFromUrls(urls, topic = true, options = {}) {
     // Input validation
     if (!Array.isArray(urls)) {
         throw new Error('URLs parameter must be an array');
@@ -87,15 +87,25 @@ async function fetchFromUrls(urls, options = {}) {
                 // Process response
                 const fileContent = data['content'];
                 const fileContentEncoding = data['encoding'];
-                const appName = data['name'].replace(/\.topic\.metadata\.json.*$/, '');
-                let re = new RegExp(String.raw`(assets|src)\/${appName}\.topic\.metadata\.json.*$`, "g");
-                const appGitUrl = data['url'].replace(re, '');
+                let appGitUrl;
+                let appName;
+                if (topic) {
+                    appName = data['name'].replace(/\.topic\.metadata\.json.*$/, '');
+                    let re = new RegExp(String.raw`(assets|src)\/${appName}\.topic\.metadata\.json.*$`, "g");
+                    appGitUrl = data['url'].replace(re, '');
+                } else {
+                    appName = data['name'].replace(/\.metadata\.json.*$/, '');
+                    let re = new RegExp(String.raw`(assets|src)\/${appName}\.metadata\.json.*$`, "g");
+                    appGitUrl = data['url'].replace(re, '');
+                }
                 if (fileContentEncoding == 'base64') {
                     // Decode base64 and parse as JSON
                     let decodedContent = atob(fileContent);
 
-                    // Remove visibility property from topic json. (only in esign)
-                    decodedContent = decodedContent.replace(/,\n\s+"visible":.*\}/g, '}');
+                    if (!topic) {
+                        // Remove visibility property from topic json. (only in esign)
+                        decodedContent = decodedContent.replace(/,\n\s+"visible":.*\}/g, '}');
+                    }
                     console.log(decodedContent);
                     try {
                         // Parse the JSON string into an object
@@ -161,6 +171,7 @@ async function generateTypesenseImportFile(activityJsons) {
         const typesenseDocument = {
             activityName: activity.name.en,
             activityDescription: activity.description.en,
+            activityRoutingName: activity.routing_name,
             activityTag: ["pdf", "signature"],
             activityIcon: activity.routing_name + '-icon'
         };
@@ -246,9 +257,11 @@ async function main() {
 
         let activityJsons = [];
         for (const activity of uniqueActivitiesArray) {
+            // First try to find activity metadata jsons in the src directory
             const activityJsonSrcFileUrl = activity.app_git_url + 'src/' + activity.path;
             let activitiesResults = await fetchFromUrls([activityJsonSrcFileUrl], CONFIG.fetchOptions);
 
+            // If no success try in the assets directory
             if (!activitiesResults.success || activitiesResults.results.length < 1) {
                 const activityJsonAssetsFileUrl = activity.app_git_url + 'assets/' + activity.path;
                 activitiesResults = await fetchFromUrls([activityJsonAssetsFileUrl], CONFIG.fetchOptions);
