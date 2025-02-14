@@ -13,9 +13,9 @@
 [submodule "vendor/lunchlottery"]
 	path = vendor/lunchlottery
 	url = https://github.com/digital-blueprint/lunchlottery-app.git
+[submodule "vendor/cabinet"]
+	path = vendor/cabinet
+	url = https://github.com/digital-blueprint/cabinet-app
 #[submodule "vendor/activities"]
 #	path = vendor/activities
 #	url = https://github.com/digital-blueprint/activities
-#[submodule "vendor/cabinet"]
-#	path = vendor/cabinet
-#	url = https://github.com/digital-blueprint/cabinet-app.git

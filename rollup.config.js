@@ -166,6 +166,7 @@ let input = [
     'vendor/lunchlottery/src/dbp-lunchlottery-register.js',
     'vendor/lunchlottery/src/dbp-lunchlottery-manage.js',
     'vendor/lunchlottery/src/dbp-lunchlottery-assign-seats.js',
+    'vendor/cabinet/src/dbp-cabinet-search.metadata.json',
 ];
 
 export default (async () => {
