@@ -245,6 +245,10 @@ export function getSearchGridCSS() {
             box-shadow: 0 2px 5px 0px #e3e5ec;
         }
 
+        .favorite-activities-container h3 {
+            margin-bottom: 2em;
+        }
+
         .favorite-list {
             padding: 0;
             list-style: none;

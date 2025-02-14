@@ -315,15 +315,10 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
             escapeHTML: true,
             templates: {
                 item: (hit, {html}) => {
-                    // console.log('*** hit: ', hit);
-                    // console.log('activityIcon', hit.activityIcon);
-                    // console.log('activityIcon', html`${unsafeHTML(hit.activityIcon)}`);
-                    // const icon = svg`${hit.activityIcon}`;
-                    // const icon = unsafeHTML(hit.activityIcon);
                     return html`
                         <div class="activity-item">
                             <dbp-icon class="activity-favorite"
-                                name="star-empty"
+                                name="${this.favoriteActivities.find((item) => item.name === hit.activityName) ? 'star-filled' : 'star-empty'}"
                                 onclick="${(e) => {
                                     const icon  = e.target;
                                     // Toggle icon and favorite status
@@ -334,8 +329,7 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
                                         });
                                         icon.name="star-filled";
                                     } else {
-                                        const index = this.favoriteActivities.indexOf(hit.activityName);
-                                        this.favoriteActivities.splice(index, 1);
+                                        this.favoriteActivities = this.favoriteActivities.filter((item) => item.name !== hit.activityName);
                                         icon.name="star-empty";
                                     }
                                     // Save this.favoriteActivities to localstorage
