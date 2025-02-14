@@ -29,6 +29,12 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
         this.typesenseProtocol = '';
         this.typesenseKey = '';
         this.typesenseCollection = '';
+        this.typesenseNexusHost = '';
+        this.typesenseNexusPort = '';
+        this.typesenseNexusPath = '';
+        this.typesenseNexusProtocol = '';
+        this.typesenseNexusKey = '';
+        this.typesenseNexusCollection = '';
         this.typesenseInstantsearchAdapter = null;
         this.typesenseService = null;
         this.serverConfig = null;
@@ -64,6 +70,13 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
             typesenseProtocol: { type: String, attribute: 'typesense-protocol' },
             typesenseKey: { type: String, attribute: 'typesense-key' },
             typesenseCollection: { type: String, attribute: 'typesense-collection' },
+            // Nexus
+            typesenseNexusHost: { type: String, attribute: 'typesense-nexus-host' },
+            typesenseNexusPort: { type: String, attribute: 'typesense-nexus-port' },
+            typesenseNexusPath: { type: String, attribute: 'typesense-nexus-path' },
+            typesenseNexusProtocol: { type: String, attribute: 'typesense-nexus-protocol' },
+            typesenseNexusKey: { type: String, attribute: 'typesense-nexus-key' },
+            typesenseNexusCollection: { type: String, attribute: 'typesense-nexus-collection' },
             hitData: { type: Object, attribute: false },
             favoriteActivities: {type: Object, attribute: false}
         };
@@ -120,13 +133,13 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
 
             this.serverConfig = {
                 // Be sure to use an API key that only allows searches, in production
-                apiKey: this.typesenseKey,
+                apiKey: this.typesenseNexusKey,
                 nodes: [
                     {
-                        host: this.typesenseHost,
-                        port: this.typesensePort,
-                        path: this.typesensePath,
-                        protocol: this.typesenseProtocol
+                        host: this.typesenseNexusHost,
+                        port: this.typesenseNexusPort,
+                        path: this.typesenseNexusPath,
+                        protocol: this.typesenseNexusProtocol
                     }
                 ],
                 additionalHeaders: {'Authorization': 'Bearer ' + this.auth.token},
@@ -247,11 +260,11 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
     }
 
     initTypesenseService() {
-        if (!this.serverConfig || !this.typesenseCollection || !this.auth.token) {
+        if (!this.serverConfig || !this.typesenseNexusCollection || !this.auth.token) {
             return;
         }
 
-        this.typesenseService = new TypesenseService(this.serverConfig, this.typesenseCollection);
+        this.typesenseService = new TypesenseService(this.serverConfig, this.typesenseNexusCollection);
         // console.log('initTypesenseService this.typesenseService', this.typesenseService);
     }
 
@@ -269,7 +282,7 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
         // typesenseInstantsearchAdapter.typesenseClient is no Typesense.Client instance, it's a Typesense.SearchClient instance!
         const searchClient = typesenseInstantsearchAdapter.searchClient;
 
-        let searchIndexName = this.typesenseCollection;
+        let searchIndexName = this.typesenseNexusCollection;
 
         return instantsearch({
             searchClient,
@@ -371,9 +384,9 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
         return sortBy({
             container: container,
             items: [
-                { label: i18n.t('default-sort'), value: `${this.typesenseCollection}` }, /* default sorting "@type:desc,_text_match:desc,person.familyName:asc" */
-                { label: i18n.t('family-name'), value: `${this.typesenseCollection}/sort/@type:desc,person.familyName:asc,_text_match:desc` },
-                { label: i18n.t('last-modified-documents'), value: `${this.typesenseCollection}/sort/@type:asc,file.base.modifiedTimestamp:desc,_text_match:desc` }
+                { label: i18n.t('default-sort'), value: `${this.typesenseNexusCollection}` }, /* default sorting "@type:desc,_text_match:desc,person.familyName:asc" */
+                { label: i18n.t('family-name'), value: `${this.typesenseNexusCollection}/sort/@type:desc,person.familyName:asc,_text_match:desc` },
+                { label: i18n.t('last-modified-documents'), value: `${this.typesenseNexusCollection}/sort/@type:asc,file.base.modifiedTimestamp:desc,_text_match:desc` }
             ],
         });
     }
@@ -447,7 +460,7 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
     async loadModules() {
         try {
             // Fetch the JSON file containing module paths
-            const response = await fetch(this.basePath + 'modules.json');
+            const response = await fetch(this.basePath + 'nexus-modules.json');
             const data = await response.json();
             console.log('data', data);
 

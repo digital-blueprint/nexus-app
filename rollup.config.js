@@ -150,6 +150,7 @@ ${getOrigin(config.matomoUrl)} ${getOrigin(config.keyCloakBaseURL)} ${getOrigin(
 )} \
 ${getOrigin(config.nextcloudBaseURL)} ${atrustHosts.map((h) => getOrigin(h)).join(' ')} \
 ${config.typesense.protocol + '://' + config.typesense.host + ':' + config.typesense.port} \
+${config.typesenseNexus.protocol + '://' + config.typesenseNexus.host + ':' + config.typesenseNexus.port} \
 ${getOrigin(config.pdfAsQualifiedlySigningServer)}; \
 img-src * blob: data:`;
 
@@ -166,7 +167,14 @@ let input = [
     'vendor/lunchlottery/src/dbp-lunchlottery-register.js',
     'vendor/lunchlottery/src/dbp-lunchlottery-manage.js',
     'vendor/lunchlottery/src/dbp-lunchlottery-assign-seats.js',
-    'vendor/cabinet/src/dbp-cabinet-search.metadata.json',
+    'vendor/cabinet/src/dbp-cabinet-search.js',
+    'vendor/cabinet/src/objectTypes/fileAdmissionNotice.js',
+    'vendor/cabinet/src/objectTypes/fileCommunication.js',
+    'vendor/cabinet/src/objectTypes/fileIdentityDocument.js',
+    'vendor/cabinet/src/objectTypes/fileMinimalSchema.js',
+    'vendor/cabinet/src/objectTypes/fileCitizenshipCertificate.js',
+    'vendor/cabinet/src/objectTypes/person.js',
+    'vendor/cabinet/src/modules/instantSearch.js',
 ];
 
 export default (async () => {
@@ -222,11 +230,11 @@ export default (async () => {
                     },
                     name: pkg.internalName,
                     entryPointURL: config.entryPointURL,
-                    // nextcloudWebAppPasswordURL: config.nextcloudWebAppPasswordURL,
-                    // nextcloudWebDavURL: config.nextcloudWebDavURL,
-                    // nextcloudBaseURL: config.nextcloudBaseURL,
-                    // nextcloudFileURL: config.nextcloudFileURL,
-                    // nextcloudName: config.nextcloudName,
+                    nextcloudWebAppPasswordURL: config.nextcloudWebAppPasswordURL,
+                    nextcloudWebDavURL: config.nextcloudWebDavURL,
+                    nextcloudBaseURL: config.nextcloudBaseURL,
+                    nextcloudFileURL: config.nextcloudFileURL,
+                    nextcloudName: config.nextcloudName,
                     keyCloakBaseURL: config.keyCloakBaseURL,
                     keyCloakRealm: config.keyCloakRealm,
                     keyCloakClientId: config.keyCloakClientId,
@@ -243,6 +251,12 @@ export default (async () => {
                     typesenseProtocol: config.typesense.protocol,
                     typesenseKey: config.typesense.key,
                     typesenseCollection: config.typesense.collection,
+                    typesenseNexusHost: config.typesenseNexus.host,
+                    typesenseNexusPort: config.typesenseNexus.port,
+                    typesenseNexusPath: config.typesenseNexus.path,
+                    typesenseNexusProtocol: config.typesenseNexus.protocol,
+                    typesenseNexusKey: config.typesenseNexus.key,
+                    typesenseNexusCollection: config.typesenseNexus.collection,
                 },
             }),
             !whitelabel &&
@@ -261,11 +275,11 @@ export default (async () => {
                     },
                     name: pkg.internalName,
                     entryPointURL: config.entryPointURL,
-                    // nextcloudWebAppPasswordURL: config.nextcloudWebAppPasswordURL,
-                    // nextcloudWebDavURL: config.nextcloudWebDavURL,
-                    // nextcloudBaseURL: config.nextcloudBaseURL,
-                    // nextcloudFileURL: config.nextcloudFileURL,
-                    // nextcloudName: config.nextcloudName,
+                    nextcloudWebAppPasswordURL: config.nextcloudWebAppPasswordURL,
+                    nextcloudWebDavURL: config.nextcloudWebDavURL,
+                    nextcloudBaseURL: config.nextcloudBaseURL,
+                    nextcloudFileURL: config.nextcloudFileURL,
+                    nextcloudName: config.nextcloudName,
                     keyCloakBaseURL: config.keyCloakBaseURL,
                     keyCloakRealm: config.keyCloakRealm,
                     keyCloakClientId: config.keyCloakClientId,
@@ -282,6 +296,12 @@ export default (async () => {
                     typesenseProtocol: config.typesense.protocol,
                     typesenseKey: config.typesense.key,
                     typesenseCollection: config.typesense.collection,
+                    typesenseNexusHost: config.typesenseNexus.host,
+                    typesenseNexusPort: config.typesenseNexus.port,
+                    typesenseNexusPath: config.typesenseNexus.path,
+                    typesenseNexusProtocol: config.typesenseNexus.protocol,
+                    typesenseNexusKey: config.typesenseNexus.key,
+                    typesenseNexusCollection: config.typesenseNexus.collection,
                 },
             }),
             replace({
@@ -349,7 +369,7 @@ Dependencies:
                     {src: 'assets/*.metadata.json', dest: 'dist'},
                     {src: 'src/*.metadata.json', dest: 'dist'},
                     {src: 'vendor/**/src/*.metadata.json', dest: 'dist'},
-                    {src: 'assets/modules.json', dest: 'dist'},
+                    {src: 'assets/nexus-modules.json', dest: 'dist'},
                     {src: 'assets/*.svg', dest: 'dist/' + (await getDistPath(pkg.name))},
                     {src: 'assets/htaccess-shared', dest: 'dist/shared/', rename: '.htaccess'},
                     {src: 'assets/icon-*.png', dest: 'dist/' + (await getDistPath(pkg.name))},
@@ -362,6 +382,10 @@ Dependencies:
                     {
                         src: await getPackagePath('instantsearch.css', 'themes/algolia-min.css'),
                         dest: 'dist/'+ (await getDistPath(pkg.name)),
+                    },
+                    {
+                        src: await getPackagePath('instantsearch.css', 'themes/algolia-min.css'),
+                        dest: 'dist/local/@digital-blueprint/cabinet-app/',
                     },
                     // the pdfjs worker is needed for signature, dispatch, pdf-viewer and the annotation loading in nexus!
                     {
@@ -431,7 +455,7 @@ Dependencies:
                     {src: customAssetsPath + '*.ico', dest: 'dist/' + (await getDistPath(pkg.name))},
                     {src: customAssetsPath + 'translation_overrides', dest: 'dist/' + (await getDistPath(pkg.name))},
                     {src: customAssetsPath + '*.metadata.json', dest: 'dist'},
-                    {src: customAssetsPath + 'modules.json', dest: 'dist'},
+                    {src: customAssetsPath + 'nexus-modules.json', dest: 'dist'},
                     // {src: 'vendor/signature/src/*.metadata.json', dest: 'dist'},
                     // {src: 'vendor/dispatch/src/*.metadata.json', dest: 'dist'},
                     {src: customAssetsPath + '*.svg', dest: 'dist/' + (await getDistPath(pkg.name))},
