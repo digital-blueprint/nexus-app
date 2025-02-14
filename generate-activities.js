@@ -102,7 +102,7 @@ async function fetchFromUrls(urls, topic = true, options = {}) {
                     // Decode base64 and parse as JSON
                     let decodedContent = atob(fileContent);
 
-                    if (!topic) {
+                    if (topic) {
                         // Remove visibility property from topic json. (only in esign)
                         decodedContent = decodedContent.replace(/,\n\s+"visible":.*\}/g, '}');
                     }
