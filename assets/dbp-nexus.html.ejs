@@ -148,12 +148,13 @@
 <template id="global-override">
     <template id="<%= name %>">
         <div slot="name">
-        <%= shortName %> <br/>
-        digital blueprint
+            <a data-nav="activity-search">
+                Nexus <br/>
+                digital blueprint
+            </a>
         </div>
         <div slot="logo">
             <style>
-
                 .logo-dark, .light-theme .logo-dark, .dark-theme .logo-light{
                     display: none;
                 }
@@ -163,11 +164,10 @@
                 }
 
                 .wrapper{
-                    float: right;
+                    display: flex;
+                    justify-content: flex-end;
                     padding: 0 50px 0 0;
                 }
-
-
             </style>
             <div class="wrapper">
                 <img class="logo-light" style="height: 80px" src="<%= getPrivateUrl('dbp_logo_small_on_white.svg') %>" alt="digital blueprint - A University toolbox logo">

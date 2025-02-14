@@ -233,15 +233,39 @@ export function getSelectorFixCSS() {
 export function getSearchGridCSS() {
     // language=css
     return css`
+        .main-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 1em;
+        }
+
+        .favorite-activities-container {
+            padding: 1em;
+            border: 1px solid #c4c8d8;
+            box-shadow: 0 2px 5px 0px #e3e5ec;
+        }
+
+        .favorite-list {
+            padding: 0;
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: .5em;
+        }
+
+        .favorite-item {
+
+        }
+
         .search-container {
 
         }
 
         .result-container {
-            margin-top: 1em;
+            margin-top: .25em;
             display: flex;
             flex-direction: column;
-            gap: 2em;
+            gap: 1em;
         }
 
         .results {
@@ -274,7 +298,8 @@ export function getSearchGridCSS() {
 
         .ais-Hits-list {
             display: grid;
-            grid-template-columns: repeat(3, minmax(250px, 1fr));
+            /*grid-template-columns: repeat(3, minmax(250px, 1fr));*/
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 1rem;
             padding: 0;
             margin: 0;
@@ -296,6 +321,15 @@ export function getSearchGridCSS() {
             height: 100%;
             justify-content: space-between;
             gap: 1em;
+            position: relative;
+        }
+
+        .activity-favorite {
+            color: var(--dbp-override-primary);
+            position: absolute;
+            top: 0;
+            right: 0;
+            font-size: 24px;
         }
 
         .activity-header {

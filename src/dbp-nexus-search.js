@@ -1,17 +1,17 @@
-import {css, html, svg} from 'lit';
-import {ref, createRef} from 'lit/directives/ref.js';
+import {css, html} from 'lit';
+import {createRef} from 'lit/directives/ref.js';
 import {ScopedElementsMixin} from '@dbp-toolkit/common';
 import DBPNexusLitElement from "./dbp-nexus-lit-element.js";
 import * as commonUtils from '@dbp-toolkit/common/utils';
 import * as commonStyles from '@dbp-toolkit/common/styles';
-import {getCurrentRefinementCSS, getPaginationCSS, getSearchGridCSS, getSelectorFixCSS} from './styles.js';
+import {getCurrentRefinementCSS, getSearchGridCSS, getSelectorFixCSS} from './styles.js';
 import {Icon, Button, InlineNotification, Modal} from '@dbp-toolkit/common';
 import {classMap} from "lit/directives/class-map.js";
 import {Activity} from './activity.js';
 import metadata from './dbp-nexus-search.metadata.json';
 import instantsearch from 'instantsearch.js';
 import TypesenseInstantSearchAdapter from 'typesense-instantsearch-adapter';
-import {hits, searchBox, sortBy, stats, pagination} from 'instantsearch.js/es/widgets';
+import {hits, searchBox, sortBy, stats} from 'instantsearch.js/es/widgets';
 import {configure} from 'instantsearch.js/es/widgets';
 // import {pascalToKebab} from './utils';
 import {NexusFacets} from './components/dbp-nexus-facets.js';
@@ -42,6 +42,7 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
         this.facetConfigs = [];
         this.search = null;
         this.configureWidget = null;
+        this.favoriteActivities = [];
     }
 
     static get scopedElements() {
@@ -64,6 +65,7 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
             typesenseKey: { type: String, attribute: 'typesense-key' },
             typesenseCollection: { type: String, attribute: 'typesense-collection' },
             hitData: { type: Object, attribute: false },
+            favoriteActivities: {type: Object, attribute: false}
         };
     }
 
@@ -133,6 +135,8 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
             console.log('serverConfig', this.serverConfig);
 
             this.loadModules();
+
+            this.favoriteActivities = JSON.parse(localStorage.getItem('nexus-favorite-activities')) || [];
         });
     }
 
@@ -150,7 +154,7 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
             this.createHits(),
             this.createSortBy(),
             this.createStats(),
-            this.createPagination('#pagination-bottom'),
+            // this.createPagination('#pagination-bottom'),
         ]);
 
         // if (this.facetConfigs.length === 0) {
@@ -180,8 +184,6 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
     }
 
     createConfigureWidget() {
-        console.log('createConfigureWidget this.showScheduledForDeletion', this.showScheduledForDeletion);
-
         this.configureWidget = configure({
             hitsPerPage: 24,
         });
@@ -201,7 +203,6 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
             ${commonStyles.getRadioAndCheckboxCss()}
             ${commonStyles.getFormAddonsCSS()}
             ${getSelectorFixCSS()}
-            ${getPaginationCSS()}
             ${getCurrentRefinementCSS()}
             ${getSearchGridCSS()}
         `;
@@ -289,10 +290,16 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
         });
     }
 
+    // renderFavoriteActivites() {
+    //     const activitiesSidebar = this._('#favorite-activities');
+    //     console.log(activitiesSidebar);
+    //     console.log('favoriteActivities', this.favoriteActivities);
+    // }
+
     createHits() {
         return hits({
             container: this._("#hits"),
-            escapeHTML: false,
+            escapeHTML: true,
             templates: {
                 item: (hit, {html}) => {
                     // console.log('*** hit: ', hit);
@@ -302,6 +309,26 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
                     // const icon = unsafeHTML(hit.activityIcon);
                     return html`
                         <div class="activity-item">
+                            <dbp-icon class="activity-favorite"
+                                name="star-empty"
+                                onclick="${(e) => {
+                                    const icon  = e.target;
+                                    // Toggle icon and favorite status
+                                    if (icon.name === 'star-empty') {
+                                        this.favoriteActivities.push({
+                                            name: hit.activityName,
+                                            route: hit.activityRoutingName
+                                        });
+                                        icon.name="star-filled";
+                                    } else {
+                                        const index = this.favoriteActivities.indexOf(hit.activityName);
+                                        this.favoriteActivities.splice(index, 1);
+                                        icon.name="star-empty";
+                                    }
+                                    // Save this.favoriteActivities to localstorage
+                                    localStorage.setItem('nexus-favorite-activities', JSON.stringify(this.favoriteActivities));
+                                    this.requestUpdate();
+                                }}"></dbp-icon>
                             <div class="activity-header">
                                 <div class="activity-icon">
                                     an-icon
@@ -320,18 +347,15 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
                                     })}
                                 </div>
                                 <div class="activity-open-button">
-                                    <dbp-button type="is-primary"
-                                        no-spinner-on-click
-                                        value="Launch"
-                                        data-href=""
+                                    <a class="is-primary button"
+                                        data-nav="${hit.activityRoutingName}"
                                         onclick="${() => {
-                                            console.log('activity Clicked');
-                                        }}">
-                                    </dbp-button>
+                                            console.log('activity Clicked', hit.activityRoutingName);
+                                        }}">Launch
+                                    </a>
                                 </div>
                             </div>
-                        </div>
-                    `;
+                        </div>`;
                 },
             },
         });
@@ -360,11 +384,11 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
         });
     }
 
-    createPagination(id) {
-        return pagination({
-            container: this._(id),
-        });
-    }
+    // createPagination(id) {
+    //     return pagination({
+    //         container: this._(id),
+    //     });
+    // }
 
     // createFacets() {
     //     return this.nexusFacetsRef.value.createFacetsFromConfig(this.facetConfigs);
@@ -393,17 +417,27 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
                 body="${i18n.t('error-login-message')}">
             </dbp-inline-notification>
 
-            <div class="search-container ${classMap({hidden: !this.isLoggedIn() || this.isLoading() || this.loadingTranslations})}">
+            <div class="main-container">
+                <aside class="favorite-activities-container">
+                    <h3>My Favorites</h3>
+                    <ul class="favorite-list">
+                        ${this.favoriteActivities.map(activity => {
+                            return html`<li class="favorite-item"><a data-nav="${activity.route}" class="favorite-activity">${activity.name}</a></li>`;
+                        })}
+                    </ul>
+                </aside>
+                <div class="search-container ${classMap({hidden: !this.isLoggedIn() || this.isLoading() || this.loadingTranslations})}">
 
-                <div class="search-box-container">
-                    <div id="searchbox" class="search-box-widget"></div>
-                    <div id="sort-by" class="sort-widget"></div>
-                </div>
-                <div class="result-container">
-                    <div id="result-count"></div>
-                    <div class="results">
-                        <div id="hits"></div>
-                        <div id="pagination-bottom"></div>
+                    <div class="search-box-container">
+                        <div id="searchbox" class="search-box-widget"></div>
+                        <div id="sort-by" class="sort-widget"></div>
+                    </div>
+                    <div class="result-container">
+                        <div id="result-count"></div>
+                        <div class="results">
+                            <div id="hits"></div>
+                            <!-- <div id="pagination-bottom"></div> -->
+                        </div>
                     </div>
                 </div>
             </div>
