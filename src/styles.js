@@ -382,6 +382,10 @@ export function getSearchGridCSS() {
             justify-content: space-between;
         }
 
+        .activity-open-button button {
+            display: block;
+        }
+
         .activity-tags {
             display: flex;
             gap: .5em;
