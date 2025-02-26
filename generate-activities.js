@@ -170,8 +170,10 @@ async function generateTypesenseImportFile(activityJsons) {
         const activity = result.results[0];
         const typesenseDocument = {
             activityName: activity.name.en,
+            activityPath: activity.appName,
             activityDescription: activity.description.en,
             activityRoutingName: activity.routing_name,
+            activityModuleSrc: activity.module_src,
             activityTag: ["pdf", "signature"],
             activityIcon: activity.routing_name + '-icon'
         };
@@ -193,8 +195,6 @@ async function main() {
         const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
         const filename = `fetch-results-${timestamp}.json`;
         const typeSenseOutputPath = join(CONFIG.dataOutputDir, filename);
-        const topicFilename = 'dbp-nexus.topic.metadata.json.ejs';
-        const nexusTopicJsonOutputPath = join(CONFIG.topicJsonOutputDir, topicFilename);
 
         console.log('🚀 Starting URL fetch...');
         console.log(`📜 URLs to fetch: ${CONFIG.urls.length}`);
@@ -221,39 +221,6 @@ async function main() {
         const uniqueActivitiesArray = Array.from(uniqueActivitiesMap.values());
         console.log('uniqueActivitiesArray', uniqueActivitiesArray);
 
-        const nexusTopicJson = `{
-            "name": {
-                "de": "Nexus",
-                "en": "Nexus"
-            },
-            "short_name": {
-                "de": "Nexus-Aktivitätensuche",
-                "en": "Nexus Activity Finder"
-            },
-            "description": {
-                "de": "Diese Anwendung ermöglicht es Ihnen, nach DBP-Aktivitäten zu suchen.",
-                "en": "This application enables you to search DBP activities."
-            },
-            "routing_name": "nexus",
-            "activities": [
-                {"path":"dbp-nexus-search.metadata.json"},
-                ${uniqueActivitiesArray.map((obj) => {
-                    if (obj.path) {
-                        return `{"path":"${obj.path}"}\n`;
-                    }
-                }).filter(Boolean).join(",\n")}
-            ],
-            "attributes": []
-            }
-        `;
-
-        console.log('nexusTopicJson', nexusTopicJson);
-        // Write dbp-nexus.topic.metadata.json.ejs
-        await writeFile(
-            nexusTopicJsonOutputPath,
-            nexusTopicJson,
-            'utf8'
-        );
 
         let activityJsons = [];
         for (const activity of uniqueActivitiesArray) {

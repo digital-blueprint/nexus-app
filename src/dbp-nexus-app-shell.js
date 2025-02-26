@@ -3,12 +3,21 @@ import {css, html, unsafeCSS} from 'lit';
 import {classMap} from 'lit/directives/class-map.js';
 import * as commonStyles from '@dbp-toolkit/common/styles';
 import {getIconSVGURL} from './utils.js';
+import {send} from '@dbp-toolkit/common/notification';
 
 export class NexusAppShell extends AppShell {
     constructor() {
         super();
         this.boundOpenActivityHandler = this.openActivity.bind(this);
         this.boundActivityFavorized = this.handleActivityFavorized.bind(this);
+
+        this.typesenseNexusHost = '';
+        this.typesenseNexusPort = '';
+        this.typesenseNexusPath = '';
+        this.typesenseNexusProtocol = '';
+        this.typesenseNexusKey = '';
+        this.typesenseNexusCollection = '';
+
         this.favoriteActivities = [];
 
         console.log('NEXUS APP SHELL');
@@ -17,6 +26,14 @@ export class NexusAppShell extends AppShell {
     static get properties() {
         return {
             ...super.properties,
+
+            typesenseNexusHost: { type: String, attribute: 'typesense-nexus-host' },
+            typesenseNexusPort: { type: String, attribute: 'typesense-nexus-port' },
+            typesenseNexusPath: { type: String, attribute: 'typesense-nexus-path' },
+            typesenseNexusProtocol: { type: String, attribute: 'typesense-nexus-protocol' },
+            typesenseNexusKey: { type: String, attribute: 'typesense-nexus-key' },
+            typesenseNexusCollection: { type: String, attribute: 'typesense-nexus-collection' },
+
             favoriteActivities: {type: Object, attribute: false}
         };
     }
@@ -35,6 +52,115 @@ export class NexusAppShell extends AppShell {
         document.removeEventListener('click', this.boundOpenActivityHandler);
         document.removeEventListener('dbp-favorized', this.boundActivityFavorized);
         super.disconnectedCallback();
+    }
+
+    /**
+     * Fetches the metadata of the components we want to use in the menu, dynamically imports the js modules for them,
+     * then triggers a rebuilding of the menu and resolves the current route
+     *
+     * @param {string} topicURL The topic metadata URL or relative path to load things from
+     */
+    async fetchMetadata(topicURL) {
+        let metadata = {};
+        let routes = [];
+
+        const result = await (
+            await fetch(topicURL, {
+                headers: {'Content-Type': 'application/json'},
+            })
+        ).json();
+
+        this.topic = result;
+
+         // Get other activities from typesense
+        try {
+            const typesenseActivities = await fetch(`${this.typesenseNexusProtocol}://${this.typesenseNexusHost}:${this.typesenseNexusPort}/multi_search`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-TYPESENSE-API-KEY': this.typesenseNexusKey,
+                    'Authorization': 'Bearer ' + this.auth.token
+                },
+                body: JSON.stringify({
+                    "searches": [
+                        {
+                            "query_by": "activityName",
+                            "collection": "nexus",
+                            "q": "*",
+                            "page": 1,
+                            "per_page": 250
+                        }
+                    ]
+                })
+            });
+
+            const typesenseResult = await typesenseActivities.json();
+
+            // console.log('typesenseResult.results', typesenseResult.results);
+
+            const hits = typesenseResult.results[0].hits;
+            // Merge Typesense activities into result.activities
+            hits.forEach(hit => {
+                const activity = {
+                    name: hit.document.activityName,
+                    path: hit.document.activityPath,
+                };
+                result.activities.push(activity);
+            });
+        } catch (error) {
+            console.error('Error fetching Typesense activities:', error);
+            send({
+                summary: 'Error!',
+                body: 'Error fetching Typesense activities',
+                type: 'danger',
+                timeout: 5,
+            });
+        }
+
+        const fetchOne = async (url) => {
+            const result = await fetch(url, {
+                headers: {'Content-Type': 'application/json'},
+            });
+            if (!result.ok) throw result;
+
+            const jsondata = await result.json();
+            if (jsondata['element'] === undefined)
+                throw new Error('no element defined in metadata');
+
+            return jsondata;
+        };
+
+        let promises = [];
+        for (const activity of result.activities) {
+            const actURL = new URL(activity.path, new URL(topicURL, window.location.href).href).href;
+            promises.push([
+                activity.visible === undefined || activity.visible,
+                actURL,
+                fetchOne(actURL),
+            ]);
+        }
+
+        for (const [visible, actURL, p] of promises) {
+            try {
+                const activity = await p;
+                activity.visible = visible;
+                // Resolve module_src relative to the location of the json file
+                activity.module_src = new URL(activity.module_src, actURL).href;
+                activity.required_roles = activity.required_roles || [];
+                metadata[activity.routing_name] = activity;
+                routes.push(activity.routing_name);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+        // this also triggers a rebuilding of the menu
+        this.metadata = metadata;
+        this.routes = routes;
+
+        // Switch to the first route if none is selected
+        if (!this.activeView) this.switchComponent(routes[0]);
+        else this.switchComponent(this.activeView);
     }
 
     _renderActivity() {
@@ -56,6 +182,14 @@ export class NexusAppShell extends AppShell {
                 }
             }
         }
+
+         // Pass Typesense configuration to the activity element
+        elm.setAttribute('typesense-nexus-host', this.typesenseNexusHost);
+        elm.setAttribute('typesense-nexus-port', this.typesenseNexusPort);
+        elm.setAttribute('typesense-nexus-path', this.typesenseNexusPath);
+        elm.setAttribute('typesense-nexus-protocol', this.typesenseNexusProtocol);
+        elm.setAttribute('typesense-nexus-key', this.typesenseNexusKey);
+        elm.setAttribute('typesense-nexus-collection', this.typesenseNexusCollection);
 
         return elm;
     }
