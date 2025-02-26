@@ -78,7 +78,7 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
             typesenseNexusKey: { type: String, attribute: 'typesense-nexus-key' },
             typesenseNexusCollection: { type: String, attribute: 'typesense-nexus-collection' },
             hitData: { type: Object, attribute: false },
-            favoriteActivities: {type: Object, attribute: false}
+            favoriteActivities: {type: Array, attribute: 'favorite-activities'}
         };
     }
 
@@ -315,26 +315,23 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
             escapeHTML: true,
             templates: {
                 item: (hit, {html}) => {
+                    const isFavorite = this.favoriteActivities.some(item => item.name === hit.activityName);
                     return html`
                         <div class="activity-item">
                             <dbp-icon class="activity-favorite"
-                                name="${this.favoriteActivities.find((item) => item.name === hit.activityName) ? 'star-filled' : 'star-empty'}"
+                                name="${isFavorite ? 'star-filled' : 'star-empty'}"
                                 onclick="${(e) => {
                                     const icon  = e.target;
-                                    // Toggle icon and favorite status
-                                    if (icon.name === 'star-empty') {
-                                        this.favoriteActivities.push({
-                                            name: hit.activityName,
-                                            route: hit.activityRoutingName
-                                        });
-                                        icon.name="star-filled";
-                                    } else {
-                                        this.favoriteActivities = this.favoriteActivities.filter((item) => item.name !== hit.activityName);
-                                        icon.name="star-empty";
-                                    }
-                                    // Save this.favoriteActivities to localstorage
-                                    localStorage.setItem('nexus-favorite-activities', JSON.stringify(this.favoriteActivities));
-                                    this.requestUpdate();
+                                    this.dispatchEvent(new CustomEvent("dbp-favorized", {
+                                            bubbles: true,
+                                            composed: true,
+                                            detail: {
+                                                icon: icon,
+                                                activityName: hit.activityName,
+                                                activityRoute: hit.activityRoutingName
+                                            }
+                                        })
+                                    );
                                 }}"></dbp-icon>
                             <div class="activity-header">
                                 <div class="activity-icon">
@@ -391,12 +388,6 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
         });
     }
 
-    toggleFavorites(e) {
-        console.log('toggle fav event', e);
-        const favoritContainer = this._('.favorite-activities-container');
-        favoritContainer.classList.toggle('closed');
-    }
-
     // createPagination(id) {
     //     return pagination({
     //         container: this._(id),
@@ -431,18 +422,6 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
             </dbp-inline-notification>
 
             <div class="main-container">
-                <aside class="favorite-activities-container">
-                    <div class="toggle-favorites">
-                        <dbp-icon name="chevron-down"
-                        @click="${(e) => this.toggleFavorites(e)}"></dbp-icon>
-                    </div>
-                    <h3>My Favorites</h3>
-                    <ul class="favorite-list">
-                        ${this.favoriteActivities.map(activity => {
-                            return html`<li class="favorite-item"><a data-nav="${activity.route}" class="favorite-activity">${activity.name}</a></li>`;
-                        })}
-                    </ul>
-                </aside>
                 <div class="search-container ${classMap({hidden: !this.isLoggedIn() || this.isLoading() || this.loadingTranslations})}">
 
                     <div class="search-box-container">

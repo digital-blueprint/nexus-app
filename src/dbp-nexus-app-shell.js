@@ -7,25 +7,61 @@ export class NexusAppShell extends AppShell {
     constructor() {
         super();
         this.boundOpenActivityHandler = this.openActivity.bind(this);
+        this.boundActivityFavorized = this.handleActivityFavorized.bind(this);
+        this.favoriteActivities = [];
 
         console.log('NEXUS APP SHELL');
+    }
+
+    static get properties() {
+        return {
+            ...super.properties,
+            favoriteActivities: {type: Object, attribute: false}
+        };
     }
 
     connectedCallback() {
         super.connectedCallback();
 
         document.addEventListener('click', this.boundOpenActivityHandler);
+        document.addEventListener('dbp-favorized', this.boundActivityFavorized);
         console.log('NexusAppShell connected', document);
+
+        this.favoriteActivities = JSON.parse(localStorage.getItem('nexus-favorite-activities')) || [];
     }
 
     disconnectedCallback() {
         document.removeEventListener('click', this.boundOpenActivityHandler);
+        document.removeEventListener('dbp-favorized', this.boundActivityFavorized);
         super.disconnectedCallback();
     }
 
+    _renderActivity() {
+        const act = this.metadata[this.activeView];
+        if (act === undefined) return html``;
+
+        const elm = this._createActivityElement(act);
+
+        // add subscriptions for the provider component
+        if (act.subscribe !== undefined) {
+            elm.setAttribute('subscribe', act.subscribe);
+        }
+
+        // add any additional attributes defined in the metadata
+        if (act.attributes !== undefined) {
+            for (const [key, value] of Object.entries(act.attributes)) {
+                if (key === 'favorite-activities') {
+                    elm.setAttribute(key, JSON.stringify(this.favoriteActivities));
+                }
+            }
+        }
+
+        return elm;
+    }
+
     openActivity(e) {
+        // @TODO change to custom event
         console.log('openActivity', e);
-        // e.preventDefault();
 
         const link = e.composedPath()[0];
         const href = link.getAttribute('data-nav');
@@ -36,6 +72,37 @@ export class NexusAppShell extends AppShell {
             let location = this.router.getPathname(partialState);
             this.router.updateFromUrl(location);
         }
+    }
+
+    handleActivityFavorized(e) {
+        console.log('handleActivityFavorized', e);
+
+        const activityName = e.detail.activityName;
+        const icon = e.detail.icon;
+        const activityRoute = e.detail.activityRoute;
+        // Toggle icon and favorite status
+        if (icon.name === 'star-empty') {
+            const activityExists = this.favoriteActivities.some(item => item.name === activityName);
+            if (!activityExists) {
+                this.favoriteActivities = [...this.favoriteActivities, {
+                    name: activityName,
+                    route: activityRoute
+                }];
+            }
+            icon.name="star-filled";
+        } else {
+            this.favoriteActivities = this.favoriteActivities.filter((item) => item.name !== activityName);
+            icon.name="star-empty";
+        }
+        // Save this.favoriteActivities to localstorage
+        localStorage.setItem('nexus-favorite-activities', JSON.stringify(this.favoriteActivities));
+        this.requestUpdate();
+    }
+
+    toggleFavorites(e) {
+        console.log('toggle fav event', e);
+        const favoritContainer = this._('.favorite-activities-container');
+        favoritContainer.classList.toggle('closed');
     }
 
     render() {
@@ -676,7 +743,28 @@ export class NexusAppShell extends AppShell {
                             <p>${i18n.t('choose-from-menu')}</p>
                         </div>
                         <p class="description">${this.description}</p>
-                        ${this._renderActivity()}
+                        <div class="page-container">
+                            <aside class="favorite-activities-container">
+                                <!-- <div class="toggle-favorites">
+                                    <dbp-icon name="chevron-down"
+                                    @click="${(e) => this.toggleFavorites(e)}"></dbp-icon>
+                                </div> -->
+                                <div class="favorite-header">
+                                    <h3 class="favorite-header-title">My Favorites</h3>
+                                    <dbp-icon class="favorite-header-icon"
+                                    name="star-filled"></dbp-icon>
+                                </div>
+                                <ul class="favorite-list">
+                                    ${this.favoriteActivities.map(activity => {
+                                        return html`<li class="favorite-item"><a data-nav="${activity.route}" class="favorite-activity">${activity.name}</a></li>`;
+                                    })}
+                                </ul>
+                            </aside>
+                            <div class="activity-container">
+                                ${this._renderActivity()}
+                            </div>
+                        </div>
+
                     </main>
 
                     <footer>
