@@ -174,16 +174,14 @@ export class NexusAppShell extends AppShell {
             #main.wide-layout {
                 max-width: var(--wide-layout-max-width);
 
-                header {
-                    max-width: var(--wide-layout-max-width);
-                }
-
-                main {
-                    max-width: var(--wide-layout-max-width);
-                }
-
+                header,
+                main,
                 footer {
                     max-width: var(--wide-layout-max-width);
+                }
+
+                .activity-container {
+                    max-width: calc(var(--wide-layout-max-width) - var(--sidebar-width));
                 }
             }
 
@@ -311,20 +309,21 @@ export class NexusAppShell extends AppShell {
 
             .page-container {
                 display: grid;
-                grid-template-columns: var(--sidebar-width) 1fr;
+                grid-template-columns: var(--sidebar-width) minmax(0, auto);
                 gap: 2em;
             }
 
             @container main (width < 700px) {
                 .page-container {
                     display: grid;
-                    grid-template-columns: 1fr;
+                    grid-template-columns: minmax(0, auto);
                     gap: 1em;
                 }
             }
 
             .activity-container {
                 width: 100%;
+                max-width: calc(var(--default-layout-max-width) - var(--sidebar-width));
             }
 
             .favorite-activities-container {

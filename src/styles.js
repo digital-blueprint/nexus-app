@@ -233,16 +233,23 @@ export function getSelectorFixCSS() {
 export function getSearchGridCSS() {
     // language=css
     return css`
+
+        .main-container {
+            --dbp-shadow-color: #e3e5ec;
+        }
+
         .result-container {
-            margin-top: .25em;
-            margin-top: .25em;
             display: flex;
             flex-direction: column;
             gap: 0;
         }
 
         .result-count {
-            margin: .25em;
+            margin: .25em 0;
+        }
+
+        .ais-Stats-text {
+            color: var(--dbp-content);
         }
 
         .search-box-container {
@@ -271,7 +278,6 @@ export function getSearchGridCSS() {
 
         .ais-Hits-list {
             display: grid;
-            /*grid-template-columns: repeat(3, minmax(250px, 1fr));*/
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 1rem;
             padding: 0;
@@ -282,6 +288,24 @@ export function getSearchGridCSS() {
             margin: 0;
             width: 100%;
         }
+
+        .ais-Hits-item:hover {
+            box-shadow: 0 2px 12px 6px var(--dbp-shadow-color);
+            animation: 250ms ease forwards wobbles;
+        }
+
+        @keyframes wobbles {
+            0 {
+                transform: rotate(0);
+            }
+            50% {
+                transform: rotate(.5deg);
+            }
+            100% {
+                transform: rotate(0);
+            }
+        }
+
 
         .ais-CurrentRefinements-categoryLabel {
             color: var(--dbp-content);

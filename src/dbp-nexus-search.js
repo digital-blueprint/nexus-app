@@ -306,12 +306,6 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
         });
     }
 
-    // renderFavoriteActivites() {
-    //     const activitiesSidebar = this._('#favorite-activities');
-    //     console.log(activitiesSidebar);
-    //     console.log('favoriteActivities', this.favoriteActivities);
-    // }
-
     createHits() {
         return hits({
             container: this._("#hits"),
@@ -436,7 +430,7 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
                         <!-- <div id="sort-by" class="sort-widget"></div> -->
                     </div>
                     <div class="result-container">
-                        <div id="result-count"></div>
+                        <div id="result-count" class="result-count"></div>
                         <div class="results">
                             <div id="hits"></div>
                             <!-- <div id="pagination-bottom"></div> -->
