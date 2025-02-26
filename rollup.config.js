@@ -111,7 +111,7 @@ if ((devConfig != undefined && appEnv in devConfig)) {
             path: '/',
             protocol: 'http',
             key: 'xyz',
-            collection: 'nexus'
+            collection: 'cabinet'
         },
     };
 } else {
@@ -471,23 +471,23 @@ Dependencies:
                         src: await getPackagePath('instantsearch.css', 'themes/algolia-min.css'),
                         dest: 'dist/'+ (await getDistPath(pkg.name)),
                     },
-                    // // the pdfjs worker is needed for signature, dispatch, pdf-viewer and the annotation loading in nexus!
-                    // {
-                    //     src: await getPackagePath('pdfjs-dist', 'legacy/build/pdf.worker.mjs'),
-                    //     dest: 'dist/local/@digital-blueprint/esign-app/pdfjs',
-                    // },
-                    // {
-                    //     src: await getPackagePath('pdfjs-dist', 'cmaps/*'),
-                    //     dest: 'dist/local/@digital-blueprint/esign-app/pdfjs',
-                    // }, // do we want all map files?
-                    // {
-                    //     src: await getPackagePath('pdfjs-dist', 'legacy/build/pdf.worker.mjs'),
-                    //     dest: 'dist/local/@dbp-toolkit/pdf-viewer/pdfjs',
-                    // },
-                    // {
-                    //     src: await getPackagePath('pdfjs-dist', 'cmaps/*'),
-                    //     dest: 'dist/local/@dbp-toolkit/pdf-viewer/pdfjs',
-                    // }, // do we want all map files?
+                    // the pdfjs worker is needed for signature, dispatch, pdf-viewer and the annotation loading in nexus!
+                    {
+                        src: await getPackagePath('pdfjs-dist', 'legacy/build/pdf.worker.mjs'),
+                        dest: 'dist/local/@digital-blueprint/esign-app/pdfjs',
+                    },
+                    {
+                        src: await getPackagePath('pdfjs-dist', 'cmaps/*'),
+                        dest: 'dist/local/@digital-blueprint/esign-app/pdfjs',
+                    }, // do we want all map files?
+                    {
+                        src: await getPackagePath('pdfjs-dist', 'legacy/build/pdf.worker.mjs'),
+                        dest: 'dist/local/@dbp-toolkit/pdf-viewer/pdfjs',
+                    },
+                    {
+                        src: await getPackagePath('pdfjs-dist', 'cmaps/*'),
+                        dest: 'dist/local/@dbp-toolkit/pdf-viewer/pdfjs',
+                    }, // do we want all map files?
                     {
                         src: await getPackagePath('@tugraz/font-source-sans-pro', 'files/*'),
                         dest: 'dist/' + (await getDistPath(pkg.name, 'fonts/source-sans-pro')),
@@ -507,21 +507,21 @@ Dependencies:
                     {
                         src: await getPackagePath('@dbp-toolkit/common', 'assets/icons/*.svg'),
                         dest: 'dist/' + (await getDistPath('@dbp-toolkit/common', 'icons')),
+                    },
+                    {
+                        src: await getPackagePath('tabulator-tables', 'dist/css'),
+                        dest:
+                            'dist/' + (await getDistPath('@digital-blueprint/dispatch-app', 'tabulator-tables')),
+                    },
+                    {
+                        src: await getPackagePath('tabulator-tables', 'dist/css'),
+                        dest:
+                            'dist/' + (await getDistPath('@dbp-toolkit/file-handling', 'tabulator-tables')),
+                    },
+                    {
+                        src: await getPackagePath('tabulator-tables', 'dist/css'),
+                        dest: 'dist/' + (await getDistPath('@dbp-toolkit/tabulator-table', 'tabulator-tables')),
                     }
-                    // {
-                    //     src: await getPackagePath('tabulator-tables', 'dist/css'),
-                    //     dest:
-                    //         'dist/' + (await getDistPath('@digital-blueprint/dispatch-app', 'tabulator-tables')),
-                    // },
-                    // {
-                    //     src: await getPackagePath('tabulator-tables', 'dist/css'),
-                    //     dest:
-                    //         'dist/' + (await getDistPath('@dbp-toolkit/file-handling', 'tabulator-tables')),
-                    // },
-                    // {
-                    //     src: await getPackagePath('tabulator-tables', 'dist/css'),
-                    //     dest: 'dist/' + (await getDistPath('@dbp-toolkit/tabulator-table', 'tabulator-tables')),
-                    // }
                 ],
             }),
 

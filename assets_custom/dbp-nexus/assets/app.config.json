@@ -17,16 +17,16 @@
             "host": "typesense.localhost",
             "port": "9100",
             "protocol": "http",
-            "key": "",
-            "collection": "nexus"
+            "key": "xyz",
+            "collection": "cabinet"
         },
         "typesense": {
             "host": "127.0.0.1",
             "path": "/cabinet/typesense/",
             "port": "8000",
             "protocol": "http",
-            "key": "xyz",
-            "collection": "nexus"
+            "key": "",
+            "collection": "cabinet"
         },
         "typesenseNexus": {
             "host": "127.0.0.1",
@@ -56,16 +56,16 @@
             "host": "typesense.localhost",
             "port": "9100",
             "protocol": "http",
-            "key": "",
-            "collection": "nexus"
+            "key": "xyz",
+            "collection": "cabinet"
         },
         "typesense": {
             "host": "127.0.0.1",
             "path": "/cabinet/typesense/",
             "port": "8000",
             "protocol": "http",
-            "key": "xyz",
-            "collection": "nexus"
+            "key": "",
+            "collection": "cabinet"
         },
         "typesenseNexus": {
             "host": "127.0.0.1",
@@ -95,16 +95,16 @@
             "host": "typesense.localhost",
             "port": "9100",
             "protocol": "http",
-            "key": "",
-            "collection": "nexus"
+            "key": "xyz",
+            "collection": "cabinet"
         },
         "typesense": {
             "host": "127.0.0.1",
             "path": "/cabinet/typesense/",
             "port": "8000",
             "protocol": "http",
-            "key": "xyz",
-            "collection": "nexus"
+            "key": "",
+            "collection": "cabinet"
         },
         "typesenseNexus": {
             "host": "127.0.0.1",
