@@ -233,77 +233,16 @@ export function getSelectorFixCSS() {
 export function getSearchGridCSS() {
     // language=css
     return css`
-        .main-container {
-            display: grid;
-            grid-template-columns: 250px 1fr;
-            gap: 1em;
-        }
-
-        @media (width < 768px) {
-            .main-container {
-                display: grid;
-                grid-template-columns: 1fr;
-                gap: 1em;
-            }
-
-            .favorite-activities-container.closed h3 {
-                margin-bottom: 0;
-            }
-
-            .favorite-activities-container.closed .favorite-list  {
-                height: 0;
-                overflow: hidden;
-            }
-
-            .toggle-favorites {
-                display: block !important;
-            }
-        }
-
-        .favorite-activities-container {
-            padding: 1em;
-            border: 1px solid #c4c8d8;
-            box-shadow: 0 2px 5px 0px #e3e5ec;
-            position: relative;
-        }
-
-        .toggle-favorites {
-            position: absolute;
-            top: 1em;
-            right: 1em;
-            display: none;
-        }
-
-        .favorite-activities-container h3 {
-            margin-bottom: 2em;
-        }
-
-        .favorite-list {
-            padding: 0;
-            margin: 0;
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: .5em;
-        }
-
-        .favorite-item {
-
-        }
-
-        .search-container {
-
-        }
-
         .result-container {
+            margin-top: .25em;
             margin-top: .25em;
             display: flex;
             flex-direction: column;
-            gap: 1em;
+            gap: 0;
         }
 
-        .results {
-
+        .result-count {
+            margin: .25em;
         }
 
         .search-box-container {
@@ -321,7 +260,7 @@ export function getSearchGridCSS() {
 
         .ais-SearchBox-input {
             flex-grow: 1;
-            height: 2em;
+            height: 3em;
             background-color: var(--dbp-background);
             color: var(--dbp-content);
             border: var(--dbp-border);
@@ -394,6 +333,14 @@ export function getSearchGridCSS() {
         .activity-tag {
             padding: .25em .5em;
             border: 1px solid var(--dbp-muted);
+        }
+
+        .activity-favorite {
+            transition: transform 250ms ease;
+        }
+
+        .is-animating {
+            transform: scale(1.3);
         }
     `;
 }

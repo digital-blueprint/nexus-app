@@ -1,7 +1,8 @@
 import {AppShell} from '@dbp-toolkit/app-shell';
-import {html} from 'lit';
+import {css, html, unsafeCSS} from 'lit';
 import {classMap} from 'lit/directives/class-map.js';
-// import {Router} from './router.js';
+import * as commonStyles from '@dbp-toolkit/common/styles';
+import {getIconSVGURL} from './utils.js';
 
 export class NexusAppShell extends AppShell {
     constructor() {
@@ -105,12 +106,322 @@ export class NexusAppShell extends AppShell {
         favoritContainer.classList.toggle('closed');
     }
 
+    static get styles() {
+        // language=css
+        return css`
+            ${commonStyles.getThemeCSS()}
+            ${commonStyles.getGeneralCSS()}
+            ${commonStyles.getLinkCss()}
+
+            .hidden {
+                display: none;
+            }
+
+            h1.title {
+                margin-bottom: 0;
+                font-weight: 300;
+            }
+
+            #main {
+                --default-layout-max-width: 1440px;
+                --wide-layout-max-width: 1920px;
+                --sidebar-width: 250px;
+                --page-padding: 20px;
+                display: grid;
+                grid-template-columns: 1fr;
+                grid-template-areas: 'header' 'headline' 'main' 'footer';
+                grid-template-rows: min-content min-content 1fr min-content;
+                margin: 0 auto;
+                min-height: 100vh;
+            }
+
+            header,
+            #headline,
+            main,
+            footer {
+                width: calc(100% - 2 * var(--page-padding));
+                max-width: var(--default-layout-max-width);
+                margin: 0 auto;
+                padding: 0 20px;
+            }
+
+            header {
+                grid-area: header;
+                display: grid;
+                grid-template-columns: 50% 1px auto;
+                grid-template-rows: 60px 60px;
+                grid-template-areas: 'hd1-left hd1-middle hd1-right' 'hd2-left . hd2-right';
+            }
+
+            #headline {
+                grid-area: headline;
+                text-align: center;
+                margin-top: 2em;
+                margin-bottom: 3em;
+            }
+
+            main {
+                grid-area: main;
+                container: main / inline-size;
+            }
+
+
+            footer {
+                grid-area: footer;
+                text-align: right;
+            }
+
+            #main.wide-layout {
+                max-width: var(--wide-layout-max-width);
+
+                header {
+                    max-width: var(--wide-layout-max-width);
+                }
+
+                main {
+                    max-width: var(--wide-layout-max-width);
+                }
+
+                footer {
+                    max-width: var(--wide-layout-max-width);
+                }
+            }
+
+            header .hd1-left {
+                display: flex;
+                flex-direction: row;
+                justify-content: flex-end;
+                -webkit-justify-content: flex-end;
+                grid-area: hd1-left;
+                text-align: right;
+                padding-right: 20px;
+                align-items: center;
+                -webkit-align-items: center;
+                gap: 10px;
+            }
+
+            header .hd1-middle {
+                grid-area: hd1-middle;
+                background-color: var(--dbp-content);
+                background: linear-gradient(
+                    180deg,
+                    var(--dbp-content) 0%,
+                    var(--dbp-content) 85%,
+                    rgba(0, 0, 0, 0) 90%
+                );
+            }
+
+            header .hd1-right {
+                grid-area: hd1-right;
+                display: flex;
+                justify-content: flex-start;
+                -webkit-justify-content: flex-start;
+                padding: 0 20px;
+                min-width: 0;
+                align-items: center;
+                -webkit-align-items: center;
+            }
+
+            header .hd1-right .auth-button {
+                min-width: 0;
+            }
+
+            header .hd2-left {
+                grid-area: hd2-left;
+                display: flex;
+                flex-direction: column;
+                white-space: nowrap;
+            }
+
+            header .hd2-left .header {
+                margin-left: 50px;
+            }
+
+            header .hd2-left a:hover {
+                color: var(--dbp-hover-color, var(--dbp-content));
+                background-color: var(--dbp-hover-background-color);
+            }
+
+            header .hd2-right {
+                grid-area: hd2-right;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                text-align: right;
+            }
+
+            header a {
+                color: var(--dbp-content);
+                display: inline;
+            }
+
+            footer {
+                display: flex;
+                justify-content: flex-end;
+                flex-wrap: wrap;
+            }
+
+            footer > *,
+            footer slot > * {
+                margin: 0.5em 0 0 1em;
+            }
+
+            footer a {
+                border-bottom: var(--dbp-border);
+                padding: 0;
+            }
+
+            footer a:hover {
+                color: var(--dbp-hover-color, var(--dbp-content));
+                background-color: var(--dbp-hover-background-color);
+                border-color: var(--dbp-hover-color, var(--dbp-content));
+            }
+
+            .description {
+                text-align: left;
+                margin-bottom: 1rem;
+                display: none;
+            }
+
+            #dbp-notification {
+                z-index: 99999;
+            }
+
+            @media (max-width: 768px) {
+                #main {
+                    grid-template-columns: minmax(0, auto);
+                    grid-template-rows: min-content min-content min-content 1fr min-content;
+                    grid-template-areas: 'header' 'headline' 'sidebar' 'main' 'footer';
+                }
+
+                header {
+                    grid-template-rows: 40px;
+                    grid-template-areas: 'hd1-left hd1-middle hd1-right';
+                }
+
+                header .hd2-left,
+                header .hd2-right {
+                    display: none;
+                }
+            }
+
+            header .hd2-left .header {
+                margin: 0 0 0 1em;
+            }
+
+            .page-container {
+                display: grid;
+                grid-template-columns: var(--sidebar-width) 1fr;
+                gap: 2em;
+            }
+
+            @container main (width < 700px) {
+                .page-container {
+                    display: grid;
+                    grid-template-columns: 1fr;
+                    gap: 1em;
+                }
+            }
+
+            .activity-container {
+                width: 100%;
+            }
+
+            .favorite-activities-container {
+                grid-area: initial; /* override appshell style */
+                padding: 0;
+                margin: 0;
+                border: 1px solid #c4c8d8;
+                box-shadow: 0 2px 5px 0px #e3e5ec;
+                position: relative;
+            }
+
+            .favorite-activities-container.closed .favorite-list  {
+                height: 0;
+                overflow: hidden;
+            }
+
+            .favorite-item {
+                transform: translateY(10px);
+                animation: 0.3s ease forwards fadeIn;
+            }
+
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(10px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            .favorite-header {
+                background-color: var(--dbp-background);
+                position: relative;
+                height: 3em;
+                display: flex;
+                justify-content: space-between;
+                padding: 1em 1em 0 1em;
+                align-items: center;
+            }
+
+            .favorite-header--home {
+                background-color: #e7e7e7;
+                cursor: pointer;
+                padding: 0;
+            }
+
+            .favorite-header-home-title {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                padding: 0 .75em;
+                font-size: 1.5em;
+                background: right .75em center no-repeat url("${unsafeCSS(
+                    getIconSVGURL('home')
+                )}");
+                background-size: 1em;
+            }
+
+            .favorite-header-title {
+                font-size: 1.5em;
+            }
+
+            .favorite-header-icon {
+                color: var(--dbp-override-primary);
+                font-size: 24px;
+                position: static;
+            }
+
+            .toggle-favorites {
+                position: absolute;
+                top: 1em;
+                right: 1em;
+                display: none;
+            }
+
+            @media (width < 768px) {
+                .toggle-favorites {
+                    display: block !important;
+                }
+            }
+
+            .favorite-list {
+                padding: 1em;
+                margin: 0;
+                list-style: none;
+                display: flex;
+                flex-direction: column;
+                gap: .5em;
+            }
+        `;
+    }
+
     render() {
         let i18n = this._i18n;
-
-        const getSelectClasses = (name) => {
-            return classMap({selected: this.activeView === name});
-        };
 
         // We hide the app until we are either fully logged in or logged out
         // At the same time when we hide the main app we show the main slot (e.g. a loading spinner)
@@ -135,8 +446,6 @@ export class NexusAppShell extends AppShell {
         this.updatePageTitle();
         this.updatePageMetaDescription();
 
-        // build the menu
-        let menuTemplates = [];
         for (let routingName of this.visibleRoutes) {
             let partialState = {
                 component: routingName,
@@ -145,258 +454,11 @@ export class NexusAppShell extends AppShell {
             if (this.activeView !== routingName) {
                 partialState['extra'] = [];
             }
-            menuTemplates.push(
-                html`
-                    <li>
-                        <a
-                            @click="${(e) => this.onMenuItemClick(e)}"
-                            href="${this.router.getPathname(partialState)}"
-                            data-nav
-                            class="${getSelectClasses(routingName)}"
-                            title="${this.metaDataText(routingName, 'description')}">
-                            ${this.metaDataText(routingName, 'short_name')}
-                        </a>
-                    </li>
-                `
-            );
         }
-        let style;
-        if (this.currentLayout == 'wide') {
-            style = html`<style>
-                #root #main {
-                    display: grid;
-                    grid-template-columns: minmax(180px, 17%) minmax(0, auto);
-                    grid-template-rows: min-content min-content 1fr min-content;
-                    grid-template-areas: 'header header' 'headline headline' 'main main' 'footer footer';
-                    max-width: 1900px;
-                    margin: auto;
-                    min-height: 100vh;
-                }
 
-                #main-logo {
-                    padding: 0 50px 0 0;
-                }
-
-                header {
-                    grid-area: header;
-                    display: grid;
-                    grid-template-columns: 50% 1px auto;
-                    grid-template-rows: 60px 60px;
-                    grid-template-areas: 'hd1-left hd1-middle hd1-right' 'hd2-left . hd2-right';
-                    width: 100%;
-                    max-width: 1060px;
-                    margin: 0 auto;
-                }
-
-                #headline {
-                    grid-area: headline;
-                    margin: 20px 0 30px 0;
-                    text-align: center;
-
-                }
-
-                main {
-                    grid-area: main;
-                    margin: 15px 15px;
-                }
-
-                footer {
-                    grid-area: footer;
-                    margin: 15px;
-                    text-align: right;
-                }
-
-                header .hd1-left {
-                    display: flex;
-                    flex-direction: row;
-                    justify-content: flex-end;
-                    -webkit-justify-content: flex-end;
-                    grid-area: hd1-left;
-                    text-align: right;
-                    padding-right: 20px;
-                    align-items: center;
-                    -webkit-align-items: center;
-                    gap: 10px;
-                }
-
-                header .hd1-middle {
-                    grid-area: hd1-middle;
-                    background-color: var(--dbp-content);
-                    background: linear-gradient(
-                        180deg,
-                        var(--dbp-content) 0%,
-                        var(--dbp-content) 85%,
-                        rgba(0, 0, 0, 0) 90%
-                    );
-                }
-
-                header .hd1-right {
-                    grid-area: hd1-right;
-                    display: flex;
-                    justify-content: flex-start;
-                    -webkit-justify-content: flex-start;
-                    padding: 0 20px;
-                    min-width: 0;
-                    align-items: center;
-                    -webkit-align-items: center;
-                }
-
-                header .hd1-right .auth-button {
-                    min-width: 0;
-                }
-
-                header .hd2-left {
-                    grid-area: hd2-left;
-                    display: flex;
-                    flex-direction: column;
-                    white-space: nowrap;
-                }
-
-                header .hd2-left .header {
-                    margin-left: 50px;
-                }
-
-                header .hd2-left a:hover {
-                    color: var(--dbp-hover-color, var(--dbp-content));
-                    background-color: var(--dbp-hover-background-color);
-                }
-
-                header .hd2-right {
-                    grid-area: hd2-right;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: center;
-                    text-align: right;
-                }
-
-                header a {
-                    color: var(--dbp-content);
-                    display: inline;
-                }
-
-                aside ul.menu,
-                footer ul.menu {
-                    list-style: none;
-                }
-
-                ul.menu li.close {
-                    text-align: right!important;
-                    cursor: pointer;
-                }
-
-                footer {
-                    display: flex;
-                    justify-content: flex-end;
-                    flex-wrap: wrap;
-                }
-
-                footer > *,
-                footer slot > * {
-                    margin: 0.5em 0 0 1em;
-                }
-
-                footer a {
-                    border-bottom: var(--dbp-border);
-                    padding: 0;
-                }
-
-                footer a:hover {
-                    color: var(--dbp-hover-color, var(--dbp-content));
-                    background-color: var(--dbp-hover-background-color);
-                    border-color: var(--dbp-hover-color, var(--dbp-content));
-                }
-
-                .menu a {
-                    padding: 8px !important;
-                    font-weight: 300;
-                    color: var(--dbp-content);
-                    display: block;
-                    padding-right: 13px;
-                    word-break: break-word;
-                }
-
-                .menu a:hover {
-                    color: var(--dbp-hover-color, var(--dbp-content));
-                    background-color: var(--dbp-hover-background-color);
-                }
-
-                .menu a.selected {
-                    border-left: 3px solid var(--dbp-accent);
-                    font-weight: bolder;
-                    padding-left: 0.5em;
-                    padding-right: 0.3em;
-                }
-
-                aside .subtitle {
-                    display: none;
-                    color: var(--dbp-content);
-                    font-size: 1.25rem;
-                    font-weight: 300;
-                    line-height: 1.25;
-                    cursor: pointer;
-                    text-align: center;
-                }
-
-                aside h2.subtitle {
-                    display: block;
-                    border-bottom: var(--dbp-border);
-                    padding: 0.5em 0.5em;
-                }
-
-                aside .menu {
-                    grid-area: headline !important;
-                    border-top-width: 0px;
-                    background-color: var(--dbp-background);
-                    border-bottom: var(--dbp-border);
-                    z-index: 10;
-                    width: 100%;
-                }
-
-                ul.menu.hidden {
-                    display: none !important;
-                }
-
-                a {
-                    transition: background-color 0.15s ease 0s, color 0.15s ease 0s;
-                }
-
-                .description {
-                    text-align: left;
-                    margin-bottom: 1rem;
-                }
-
-                aside{
-                    grid-area: headline !important;
-                    margin:65px auto!important;
-                    line-height: 1.125;
-                    color: var(--dbp-content);
-                    width: 100%;
-                }
-            </style>
-            `;
-        } else {
-            style = html`<style>
-                #root {
-                    #main {
-                        grid-template-columns: 1fr;
-                        grid-template-areas: 'header' 'headline' 'main' 'footer';
-                    }
-                    header {
-                        max-width: 1400px;
-                    }
-                    main {
-                        max-width: 1400px;
-                    }
-                    header .hd2-left .header {
-                        margin: 0 0 0 1em;
-                    }
-                }
-            </style>
-            `;
-        }
         const kc = this.keycloakConfig;
+        const wideLayout = this.currentLayout === 'wide';
         return html`
-            ${style}
             <slot class="${slotClassMap}"></slot>
             <dbp-auth-keycloak
                 subscribe="requested-login-status"
