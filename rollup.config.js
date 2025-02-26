@@ -378,6 +378,10 @@ Dependencies:
                     {src: 'assets/safari-*.svg', dest: 'dist/' + (await getDistPath(pkg.name))},
                     {src: 'assets/images/*', dest: 'dist/images'},
                     {src: 'assets/icon/*', dest: 'dist/' + (await getDistPath(pkg.name, 'icon'))},
+                    // {
+                    //     src: await getPackagePath('@digital-blueprint/cabinet-app', 'assets/icon/*'),
+                    //     dest: 'dist/local/@digital-blueprint/cabinet-app/icon'
+                    // },
                     {src: 'assets/site.webmanifest', dest: 'dist', rename: pkg.internalName + '.webmanifest'},
                     {src: 'assets/silent-check-sso.html', dest: 'dist'},
                     {
@@ -465,6 +469,10 @@ Dependencies:
                     {src: customAssetsPath + 'safari-*.svg', dest: 'dist/' + (await getDistPath(pkg.name))},
                     {src: customAssetsPath + 'images/*', dest: 'dist/images'},
                     {src: customAssetsPath + 'icon/*', dest: 'dist/' + (await getDistPath(pkg.name, 'icon'))},
+                    // {
+                    //     src: await getPackagePath('@digital-blueprint/cabinet-app', 'assets/icon/*'),
+                    //     dest: 'dist/local/@digital-blueprint/cabinet-app/icon'
+                    // },
                     {src: customAssetsPath + 'site.webmanifest', dest: 'dist', rename: pkg.internalName + '.webmanifest'},
                     {src: customAssetsPath + 'silent-check-sso.html', dest: 'dist'},
                     {

@@ -479,7 +479,7 @@ export class NexusAppShell extends AppShell {
                 site-id="${this.matomoSiteId}"
                 git-info="${this.gitInfo}"></dbp-matomo>
             <div class="${mainClassMap}" id="root">
-                <div id="main">
+                <div id="main" class="${classMap({'wide-layout': wideLayout })}">
                     <dbp-notification id="dbp-notification" lang="${this.lang}"></dbp-notification>
                     <header>
                         <slot name="header">
@@ -799,26 +799,25 @@ export class NexusAppShell extends AppShell {
                     </div>
 
                     <main>
-                        <div
-                            style="display: ${!this.metadata[this.activeView] ? 'block' : 'none'};">
+                        <div style="display: ${!this.metadata[this.activeView] ? 'block' : 'none'};">
                             <h2>${i18n.t('page-not-found')}</h2>
-                            <p>${i18n.t('choose-from-menu')}</p>
                         </div>
                         <p class="description">${this.description}</p>
                         <div class="page-container">
                             <aside class="favorite-activities-container">
-                                <!-- <div class="toggle-favorites">
-                                    <dbp-icon name="chevron-down"
-                                    @click="${(e) => this.toggleFavorites(e)}"></dbp-icon>
-                                </div> -->
+                                <div class="favorite-header favorite-header--home">
+                                    <h3 class="favorite-header-home-title" data-nav="activity-search">
+                                        Home
+                                    </h3>
+                                </div>
                                 <div class="favorite-header">
                                     <h3 class="favorite-header-title">My Favorites</h3>
                                     <dbp-icon class="favorite-header-icon"
-                                    name="star-filled"></dbp-icon>
+                                        name="star-filled"></dbp-icon>
                                 </div>
                                 <ul class="favorite-list">
                                     ${this.favoriteActivities.map(activity => {
-                                        return html`<li class="favorite-item"><a data-nav="${activity.route}" class="favorite-activity">${activity.name}</a></li>`;
+                                        return html`<li class="favorite-item is-animating"><a data-nav="${activity.route}" class="favorite-activity">${activity.name}</a></li>`;
                                     })}
                                 </ul>
                             </aside>

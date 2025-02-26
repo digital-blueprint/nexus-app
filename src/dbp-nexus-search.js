@@ -113,6 +113,11 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
                     // not before, or Instantsearch will break! Maybe there is some leaked stated between the two?
                     this.initTypesenseService();
                     break;
+
+                case 'favorite-activities':
+                    this.favoriteActivities = JSON.parse(this.favoriteActivities);
+                    this.requestUpdate();
+                    break;
             }
         });
 
@@ -148,8 +153,6 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
             console.log('serverConfig', this.serverConfig);
 
             this.loadModules();
-
-            this.favoriteActivities = JSON.parse(localStorage.getItem('nexus-favorite-activities')) || [];
         });
     }
 
@@ -322,6 +325,10 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
                                 name="${isFavorite ? 'star-filled' : 'star-empty'}"
                                 onclick="${(e) => {
                                     const icon  = e.target;
+                                    icon.classList.add('is-animating');
+                                    setTimeout(() => {
+                                        icon.classList.remove('is-animating');
+                                    }, 250);
                                     this.dispatchEvent(new CustomEvent("dbp-favorized", {
                                             bubbles: true,
                                             composed: true,
