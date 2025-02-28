@@ -57,7 +57,6 @@ export class NexusAppShell extends AppShell {
     /**
      * Fetches the metadata of the components we want to use in the menu, dynamically imports the js modules for them,
      * then triggers a rebuilding of the menu and resolves the current route
-     *
      * @param {string} topicURL The topic metadata URL or relative path to load things from
      */
     async fetchMetadata(topicURL) {
@@ -176,7 +175,7 @@ export class NexusAppShell extends AppShell {
 
         // add any additional attributes defined in the metadata
         if (act.attributes !== undefined) {
-            for (const [key, value] of Object.entries(act.attributes)) {
+            for (const [key] of Object.entries(act.attributes)) {
                 if (key === 'favorite-activities') {
                     elm.setAttribute(key, JSON.stringify(this.favoriteActivities));
                 }

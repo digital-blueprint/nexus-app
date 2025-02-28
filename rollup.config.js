@@ -460,6 +460,7 @@ Dependencies:
                     {src: customAssetsPath + '*.ico', dest: 'dist/' + (await getDistPath(pkg.name))},
                     {src: customAssetsPath + 'translation_overrides', dest: 'dist/' + (await getDistPath(pkg.name))},
                     {src: customAssetsPath + '*.metadata.json', dest: 'dist'},
+                    {src: 'vendor/**/src/*.metadata.json', dest: 'dist'},
                     {src: 'vendor/cabinet/assets/modules.json', dest: 'dist'},
                     {src: customAssetsPath + 'nexus-modules.json', dest: 'dist'},
                     {src: customAssetsPath + '*.svg', dest: 'dist/' + (await getDistPath(pkg.name))},

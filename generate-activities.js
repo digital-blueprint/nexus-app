@@ -221,7 +221,6 @@ async function main() {
         const uniqueActivitiesArray = Array.from(uniqueActivitiesMap.values());
         console.log('uniqueActivitiesArray', uniqueActivitiesArray);
 
-
         let activityJsons = [];
         for (const activity of uniqueActivitiesArray) {
             // First try to find activity metadata jsons in the src directory

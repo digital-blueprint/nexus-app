@@ -1,20 +1,9 @@
 import DBPLitElement from '@dbp-toolkit/common/dbp-lit-element';
 import {ScopedElementsMixin} from '@dbp-toolkit/common';
 import {css, html, unsafeCSS} from 'lit';
-import {
-    DbpCheckboxElement,
-    DbpDateElement,
-    DbpDateTimeElement,
-    DbpEnumElement,
-    DbpStringElement
-} from '@dbp-toolkit/form-elements';
 import {createInstance} from './i18n';
 import * as commonStyles from '@dbp-toolkit/common/styles';
-import {classMap} from 'lit/directives/class-map.js';
-import {getSelectorFixCSS} from './styles.js';
 import {getIconSVGURL} from './utils.js';
-import {gatherFormDataFromElement, validateRequiredFields} from '@dbp-toolkit/form-elements/src/utils.js';
-import {createRef, ref} from 'lit/directives/ref.js';
 
 export class BaseObject {
     name = 'baseObject';
