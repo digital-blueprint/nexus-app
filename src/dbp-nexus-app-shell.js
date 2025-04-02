@@ -11,30 +11,13 @@ export class NexusAppShell extends AppShell {
         super();
         this.boundOpenActivityHandler = this.openActivity.bind(this);
         this.boundActivityFavorized = this.handleActivityFavorized.bind(this);
-
-        this.typesenseNexusHost = '';
-        this.typesenseNexusPort = '';
-        this.typesenseNexusPath = '';
-        this.typesenseNexusProtocol = '';
-        this.typesenseNexusKey = '';
-        this.typesenseNexusCollection = '';
-
+        this.typesenseActivities = [];
         this.favoriteActivities = [];
-
-        console.log('NEXUS APP SHELL');
     }
 
     static get properties() {
         return {
             ...super.properties,
-
-            typesenseNexusHost: { type: String, attribute: 'typesense-nexus-host' },
-            typesenseNexusPort: { type: String, attribute: 'typesense-nexus-port' },
-            typesenseNexusPath: { type: String, attribute: 'typesense-nexus-path' },
-            typesenseNexusProtocol: { type: String, attribute: 'typesense-nexus-protocol' },
-            typesenseNexusKey: { type: String, attribute: 'typesense-nexus-key' },
-            typesenseNexusCollection: { type: String, attribute: 'typesense-nexus-collection' },
-
             favoriteActivities: {type: Object, attribute: false}
         };
     }
@@ -114,15 +97,20 @@ export class NexusAppShell extends AppShell {
 
             console.log('typesenseResult.results', typesenseResult.results);
 
-            const hits = typesenseResult.results[0].hits;
-            // Merge Typesense activities into result.activities
-            hits.forEach(hit => {
-                const activity = {
-                    name: hit.document.activityName,
-                    path: hit.document.activityPath,
-                };
-                result.activities.push(activity);
-            });
+            if (Array.isArray(typesenseResult.results) && typesenseResult.results.length > 0) {
+                const hits = typesenseResult.results.pop().hits;
+
+                if (Array.isArray(hits) && hits.length > 0) {
+                    // Merge Typesense activities into result.activities
+                    hits.forEach(hit => {
+                        const activity = {
+                            name: hit.document.activityName,
+                            path: hit.document.activityPath,
+                        };
+                        result.activities.push(activity);
+                    });
+                }
+            }
         } catch (error) {
             console.error('Error fetching Typesense activities:', error);
             send({
@@ -198,14 +186,6 @@ export class NexusAppShell extends AppShell {
                 }
             }
         }
-
-         // Pass Typesense configuration to the activity element
-        elm.setAttribute('typesense-nexus-host', this.typesenseNexusHost);
-        elm.setAttribute('typesense-nexus-port', this.typesenseNexusPort);
-        elm.setAttribute('typesense-nexus-path', this.typesenseNexusPath);
-        elm.setAttribute('typesense-nexus-protocol', this.typesenseNexusProtocol);
-        elm.setAttribute('typesense-nexus-key', this.typesenseNexusKey);
-        elm.setAttribute('typesense-nexus-collection', this.typesenseNexusCollection);
 
         return elm;
     }

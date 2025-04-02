@@ -25,18 +25,6 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
         super();
         this.activity = new Activity(metadata);
         this.fuzzySearch = true;
-        // this.typesenseHost = '';
-        // this.typesensePort = '';
-        // this.typesensePath = '';
-        // this.typesenseProtocol = '';
-        // this.typesenseKey = '';
-        // this.typesenseCollection = '';
-        // this.typesenseNexusHost = '';
-        // this.typesenseNexusPort = '';
-        // this.typesenseNexusPath = '';
-        // this.typesenseNexusProtocol = '';
-        // this.typesenseNexusKey = '';
-        // this.typesenseNexusCollection = '';
         this.typesenseInstantsearchAdapter = null;
         this.typesenseService = null;
         this.serverConfig = null;
