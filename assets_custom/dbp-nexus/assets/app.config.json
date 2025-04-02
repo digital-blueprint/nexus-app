@@ -30,11 +30,11 @@
         },
         "typesenseNexus": {
             "host": "127.0.0.1",
-            "path": "/",
-            "port": "8108",
+            "path": "/nexus/typesense/",
+            "port": "8000",
             "protocol": "http",
             "key": "rshvebw4z2k0VSRlj3KeEeNF1HH4gEEp",
-            "collection": "nexus"
+            "collection": "nexus--current"
         }
     },
     "localCustom": {
@@ -69,11 +69,11 @@
         },
         "typesenseNexus": {
             "host": "127.0.0.1",
-            "path": "/",
-            "port": "8108",
+            "path": "/nexus/typesense/",
+            "port": "8000",
             "protocol": "http",
             "key": "rshvebw4z2k0VSRlj3KeEeNF1HH4gEEp",
-            "collection": "nexus"
+            "collection": "nexus--current"
         }
     },
     "bs": {
@@ -108,11 +108,11 @@
         },
         "typesenseNexus": {
             "host": "127.0.0.1",
-            "path": "/",
-            "port": "8108",
+            "path": "/nexus/typesense/",
+            "port": "8000",
             "protocol": "http",
             "key": "rshvebw4z2k0VSRlj3KeEeNF1HH4gEEp",
-            "collection": "nexus"
+            "collection": "nexus--current"
         }
     },
     "development": {

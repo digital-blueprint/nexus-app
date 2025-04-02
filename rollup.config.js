@@ -41,7 +41,7 @@ let devPath = 'assets_custom/dbp-nexus/assets/';
 // deployment path
 let deploymentPath = '../assets/';
 
-let useHTTPS = false;
+let useHTTPS = true;
 
 // set whitelabel bool according to used environment
 if ((appEnv.length > 6 && appEnv.substring(appEnv.length - 6) == "Custom") || appEnv == "production") {
@@ -151,30 +151,13 @@ ${getOrigin(config.matomoUrl)} ${getOrigin(config.keyCloakBaseURL)} ${getOrigin(
 ${getOrigin(config.nextcloudBaseURL)} ${atrustHosts.map((h) => getOrigin(h)).join(' ')} \
 ${config.typesense.protocol + '://' + config.typesense.host + ':' + config.typesense.port} \
 ${config.typesenseNexus.protocol + '://' + config.typesenseNexus.host + ':' + config.typesenseNexus.port} \
-${getOrigin(config.pdfAsQualifiedlySigningServer)}; \
+${getOrigin(config.pdfAsQualifiedlySigningServer)} \
+https://*.tugraz.at;\
 img-src * blob: data:`;
 
 let input = [
     'src/' + pkg.internalName + '.js',
     'src/dbp-nexus-search.js',
-    // All activities from vendor directory
-    'vendor/signature/src/dbp-qualified-signature-pdf-upload.js',
-    'vendor/signature/src/dbp-official-signature-pdf-upload.js',
-    'vendor/dispatch/src/dbp-create-request.js',
-    'vendor/dispatch/src/dbp-show-requests.js',
-    'vendor/formalize/src/dbp-formalize-render-form.js',
-    'vendor/formalize/src/dbp-formalize-show-registrations.js',
-    'vendor/lunchlottery/src/dbp-lunchlottery-register.js',
-    'vendor/lunchlottery/src/dbp-lunchlottery-manage.js',
-    'vendor/lunchlottery/src/dbp-lunchlottery-assign-seats.js',
-    'vendor/cabinet/src/dbp-cabinet-search.js',
-    'vendor/cabinet/src/objectTypes/fileAdmissionNotice.js',
-    'vendor/cabinet/src/objectTypes/fileCommunication.js',
-    'vendor/cabinet/src/objectTypes/fileIdentityDocument.js',
-    'vendor/cabinet/src/objectTypes/fileMinimalSchema.js',
-    'vendor/cabinet/src/objectTypes/fileCitizenshipCertificate.js',
-    'vendor/cabinet/src/objectTypes/person.js',
-    'vendor/cabinet/src/modules/instantSearch.js',
 ];
 
 export default (async () => {
@@ -355,21 +338,19 @@ Dependencies:
             whitelabel &&
             copy({
                 targets: [
-                    {
-                        src: 'vendor/signature/assets/*-placeholder.png',
-                        dest: 'dist/' + (await getDistPath('@digital-blueprint/esign-app')),
-                    },
-                    {
-                        src: 'vendor/dispatch/assets/*-placeholder.png',
-                        dest: 'dist/' + (await getDistPath('@digital-blueprint/dispatch-app')),
-                    },
+                    // {
+                    //     src: 'vendor/signature/assets/*-placeholder.png',
+                    //     dest: 'dist/' + (await getDistPath('@digital-blueprint/esign-app')),
+                    // },
+                    // {
+                    //     src: 'vendor/dispatch/assets/*-placeholder.png',
+                    //     dest: 'dist/' + (await getDistPath('@digital-blueprint/dispatch-app')),
+                    // },
                     {src: 'assets/*.css', dest: 'dist/' + (await getDistPath(pkg.name))},
                     {src: 'assets/*.ico', dest: 'dist/' + (await getDistPath(pkg.name))},
                     {src: 'assets/translation_overrides/', dest: 'dist/' + (await getDistPath(pkg.name))},
                     {src: 'assets/*.metadata.json', dest: 'dist'},
                     {src: 'src/*.metadata.json', dest: 'dist'},
-                    {src: 'vendor/**/src/*.metadata.json', dest: 'dist'},
-                    {src: 'vendor/cabinet/assets/modules.json', dest: 'dist'},
                     {src: 'assets/nexus-modules.json', dest: 'dist'},
                     {src: 'assets/*.svg', dest: 'dist/' + (await getDistPath(pkg.name))},
                     {src: 'assets/htaccess-shared', dest: 'dist/shared/', rename: '.htaccess'},
@@ -378,10 +359,6 @@ Dependencies:
                     {src: 'assets/safari-*.svg', dest: 'dist/' + (await getDistPath(pkg.name))},
                     {src: 'assets/images/*', dest: 'dist/images'},
                     {src: 'assets/icon/*', dest: 'dist/' + (await getDistPath(pkg.name, 'icon'))},
-                    // {
-                    //     src: await getPackagePath('@digital-blueprint/cabinet-app', 'assets/icon/*'),
-                    //     dest: 'dist/local/@digital-blueprint/cabinet-app/icon'
-                    // },
                     {src: 'assets/site.webmanifest', dest: 'dist', rename: pkg.internalName + '.webmanifest'},
                     {src: 'assets/silent-check-sso.html', dest: 'dist'},
                     {
@@ -392,23 +369,6 @@ Dependencies:
                         src: await getPackagePath('instantsearch.css', 'themes/algolia-min.css'),
                         dest: 'dist/local/@digital-blueprint/cabinet-app/',
                     },
-                    // the pdfjs worker is needed for signature, dispatch, pdf-viewer and the annotation loading in nexus!
-                    {
-                        src: await getPackagePath('pdfjs-dist', 'legacy/build/pdf.worker.mjs'),
-                        dest: 'dist/local/@digital-blueprint/esign-app/pdfjs',
-                    },
-                    {
-                        src: await getPackagePath('pdfjs-dist', 'cmaps/*'),
-                        dest: 'dist/local/@digital-blueprint/esign-app/pdfjs',
-                    }, // do we want all map files?
-                    {
-                        src: await getPackagePath('pdfjs-dist', 'legacy/build/pdf.worker.mjs'),
-                        dest: 'dist/local/@dbp-toolkit/pdf-viewer/pdfjs',
-                    },
-                    {
-                        src: await getPackagePath('pdfjs-dist', 'cmaps/*'),
-                        dest: 'dist/local/@dbp-toolkit/pdf-viewer/pdfjs',
-                    }, // do we want all map files?
                     {
                         src: await getPackagePath('@fontsource/nunito-sans', '*'),
                         dest: 'dist/' + (await getDistPath(pkg.name, 'fonts/nunito-sans')),
@@ -429,39 +389,15 @@ Dependencies:
                         src: await getPackagePath('@dbp-toolkit/common', 'assets/icons/*.svg'),
                         dest: 'dist/' + (await getDistPath('@dbp-toolkit/common', 'icons')),
                     },
-                    {
-                        src: await getPackagePath('tabulator-tables', 'dist/css'),
-                        dest:
-                            'dist/' + (await getDistPath('@digital-blueprint/dispatch-app', 'tabulator-tables')),
-                    },
-                    {
-                        src: await getPackagePath('tabulator-tables', 'dist/css'),
-                        dest:
-                            'dist/' + (await getDistPath('@dbp-toolkit/file-handling', 'tabulator-tables')),
-                    },
-                    {
-                        src: await getPackagePath('tabulator-tables', 'dist/css'),
-                        dest: 'dist/' + (await getDistPath('@dbp-toolkit/tabulator-table', 'tabulator-tables')),
-                    }
                 ],
             }),
             !whitelabel &&
             copy({
                 targets: [
-                    {
-                        src: 'vendor/signature/assets/*-placeholder.png',
-                        dest: 'dist/' + (await getDistPath('@digital-blueprint/esign-app')),
-                    },
-                    {
-                        src: 'vendor/dispatch/assets/*-placeholder.png',
-                        dest: 'dist/' + (await getDistPath('@digital-blueprint/dispatch-app')),
-                    },
                     {src: customAssetsPath + '*.css', dest: 'dist/' + (await getDistPath(pkg.name))},
                     {src: customAssetsPath + '*.ico', dest: 'dist/' + (await getDistPath(pkg.name))},
                     {src: customAssetsPath + 'translation_overrides', dest: 'dist/' + (await getDistPath(pkg.name))},
                     {src: customAssetsPath + '*.metadata.json', dest: 'dist'},
-                    {src: 'vendor/**/src/*.metadata.json', dest: 'dist'},
-                    {src: 'vendor/cabinet/assets/modules.json', dest: 'dist'},
                     {src: customAssetsPath + 'nexus-modules.json', dest: 'dist'},
                     {src: customAssetsPath + '*.svg', dest: 'dist/' + (await getDistPath(pkg.name))},
                     {src: customAssetsPath + 'htaccess-shared', dest: 'dist/shared/', rename: '.htaccess'},
@@ -470,33 +406,13 @@ Dependencies:
                     {src: customAssetsPath + 'safari-*.svg', dest: 'dist/' + (await getDistPath(pkg.name))},
                     {src: customAssetsPath + 'images/*', dest: 'dist/images'},
                     {src: customAssetsPath + 'icon/*', dest: 'dist/' + (await getDistPath(pkg.name, 'icon'))},
-                    // {
-                    //     src: await getPackagePath('@digital-blueprint/cabinet-app', 'assets/icon/*'),
-                    //     dest: 'dist/local/@digital-blueprint/cabinet-app/icon'
-                    // },
                     {src: customAssetsPath + 'site.webmanifest', dest: 'dist', rename: pkg.internalName + '.webmanifest'},
                     {src: customAssetsPath + 'silent-check-sso.html', dest: 'dist'},
+
                     {
                         src: await getPackagePath('instantsearch.css', 'themes/algolia-min.css'),
                         dest: 'dist/'+ (await getDistPath(pkg.name)),
                     },
-                    // the pdfjs worker is needed for signature, dispatch, pdf-viewer and the annotation loading in nexus!
-                    {
-                        src: await getPackagePath('pdfjs-dist', 'legacy/build/pdf.worker.mjs'),
-                        dest: 'dist/local/@digital-blueprint/esign-app/pdfjs',
-                    },
-                    {
-                        src: await getPackagePath('pdfjs-dist', 'cmaps/*'),
-                        dest: 'dist/local/@digital-blueprint/esign-app/pdfjs',
-                    }, // do we want all map files?
-                    {
-                        src: await getPackagePath('pdfjs-dist', 'legacy/build/pdf.worker.mjs'),
-                        dest: 'dist/local/@dbp-toolkit/pdf-viewer/pdfjs',
-                    },
-                    {
-                        src: await getPackagePath('pdfjs-dist', 'cmaps/*'),
-                        dest: 'dist/local/@dbp-toolkit/pdf-viewer/pdfjs',
-                    }, // do we want all map files?
                     {
                         src: await getPackagePath('@tugraz/font-source-sans-pro', 'files/*'),
                         dest: 'dist/' + (await getDistPath(pkg.name, 'fonts/source-sans-pro')),
@@ -517,20 +433,6 @@ Dependencies:
                         src: await getPackagePath('@dbp-toolkit/common', 'assets/icons/*.svg'),
                         dest: 'dist/' + (await getDistPath('@dbp-toolkit/common', 'icons')),
                     },
-                    {
-                        src: await getPackagePath('tabulator-tables', 'dist/css'),
-                        dest:
-                            'dist/' + (await getDistPath('@digital-blueprint/dispatch-app', 'tabulator-tables')),
-                    },
-                    {
-                        src: await getPackagePath('tabulator-tables', 'dist/css'),
-                        dest:
-                            'dist/' + (await getDistPath('@dbp-toolkit/file-handling', 'tabulator-tables')),
-                    },
-                    {
-                        src: await getPackagePath('tabulator-tables', 'dist/css'),
-                        dest: 'dist/' + (await getDistPath('@dbp-toolkit/tabulator-table', 'tabulator-tables')),
-                    }
                 ],
             }),
 
