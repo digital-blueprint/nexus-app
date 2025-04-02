@@ -43,7 +43,6 @@ export class NexusAppShell extends AppShell {
 
         document.addEventListener('click', this.boundOpenActivityHandler);
         document.addEventListener('dbp-favorized', this.boundActivityFavorized);
-        console.log('NexusAppShell connected', document);
 
         this.favoriteActivities = JSON.parse(localStorage.getItem('nexus-favorite-activities')) || [];
     }
@@ -51,7 +50,19 @@ export class NexusAppShell extends AppShell {
     disconnectedCallback() {
         document.removeEventListener('click', this.boundOpenActivityHandler);
         document.removeEventListener('dbp-favorized', this.boundActivityFavorized);
-        super.disconnectedCallback();
+    }
+
+    async waitForAuth() {
+        return new Promise((resolve) => {
+            const checkAuth = () => {
+                if (this.auth && this.auth.token) {
+                    resolve();
+                } else {
+                    setTimeout(checkAuth, 100); // Retry after 100ms
+                }
+            };
+            checkAuth();
+        });
     }
 
     /**
@@ -60,6 +71,9 @@ export class NexusAppShell extends AppShell {
      * @param {string} topicURL The topic metadata URL or relative path to load things from
      */
     async fetchMetadata(topicURL) {
+        // Wait for this.auth to be populated
+        await this.waitForAuth();
+
         let metadata = {};
         let routes = [];
 
@@ -72,19 +86,20 @@ export class NexusAppShell extends AppShell {
         this.topic = result;
 
          // Get other activities from typesense
+         // console.log('this.auth.token', this.auth.token);
+
         try {
-            const typesenseActivities = await fetch(`${this.typesenseNexusProtocol}://${this.typesenseNexusHost}:${this.typesenseNexusPort}/multi_search`, {
+            const typesenseActivities = await fetch(`${this.typesenseNexusProtocol}://${this.typesenseNexusHost}:${this.typesenseNexusPort}/nexus/typesense/multi_search`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-TYPESENSE-API-KEY': this.typesenseNexusKey,
                     'Authorization': 'Bearer ' + this.auth.token
                 },
                 body: JSON.stringify({
                     "searches": [
                         {
                             "query_by": "activityName",
-                            "collection": "nexus",
+                            "collection": "nexus--current",
                             "q": "*",
                             "page": 1,
                             "per_page": 250
@@ -95,7 +110,7 @@ export class NexusAppShell extends AppShell {
 
             const typesenseResult = await typesenseActivities.json();
 
-            // console.log('typesenseResult.results', typesenseResult.results);
+            console.log('typesenseResult.results', typesenseResult.results);
 
             const hits = typesenseResult.results[0].hits;
             // Merge Typesense activities into result.activities
