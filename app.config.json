@@ -12,15 +12,7 @@
         "pdfAsQualifiedlySigningServer": "",
         "hiddenActivities": [],
         "shortName": "dbp",
-        "appDomain": "",
-        "typesense": {
-            "host": "127.0.0.1",
-            "path": "/cabinet/typesense/",
-            "port": "8000",
-            "protocol": "http",
-            "key": "",
-            "collection": "nexus"
-        }
+        "appDomain": ""
     },
     "localCustom": {
         "basePath": "/dist/",
@@ -35,22 +27,14 @@
         "pdfAsQualifiedlySigningServer": "",
         "hiddenActivities": [],
         "shortName": "dbp",
-        "appDomain": "",
-        "typesense": {
-            "host": "127.0.0.1",
-            "path": "/cabinet/typesense/",
-            "port": "8000",
-            "protocol": "http",
-            "key": "",
-            "collection": "nexus"
-        }
+        "appDomain": ""
     },
     "development": {
-        "basePath": "/apps/cabinet/",
+        "basePath": "/apps/nexus/",
         "entryPointURL": "https://api-dev.tugraz.at",
         "keyCloakBaseURL": "https://auth-dev.tugraz.at/auth",
         "keyCloakRealm": "tugraz-vpu",
-        "keyCloakClientId": "dbp-cabinet",
+        "keyCloakClientId": "dbp-nexus",
         "matomoUrl": "https://analytics.tugraz.at/",
         "matomoSiteId": 131,
         "nextcloudBaseURL": "https://cloud-dev.tugraz.at",
@@ -58,14 +42,6 @@
         "pdfAsQualifiedlySigningServer": "https://sig-dev.tugraz.at",
         "hiddenActivities": [],
         "shortName": "dbp",
-        "appDomain": "https://dbp-demo.tugraz.at/apps/cabinet/",
-        "typesense": {
-            "host": "api-dev.tugraz.at",
-            "port": "443",
-            "path": "/cabinet/typesense/",
-            "protocol": "https",
-            "key": "",
-            "collection": "nexus"
-        }
+        "appDomain": "https://dbp-demo.tugraz.at/apps/nexus/"
     }
 }

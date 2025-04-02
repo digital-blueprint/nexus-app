@@ -17,5 +17,5 @@
     "attributes": {
         "favorite-activities": "[]"
     },
-    "subscribe": "lang,lang-dir,entry-point-url,auth,html-overrides,nextcloud-web-app-password-url,nextcloud-webdav-url,nextcloud-name,nextcloud-file-url,file-handling-enabled-targets,typesense-nexus-host,typesense-nexus-key,typesense-nexus-collection,typesense-nexus-protocol,typesense-nexus-port,typesense-nexus-path,base-path"
+    "subscribe": "lang,lang-dir,entry-point-url,auth,html-overrides,nextcloud-web-app-password-url,nextcloud-webdav-url,nextcloud-name,nextcloud-file-url,file-handling-enabled-targets,base-path"
 }

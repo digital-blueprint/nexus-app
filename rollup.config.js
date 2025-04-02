@@ -105,14 +105,14 @@ if ((devConfig != undefined && appEnv in devConfig)) {
         //     protocol: 'https',
         //     key: '8NfxGOHntZ3Aat1fWByyoadCctmb7klF'
         // },
-        typesense: {
-            host: 'typesense.localhost',
-            port: '9100',
-            path: '/',
-            protocol: 'http',
-            key: 'xyz',
-            collection: 'cabinet'
-        },
+        // typesense: {
+        //     host: 'typesense.localhost',
+        //     port: '9100',
+        //     path: '/',
+        //     protocol: 'http',
+        //     key: 'xyz',
+        //     collection: 'cabinet'
+        // },
     };
 } else {
     console.error(`Unknown build environment: '${appEnv}', use one of '${Object.keys(devConfig)}'`);
@@ -149,8 +149,6 @@ ${getOrigin(config.matomoUrl)} ${getOrigin(config.keyCloakBaseURL)} ${getOrigin(
     config.entryPointURL
 )} \
 ${getOrigin(config.nextcloudBaseURL)} ${atrustHosts.map((h) => getOrigin(h)).join(' ')} \
-${config.typesense.protocol + '://' + config.typesense.host + ':' + config.typesense.port} \
-${config.typesenseNexus.protocol + '://' + config.typesenseNexus.host + ':' + config.typesenseNexus.port} \
 ${getOrigin(config.pdfAsQualifiedlySigningServer)} \
 https://*.tugraz.at;\
 img-src * blob: data:`;
@@ -228,18 +226,18 @@ export default (async () => {
                     shortName: config.shortName,
                     appDomain: config.appDomain,
                     enableAnnotations: config.enableAnnotations,
-                    typesenseHost: config.typesense.host,
-                    typesensePort: config.typesense.port,
-                    typesensePath: config.typesense.path,
-                    typesenseProtocol: config.typesense.protocol,
-                    typesenseKey: config.typesense.key,
-                    typesenseCollection: config.typesense.collection,
-                    typesenseNexusHost: config.typesenseNexus.host,
-                    typesenseNexusPort: config.typesenseNexus.port,
-                    typesenseNexusPath: config.typesenseNexus.path,
-                    typesenseNexusProtocol: config.typesenseNexus.protocol,
-                    typesenseNexusKey: config.typesenseNexus.key,
-                    typesenseNexusCollection: config.typesenseNexus.collection,
+                    // typesenseHost: config.typesense.host,
+                    // typesensePort: config.typesense.port,
+                    // typesensePath: config.typesense.path,
+                    // typesenseProtocol: config.typesense.protocol,
+                    // typesenseKey: config.typesense.key,
+                    // typesenseCollection: config.typesense.collection,
+                    // typesenseNexusHost: config.typesenseNexus.host,
+                    // typesenseNexusPort: config.typesenseNexus.port,
+                    // typesenseNexusPath: config.typesenseNexus.path,
+                    // typesenseNexusProtocol: config.typesenseNexus.protocol,
+                    // typesenseNexusKey: config.typesenseNexus.key,
+                    // typesenseNexusCollection: config.typesenseNexus.collection,
                 },
             }),
             !whitelabel &&
@@ -273,18 +271,18 @@ export default (async () => {
                     shortName: config.shortName,
                     appDomain: config.appDomain,
                     enableAnnotations: config.enableAnnotations,
-                    typesenseHost: config.typesense.host,
-                    typesensePort: config.typesense.port,
-                    typesensePath: config.typesense.path,
-                    typesenseProtocol: config.typesense.protocol,
-                    typesenseKey: config.typesense.key,
-                    typesenseCollection: config.typesense.collection,
-                    typesenseNexusHost: config.typesenseNexus.host,
-                    typesenseNexusPort: config.typesenseNexus.port,
-                    typesenseNexusPath: config.typesenseNexus.path,
-                    typesenseNexusProtocol: config.typesenseNexus.protocol,
-                    typesenseNexusKey: config.typesenseNexus.key,
-                    typesenseNexusCollection: config.typesenseNexus.collection,
+                    // typesenseHost: config.typesense.host,
+                    // typesensePort: config.typesense.port,
+                    // typesensePath: config.typesense.path,
+                    // typesenseProtocol: config.typesense.protocol,
+                    // typesenseKey: config.typesense.key,
+                    // typesenseCollection: config.typesense.collection,
+                    // typesenseNexusHost: config.typesenseNexus.host,
+                    // typesenseNexusPort: config.typesenseNexus.port,
+                    // typesenseNexusPath: config.typesenseNexus.path,
+                    // typesenseNexusProtocol: config.typesenseNexus.protocol,
+                    // typesenseNexusKey: config.typesenseNexus.key,
+                    // typesenseNexusCollection: config.typesenseNexus.collection,
                 },
             }),
             replace({

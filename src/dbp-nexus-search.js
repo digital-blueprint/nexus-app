@@ -18,23 +18,25 @@ import {NexusFacets} from './components/dbp-nexus-facets.js';
 import {TypesenseService} from './services/typesense.js';
 import {name as pkgName} from '../package.json';
 
+const TYPESENSE_COLLECTION = 'nexus--current';
+
 class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
     constructor() {
         super();
         this.activity = new Activity(metadata);
         this.fuzzySearch = true;
-        this.typesenseHost = '';
-        this.typesensePort = '';
-        this.typesensePath = '';
-        this.typesenseProtocol = '';
-        this.typesenseKey = '';
-        this.typesenseCollection = '';
-        this.typesenseNexusHost = '';
-        this.typesenseNexusPort = '';
-        this.typesenseNexusPath = '';
-        this.typesenseNexusProtocol = '';
-        this.typesenseNexusKey = '';
-        this.typesenseNexusCollection = '';
+        // this.typesenseHost = '';
+        // this.typesensePort = '';
+        // this.typesensePath = '';
+        // this.typesenseProtocol = '';
+        // this.typesenseKey = '';
+        // this.typesenseCollection = '';
+        // this.typesenseNexusHost = '';
+        // this.typesenseNexusPort = '';
+        // this.typesenseNexusPath = '';
+        // this.typesenseNexusProtocol = '';
+        // this.typesenseNexusKey = '';
+        // this.typesenseNexusCollection = '';
         this.typesenseInstantsearchAdapter = null;
         this.typesenseService = null;
         this.serverConfig = null;
@@ -64,19 +66,19 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
     static get properties() {
         return {
             ...super.properties,
-            typesenseHost: { type: String, attribute: 'typesense-host' },
-            typesensePort: { type: String, attribute: 'typesense-port' },
-            typesensePath: { type: String, attribute: 'typesense-path' },
-            typesenseProtocol: { type: String, attribute: 'typesense-protocol' },
-            typesenseKey: { type: String, attribute: 'typesense-key' },
-            typesenseCollection: { type: String, attribute: 'typesense-collection' },
+            // typesenseHost: { type: String, attribute: 'typesense-host' },
+            // typesensePort: { type: String, attribute: 'typesense-port' },
+            // typesensePath: { type: String, attribute: 'typesense-path' },
+            // typesenseProtocol: { type: String, attribute: 'typesense-protocol' },
+            // typesenseKey: { type: String, attribute: 'typesense-key' },
+            // typesenseCollection: { type: String, attribute: 'typesense-collection' },
             // Nexus
-            typesenseNexusHost: { type: String, attribute: 'typesense-nexus-host' },
-            typesenseNexusPort: { type: String, attribute: 'typesense-nexus-port' },
-            typesenseNexusPath: { type: String, attribute: 'typesense-nexus-path' },
-            typesenseNexusProtocol: { type: String, attribute: 'typesense-nexus-protocol' },
-            typesenseNexusKey: { type: String, attribute: 'typesense-nexus-key' },
-            typesenseNexusCollection: { type: String, attribute: 'typesense-nexus-collection' },
+            // typesenseNexusHost: { type: String, attribute: 'typesense-nexus-host' },
+            // typesenseNexusPort: { type: String, attribute: 'typesense-nexus-port' },
+            // typesenseNexusPath: { type: String, attribute: 'typesense-nexus-path' },
+            // typesenseNexusProtocol: { type: String, attribute: 'typesense-nexus-protocol' },
+            // typesenseNexusKey: { type: String, attribute: 'typesense-nexus-key' },
+            // typesenseNexusCollection: { type: String, attribute: 'typesense-nexus-collection' },
             hitData: { type: Object, attribute: false },
             favoriteActivities: {type: Array, attribute: 'favorite-activities'}
         };
@@ -136,15 +138,17 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
         this.updateComplete.then(() => {
             console.log('-- updateComplete --');
 
+            let typesenseUrl = new URL(this.entryPointUrl + "/nexus/typesense");
+
             this.serverConfig = {
                 // Be sure to use an API key that only allows searches, in production
-                apiKey: this.typesenseNexusKey,
+                apiKey: '', // unused
                 nodes: [
                     {
-                        host: this.typesenseNexusHost,
-                        port: this.typesenseNexusPort,
-                        path: this.typesenseNexusPath,
-                        protocol: this.typesenseNexusProtocol
+                        host: typesenseUrl.hostname,
+                        port: typesenseUrl.port || (typesenseUrl.protocol === 'https:' ? '443' : typesenseUrl.protocol === 'http:' ? '80' : ''),
+                        path: typesenseUrl.pathname,
+                        protocol: typesenseUrl.protocol.replace(':', ''),
                     }
                 ],
                 additionalHeaders: {'Authorization': 'Bearer ' + this.auth.token},
@@ -265,11 +269,11 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
     }
 
     initTypesenseService() {
-        if (!this.serverConfig || !this.typesenseNexusCollection || !this.auth.token) {
+        if (!this.serverConfig || !this.auth.token) {
             return;
         }
 
-        this.typesenseService = new TypesenseService(this.serverConfig, this.typesenseNexusCollection);
+        this.typesenseService = new TypesenseService(this.serverConfig, TYPESENSE_COLLECTION);
         console.log('initTypesenseService this.typesenseService', this.typesenseService);
     }
 
@@ -287,11 +291,9 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
         // typesenseInstantsearchAdapter.typesenseClient is no Typesense.Client instance, it's a Typesense.SearchClient instance!
         const searchClient = typesenseInstantsearchAdapter.searchClient;
 
-        let searchIndexName = this.typesenseNexusCollection;
-
         return instantsearch({
             searchClient,
-            indexName: searchIndexName,
+            indexName: TYPESENSE_COLLECTION,
             future: {
                 preserveSharedStateOnUnmount: true,
             },
@@ -378,8 +380,8 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
         return sortBy({
             container: container,
             items: [
-                { label: i18n.t('A-Z'), value: `${this.typesenseNexusCollection}` },
-                { label: i18n.t('Z-A'), value: `${this.typesenseNexusCollection}/sort/activityName:desc` },
+                { label: i18n.t('A-Z'), value: `${TYPESENSE_COLLECTION}` },
+                { label: i18n.t('Z-A'), value: `${TYPESENSE_COLLECTION}/sort/activityName:desc` },
             ],
         });
     }
