@@ -232,8 +232,8 @@ export class NexusAppShell extends AppShell {
 
     toggleFavorites(e) {
         console.log('toggle fav event', e);
-        const favoritContainer = this._('.favorite-activities-container');
-        favoritContainer.classList.toggle('closed');
+        const favoriteContainer = this._('.favorite-activities-container');
+        favoriteContainer.classList.toggle('closed');
     }
 
     static get styles() {
