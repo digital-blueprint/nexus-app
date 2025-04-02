@@ -5,6 +5,7 @@ import * as commonStyles from '@dbp-toolkit/common/styles';
 import {getIconSVGURL} from './utils.js';
 import {send} from '@dbp-toolkit/common/notification';
 
+const TYPESENSE_COLLECTION = 'nexus--current';
 export class NexusAppShell extends AppShell {
     constructor() {
         super();
@@ -89,7 +90,8 @@ export class NexusAppShell extends AppShell {
          // console.log('this.auth.token', this.auth.token);
 
         try {
-            const typesenseActivities = await fetch(`${this.typesenseNexusProtocol}://${this.typesenseNexusHost}:${this.typesenseNexusPort}/nexus/typesense/multi_search`, {
+            let typesenseUrl = new URL(this.entryPointUrl + "/nexus/typesense");
+            const typesenseActivities = await fetch(`${typesenseUrl}/multi_search`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -99,7 +101,7 @@ export class NexusAppShell extends AppShell {
                     "searches": [
                         {
                             "query_by": "activityName",
-                            "collection": "nexus--current",
+                            "collection": TYPESENSE_COLLECTION,
                             "q": "*",
                             "page": 1,
                             "per_page": 250
