@@ -4,14 +4,14 @@ import {ScopedElementsMixin} from '@dbp-toolkit/common';
 import DBPNexusLitElement from "./dbp-nexus-lit-element.js";
 import * as commonUtils from '@dbp-toolkit/common/utils';
 import * as commonStyles from '@dbp-toolkit/common/styles';
-import {getCurrentRefinementCSS, getSearchGridCSS, getSelectorFixCSS} from './styles.js';
+import {getCurrentRefinementCSS, getPaginationCSS, getSearchGridCSS, getSelectorFixCSS} from './styles.js';
 import {Icon, Button, InlineNotification, Modal} from '@dbp-toolkit/common';
 import {classMap} from "lit/directives/class-map.js";
 import {Activity} from './activity.js';
 import metadata from './dbp-nexus-search.metadata.json';
 import instantsearch from 'instantsearch.js';
 import TypesenseInstantSearchAdapter from 'typesense-instantsearch-adapter';
-import {hits, searchBox, sortBy, stats} from 'instantsearch.js/es/widgets';
+import {hits, searchBox, sortBy, stats, pagination} from 'instantsearch.js/es/widgets';
 import {configure} from 'instantsearch.js/es/widgets';
 // import {pascalToKebab} from './utils';
 import {NexusFacets} from './components/dbp-nexus-facets.js';
@@ -54,19 +54,6 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
     static get properties() {
         return {
             ...super.properties,
-            // typesenseHost: { type: String, attribute: 'typesense-host' },
-            // typesensePort: { type: String, attribute: 'typesense-port' },
-            // typesensePath: { type: String, attribute: 'typesense-path' },
-            // typesenseProtocol: { type: String, attribute: 'typesense-protocol' },
-            // typesenseKey: { type: String, attribute: 'typesense-key' },
-            // typesenseCollection: { type: String, attribute: 'typesense-collection' },
-            // Nexus
-            // typesenseNexusHost: { type: String, attribute: 'typesense-nexus-host' },
-            // typesenseNexusPort: { type: String, attribute: 'typesense-nexus-port' },
-            // typesenseNexusPath: { type: String, attribute: 'typesense-nexus-path' },
-            // typesenseNexusProtocol: { type: String, attribute: 'typesense-nexus-protocol' },
-            // typesenseNexusKey: { type: String, attribute: 'typesense-nexus-key' },
-            // typesenseNexusCollection: { type: String, attribute: 'typesense-nexus-collection' },
             hitData: { type: Object, attribute: false },
             favoriteActivities: {type: Array, attribute: 'favorite-activities'}
         };
@@ -162,7 +149,7 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
             this.createHits(),
             this.createSortBy(),
             this.createStats(),
-            // this.createPagination('#pagination-bottom'),
+            this.createPagination('#pagination-bottom'),
         ]);
 
         // if (this.facetConfigs.length === 0) {
@@ -191,14 +178,6 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
         }, 1000);
     }
 
-    createConfigureWidget() {
-        this.configureWidget = configure({
-            hitsPerPage: 24,
-        });
-
-        return this.configureWidget;
-    }
-
     static get styles() {
         // language=css
         return css`
@@ -210,10 +189,19 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
             ${commonStyles.getActivityCSS()}
             ${commonStyles.getRadioAndCheckboxCss()}
             ${commonStyles.getFormAddonsCSS()}
+            ${getPaginationCSS()}
             ${getSelectorFixCSS()}
             ${getCurrentRefinementCSS()}
             ${getSearchGridCSS()}
         `;
+    }
+
+    createConfigureWidget() {
+        this.configureWidget = configure({
+            hitsPerPage: 12,
+        });
+
+        return this.configureWidget;
     }
 
     /**
@@ -223,19 +211,8 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
         // https://typesense.org/docs/0.25.1/api/search.html#ranking-and-sorting-parameters
         let searchParameters = {
             query_by: "activityName,activityTag",
-            per_page: 99,
             page: 1,
-            // query_by: "person.familyName,person.givenName,file.base.fileName,objectType,person.stPersonNr,person.studId,person.identNrObfuscated,person.birthDate",
-            // @TODO we should set typo tolerance by field. ex.: birthdate or identNrObfuscated dont need typo tolerance
             sort_by: "activityName:asc",
-            // Show not-deleted documents / Show only deleted documents
-            // filter_by: "base.isScheduledForDeletion:" + (this.showScheduledForDeletion ? "true" : "false"),
-            // filter_by: "file.base.deleteAtTimestamp:>0",
-            // filter_by: "@type:=Person || file.base.isSchedulerForDeletion:=false",
-            // num_typos: "2,2,0,0,0,0,0,0",
-            // group_by: "base.personGroupId",
-            // group_limit: 1,
-            // group_missing_values: false,
         };
 
         if (!this.fuzzySearch) {
@@ -262,7 +239,7 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
         }
 
         this.typesenseService = new TypesenseService(this.serverConfig, TYPESENSE_COLLECTION);
-        console.log('initTypesenseService this.typesenseService', this.typesenseService);
+        // console.log('initTypesenseService this.typesenseService', this.typesenseService);
     }
 
     /**
@@ -380,11 +357,11 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
         });
     }
 
-    // createPagination(id) {
-    //     return pagination({
-    //         container: this._(id),
-    //     });
-    // }
+    createPagination(id) {
+        return pagination({
+            container: this._(id),
+        });
+    }
 
     // createFacets() {
     //     return this.nexusFacetsRef.value.createFacetsFromConfig(this.facetConfigs);
@@ -424,7 +401,7 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
                         <div id="result-count" class="result-count"></div>
                         <div class="results">
                             <div id="hits"></div>
-                            <!-- <div id="pagination-bottom"></div> -->
+                            <div id="pagination-bottom"></div>
                         </div>
                     </div>
                 </div>
