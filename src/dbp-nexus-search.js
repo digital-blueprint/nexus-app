@@ -168,7 +168,7 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
             this.createConfigureWidget(),
             this.createSearchBox(),
             this.createHits(),
-            // this.createSortBy(),
+            this.createSortBy(),
             this.createStats(),
             // this.createPagination('#pagination-bottom'),
         ]);
@@ -231,9 +231,11 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
         // https://typesense.org/docs/0.25.1/api/search.html#ranking-and-sorting-parameters
         let searchParameters = {
             query_by: "activityName,activityTag",
+            per_page: 99,
+            page: 1,
             // query_by: "person.familyName,person.givenName,file.base.fileName,objectType,person.stPersonNr,person.studId,person.identNrObfuscated,person.birthDate",
             // @TODO we should set typo tolerance by field. ex.: birthdate or identNrObfuscated dont need typo tolerance
-            // sort_by: "@type:desc,_text_match:desc,person.familyName:asc",
+            sort_by: "activityName:asc",
             // Show not-deleted documents / Show only deleted documents
             // filter_by: "base.isScheduledForDeletion:" + (this.showScheduledForDeletion ? "true" : "false"),
             // filter_by: "file.base.deleteAtTimestamp:>0",
@@ -268,7 +270,7 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
         }
 
         this.typesenseService = new TypesenseService(this.serverConfig, this.typesenseNexusCollection);
-        // console.log('initTypesenseService this.typesenseService', this.typesenseService);
+        console.log('initTypesenseService this.typesenseService', this.typesenseService);
     }
 
     /**
@@ -370,15 +372,14 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
         const i18n = this._i18n;
         const container = this._('#sort-by');
         const titleElement = document.createElement('div');
-        titleElement.textContent = i18n.t('sorting :');
+        titleElement.textContent = '⇅';
         titleElement.className = 'dropdown-title';
         container.insertAdjacentElement('beforebegin', titleElement);
         return sortBy({
             container: container,
             items: [
-                { label: i18n.t('default-sort'), value: `${this.typesenseNexusCollection}` }, /* default sorting "@type:desc,_text_match:desc,person.familyName:asc" */
-                { label: i18n.t('family-name'), value: `${this.typesenseNexusCollection}/sort/@type:desc,person.familyName:asc,_text_match:desc` },
-                { label: i18n.t('last-modified-documents'), value: `${this.typesenseNexusCollection}/sort/@type:asc,file.base.modifiedTimestamp:desc,_text_match:desc` }
+                { label: i18n.t('A-Z'), value: `${this.typesenseNexusCollection}` },
+                { label: i18n.t('Z-A'), value: `${this.typesenseNexusCollection}/sort/activityName:desc` },
             ],
         });
     }
@@ -427,7 +428,7 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
 
                     <div class="search-box-container">
                         <div id="searchbox" class="search-box-widget"></div>
-                        <!-- <div id="sort-by" class="sort-widget"></div> -->
+                        <div id="sort-by" class="sort-widget"></div>
                     </div>
                     <div class="result-container">
                         <div id="result-count" class="result-count"></div>

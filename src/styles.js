@@ -261,6 +261,24 @@ export function getSearchGridCSS() {
             flex: 4 1 auto;
         }
 
+        .dropdown-title {
+            font-size: 28px;
+            line-height: 48px;
+        }
+
+        .sort-widget {
+
+            .ais-SortBy {
+                height: 100%;
+            }
+
+            .ais-SortBy-select {
+                height: 100%;
+                padding-inline: 1.5em;
+                background-position: calc(100% - 0.5rem) center;
+            }
+        }
+
         .ais-SearchBox-form {
             display: flex;
         }
@@ -327,6 +345,7 @@ export function getSearchGridCSS() {
             top: 0;
             right: 0;
             font-size: 24px;
+            cursor: pointer;
         }
 
         .activity-header {
@@ -345,7 +364,7 @@ export function getSearchGridCSS() {
             justify-content: space-between;
         }
 
-        .activity-open-button button {
+        .activity-open-button a {
             display: block;
         }
 
