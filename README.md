@@ -31,20 +31,8 @@ npm run watch-custom
 
 # run tests
 npm test
-```
-## Manual changes required to use typesense directly (without the proxy)
-You need to add `http://127.0.0.1:8001` as allowd CORS domain to the docker-compose.yml file._dialog_overlay
 
-```
---- a/docker/docker-compose.yml
-+++ b/docker/docker-compose.yml
--      TYPESENSE_CORS_DOMAINS: "http://typesense-dashboard.localhost:8000,http://127.0.0.1:8107"
-+      TYPESENSE_CORS_DOMAINS: "http://typesense-dashboard.localhost:8000,http://127.0.0.1:8107,http://127.0.0.1:8001"
-```
-
-### Typesense
-You need to create a new collection names `nexus` trough the typesense dashboard: `http://typesense-dashboard.localhost:8000`
-Add a schema:
+### Typesense schema
 ```json
 {
   "name": "nexus",
@@ -141,9 +129,6 @@ Add a schema:
 }
 ```
 
-Use the dashboard to import `nexus-activities-import.ljson` generated with `npm run generate-activities`.
-
-
 Jump to <http://localhost:8001>, and you should get a Single Sign On login page.
 
 By default, the application is built using the assets in `assets/`. However, custom assets can also be used to build the application. The custom assets can be added to the directory `assets_custom/dbp-nexus/assets/`. This allows developers to easily develop and build the application for different environments.
@@ -208,11 +193,11 @@ you need to manually add these attributes so that the topic will work properly:
 
 ```html
 <dbp-nexus
-        auth
-        requested-login-status
-        analytics-event
-        initial-file-handling-state
-        clipboard-files
+  auth
+  requested-login-status
+  analytics-event
+  initial-file-handling-state
+  clipboard-files
 >
 </dbp-nexus>
 ```
