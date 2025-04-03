@@ -274,7 +274,7 @@ export function getSearchGridCSS() {
 
             .ais-SortBy-select {
                 height: 100%;
-                padding-inline: 1.5em;
+                padding-inline: 1.5em 2.5em;
                 background-position: calc(100% - 0.5rem) center;
             }
         }
