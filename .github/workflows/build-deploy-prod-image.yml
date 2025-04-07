@@ -18,7 +18,6 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  if: false  # This workfow is disables
   build-and-push-image:
     runs-on: ubuntu-latest
     permissions:

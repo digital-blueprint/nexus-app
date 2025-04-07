@@ -2,7 +2,6 @@ name: Build, Test and Publish
 on: [push, pull_request, workflow_dispatch]
 
 jobs:
-  if: false  # This workfow is disables
   test:
     runs-on: ubuntu-latest
 
