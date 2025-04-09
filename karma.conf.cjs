@@ -6,7 +6,7 @@ module.exports = async function (config) {
 
     config.set({
         basePath: 'dist',
-        frameworks: ['mocha'],
+        frameworks: ['mocha', 'source-map-support'],
         client: {
             mocha: {
                 ui: 'tdd',
