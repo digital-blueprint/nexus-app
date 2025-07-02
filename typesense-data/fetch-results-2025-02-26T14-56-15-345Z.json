@@ -5,10 +5,7 @@
         "activityDescription": "Search and edit records of applicants and students.",
         "activityRoutingName": "cabinet-search",
         "activityModuleSrc": "dbp-cabinet-search.js",
-        "activityTag": [
-            "pdf",
-            "signature"
-        ],
+        "activityTag": ["pdf", "signature"],
         "activityIcon": "cabinet-search-icon"
     },
     {
@@ -17,10 +14,7 @@
         "activityDescription": "Allows the creation of new dispatch orders.",
         "activityRoutingName": "create-request",
         "activityModuleSrc": "dbp-create-request.js",
-        "activityTag": [
-            "pdf",
-            "signature"
-        ],
+        "activityTag": ["pdf", "signature"],
         "activityIcon": "create-request-icon"
     },
     {
@@ -29,10 +23,7 @@
         "activityDescription": "Shows a list of all dispatch orders.",
         "activityRoutingName": "show-requests",
         "activityModuleSrc": "dbp-show-requests.js",
-        "activityTag": [
-            "pdf",
-            "signature"
-        ],
+        "activityTag": ["pdf", "signature"],
         "activityIcon": "show-requests-icon"
     },
     {
@@ -41,10 +32,7 @@
         "activityDescription": "Enables you to upload PDF documents and to sign them personally",
         "activityRoutingName": "qualified-pdf-upload",
         "activityModuleSrc": "dbp-qualified-signature-pdf-upload.js",
-        "activityTag": [
-            "pdf",
-            "signature"
-        ],
+        "activityTag": ["pdf", "signature"],
         "activityIcon": "qualified-pdf-upload-icon"
     },
     {
@@ -53,10 +41,7 @@
         "activityDescription": "Enables you to upload PDF documents and to sign them officially",
         "activityRoutingName": "official-pdf-upload",
         "activityModuleSrc": "dbp-official-signature-pdf-upload.js",
-        "activityTag": [
-            "pdf",
-            "signature"
-        ],
+        "activityTag": ["pdf", "signature"],
         "activityIcon": "official-pdf-upload-icon"
     },
     {
@@ -65,10 +50,7 @@
         "activityDescription": "Allows verification of signed PDF-documents",
         "activityRoutingName": "signature-verification",
         "activityModuleSrc": "dbp-signature-verification.js",
-        "activityTag": [
-            "pdf",
-            "signature"
-        ],
+        "activityTag": ["pdf", "signature"],
         "activityIcon": "signature-verification-icon"
     },
     {
@@ -77,10 +59,7 @@
         "activityDescription": "Shows a list of available submissions",
         "activityRoutingName": "show-registrations",
         "activityModuleSrc": "dbp-formalize-show-registrations.js",
-        "activityTag": [
-            "pdf",
-            "signature"
-        ],
+        "activityTag": ["pdf", "signature"],
         "activityIcon": "show-registrations-icon"
     },
     {
@@ -89,10 +68,7 @@
         "activityDescription": "Shows a form",
         "activityRoutingName": "render-form",
         "activityModuleSrc": "dbp-formalize-render-form.js",
-        "activityTag": [
-            "pdf",
-            "signature"
-        ],
+        "activityTag": ["pdf", "signature"],
         "activityIcon": "render-form-icon"
     },
     {
@@ -101,10 +77,7 @@
         "activityDescription": "Register for The Lunch Lottery",
         "activityRoutingName": "lunchlottery-register",
         "activityModuleSrc": "dbp-lunchlottery-register.js",
-        "activityTag": [
-            "pdf",
-            "signature"
-        ],
+        "activityTag": ["pdf", "signature"],
         "activityIcon": "lunchlottery-register-icon"
     },
     {
@@ -113,10 +86,7 @@
         "activityDescription": "Allows to create the seat assigment for the next Lunch Lottery event",
         "activityRoutingName": "lunchlottery-assign-seats",
         "activityModuleSrc": "dbp-lunchlottery-assign-seats.js",
-        "activityTag": [
-            "pdf",
-            "signature"
-        ],
+        "activityTag": ["pdf", "signature"],
         "activityIcon": "lunchlottery-assign-seats-icon"
     },
     {
@@ -125,10 +95,7 @@
         "activityDescription": "Allows to manage Lunch Lottery",
         "activityRoutingName": "lunchlottery-manage",
         "activityModuleSrc": "dbp-lunchlottery-manage.js",
-        "activityTag": [
-            "pdf",
-            "signature"
-        ],
+        "activityTag": ["pdf", "signature"],
         "activityIcon": "lunchlottery-manage-icon"
     }
 ]

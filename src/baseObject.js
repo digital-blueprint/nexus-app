@@ -8,8 +8,7 @@ import {getIconSVGURL} from './utils.js';
 export class BaseObject {
     name = 'baseObject';
 
-    constructor() {
-    }
+    constructor() {}
 
     getHitComponent() {
         return BaseHitElement;
@@ -36,7 +35,7 @@ export const getCommonStyles = () => css`
         display: flex;
         align-items: right;
         justify-content: right;
-        background-image: url("${unsafeCSS(getIconSVGURL('docs'))}");
+        background-image: url('${unsafeCSS(getIconSVGURL('docs'))}');
         background-repeat: no-repeat;
         background-size: 30px;
         background-position-x: right;
@@ -78,8 +77,7 @@ export class BaseHitElement extends ScopedElementsMixin(DBPLitElement) {
     }
 
     static get scopedElements() {
-        return {
-        };
+        return {};
     }
 
     static get properties() {
@@ -107,7 +105,9 @@ export class BaseHitElement extends ScopedElementsMixin(DBPLitElement) {
         return html`
             <form>
                 <h2>BaseHit</h2>
-                lang: ${this.lang}<br />
+                lang: ${this.lang}
+                <br />
+            </form>
         `;
     }
 

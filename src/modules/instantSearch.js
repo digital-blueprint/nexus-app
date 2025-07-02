@@ -27,12 +27,35 @@ export default class {
     getFacetsConfig() {
         const showMoreLimitValue = 1000;
         return [
-            { "filter-group": { "id": "category", "name": "nexus-search.type-filter-group-title"}},
-            { "groupId": "category", "schemaField": "@type", "schemaFieldType": "checkbox", "facetOptions": { facet: { searchablePlaceholder: 'nexus-search.search-placeholder-person-person', searchable: false, sortBy: ['alpha:asc']}}, "usePanel": false},
+            {'filter-group': {id: 'category', name: 'nexus-search.type-filter-group-title'}},
+            {
+                groupId: 'category',
+                schemaField: '@type',
+                schemaFieldType: 'checkbox',
+                facetOptions: {
+                    facet: {
+                        searchablePlaceholder: 'nexus-search.search-placeholder-person-person',
+                        searchable: false,
+                        sortBy: ['alpha:asc'],
+                    },
+                },
+                usePanel: false,
+            },
 
             // Person properties
-            { "filter-group": { "id": "person", "name": "nexus-search.person-filter-group-title"}},
-            { "groupId": "person", "schemaField": "person.person", "schemaFieldType": "checkbox", "facetOptions": { facet: { searchablePlaceholder: 'nexus-search.search-placeholder-person-person',  showMore: true, showMoreLimit: showMoreLimitValue}}}
+            {'filter-group': {id: 'person', name: 'nexus-search.person-filter-group-title'}},
+            {
+                groupId: 'person',
+                schemaField: 'person.person',
+                schemaFieldType: 'checkbox',
+                facetOptions: {
+                    facet: {
+                        searchablePlaceholder: 'nexus-search.search-placeholder-person-person',
+                        showMore: true,
+                        showMoreLimit: showMoreLimitValue,
+                    },
+                },
+            },
         ];
     }
 }

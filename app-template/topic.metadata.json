@@ -12,8 +12,6 @@
         "en": "With this application you can ......"
     },
     "routing_name": "nexus",
-    "activities": [
-        {"path": "/app/dbp-dd-activity.metadata.json"}
-    ],
+    "activities": [{"path": "/app/dbp-dd-activity.metadata.json"}],
     "attributes": []
 }
