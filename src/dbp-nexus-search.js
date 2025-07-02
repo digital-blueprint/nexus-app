@@ -1,6 +1,6 @@
 import {css, html} from 'lit';
 import {createRef} from 'lit/directives/ref.js';
-import {ScopedElementsMixin} from '@dbp-toolkit/common';
+import {LangMixin, ScopedElementsMixin} from '@dbp-toolkit/common';
 import DBPNexusLitElement from './dbp-nexus-lit-element.js';
 import * as commonUtils from '@dbp-toolkit/common/utils';
 import * as commonStyles from '@dbp-toolkit/common/styles';
@@ -22,8 +22,149 @@ import {configure} from 'instantsearch.js/es/widgets';
 import {NexusFacets} from './components/dbp-nexus-facets.js';
 import {TypesenseService} from './services/typesense.js';
 import {name as pkgName} from '../package.json';
+import {preactRefReplaceElement} from './utils.js';
+import {createInstance} from './i18n.js';
 
 const TYPESENSE_COLLECTION = 'nexus--current';
+
+class HitElement extends LangMixin(DBPNexusLitElement, createInstance) {
+    constructor() {
+        super();
+        this.hitData = null;
+        this.isFavorite = false;
+    }
+
+    static get scopedElements() {
+        return {
+            'dbp-icon': Icon,
+        };
+    }
+
+    static get properties() {
+        return {
+            hitData: {type: Object, attribute: false},
+            isFavorite: {type: Boolean, attribute: 'is-favorite'},
+        };
+    }
+
+    static get styles() {
+        return [
+            commonStyles.getButtonCSS(),
+            css`
+                .activity-item {
+                    color: var(--dbp-content);
+                    display: flex;
+                    flex-direction: column;
+                    height: 100%;
+                    justify-content: space-between;
+                    gap: 1em;
+                    position: relative;
+                }
+
+                .activity-favorite {
+                    color: var(--dbp-override-primary);
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    font-size: 24px;
+                    cursor: pointer;
+                    transition: transform 250ms ease;
+                }
+
+                .activity-header {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 0.5em;
+                }
+
+                .activity-name {
+                    font-size: 24px;
+                }
+
+                .activity-footer {
+                    display: flex;
+                    gap: 1em;
+                    justify-content: space-between;
+                }
+
+                .activity-open-button a {
+                    display: block;
+                }
+
+                .activity-tags {
+                    display: flex;
+                    gap: 0.5em;
+                }
+
+                .activity-tag {
+                    padding: 0.25em 0.5em;
+                    border: 1px solid var(--dbp-muted);
+                }
+
+                .is-animating {
+                    transform: scale(1.3);
+                }
+            `,
+        ];
+    }
+
+    render() {
+        let hit = this.hitData;
+        if (hit === null) {
+            return html``;
+        }
+
+        return html`
+            <div class="activity-item">
+                <dbp-icon
+                    class="activity-favorite"
+                    name="${this.isFavorite ? 'star-filled' : 'star-empty'}"
+                    @click="${(e) => {
+                        const icon = e.target;
+                        icon.classList.add('is-animating');
+                        setTimeout(() => {
+                            icon.classList.remove('is-animating');
+                        }, 250);
+                        this.dispatchEvent(
+                            new CustomEvent('dbp-favorized', {
+                                bubbles: true,
+                                composed: true,
+                                detail: {
+                                    icon: icon,
+                                    activityName: hit.activityName,
+                                    activityRoute: hit.activityRoutingName,
+                                },
+                            }),
+                        );
+                    }}"></dbp-icon>
+                <div class="activity-header">
+                    <div class="activity-icon">an-icon</div>
+                    <div class="activity-name">${hit.activityName}</div>
+                    <div class="activity-description">${hit.activityDescription}</div>
+                </div>
+                <div class="activity-footer">
+                    <div class="activity-tags">
+                        ${hit.activityTag.map((tag) => {
+                            return html`
+                                <span class="activity-tag">${tag}</span>
+                            `;
+                        })}
+                    </div>
+                    <div class="activity-open-button">
+                        <a
+                            class="is-primary button"
+                            data-nav="${hit.activityRoutingName}"
+                            @click="${() => {
+                                console.log('activity Clicked', hit.activityRoutingName);
+                            }}">
+                            Launch
+                        </a>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+}
 
 class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
     constructor() {
@@ -53,6 +194,7 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
             'dbp-button': Button,
             'dbp-inline-notification': InlineNotification,
             'dbp-nexus-facets': NexusFacets,
+            'dbp-nexus-hit-element': HitElement,
         };
     }
 
@@ -292,6 +434,7 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
     }
 
     createHits() {
+        let nexus = this;
         return hits({
             container: this._('#hits'),
             escapeHTML: true,
@@ -300,57 +443,14 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
                     const isFavorite = this.favoriteActivities.some(
                         (item) => item.name === hit.activityName,
                     );
+
+                    let hitElement = nexus.createScopedElement('dbp-nexus-hit-element');
+                    hitElement.setAttribute('subscribe', 'lang');
+                    hitElement.hitData = hit;
+                    hitElement.isFavorite = isFavorite;
+
                     return html`
-                        <div class="activity-item">
-                            <dbp-icon
-                                class="activity-favorite"
-                                name="${isFavorite ? 'star-filled' : 'star-empty'}"
-                                onclick="${(e) => {
-                                    const icon = e.target;
-                                    icon.classList.add('is-animating');
-                                    setTimeout(() => {
-                                        icon.classList.remove('is-animating');
-                                    }, 250);
-                                    this.dispatchEvent(
-                                        new CustomEvent('dbp-favorized', {
-                                            bubbles: true,
-                                            composed: true,
-                                            detail: {
-                                                icon: icon,
-                                                activityName: hit.activityName,
-                                                activityRoute: hit.activityRoutingName,
-                                            },
-                                        }),
-                                    );
-                                }}"></dbp-icon>
-                            <div class="activity-header">
-                                <div class="activity-icon">an-icon</div>
-                                <div class="activity-name">${hit.activityName}</div>
-                                <div class="activity-description">${hit.activityDescription}</div>
-                            </div>
-                            <div class="activity-footer">
-                                <div class="activity-tags">
-                                    ${hit.activityTag.map((tag) => {
-                                        return html`
-                                            <span class="activity-tag">${tag}</span>
-                                        `;
-                                    })}
-                                </div>
-                                <div class="activity-open-button">
-                                    <a
-                                        class="is-primary button"
-                                        data-nav="${hit.activityRoutingName}"
-                                        onclick="${() => {
-                                            console.log(
-                                                'activity Clicked',
-                                                hit.activityRoutingName,
-                                            );
-                                        }}">
-                                        Launch
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
+                        <span ref=${preactRefReplaceElement(hitElement)}></span>
                     `;
                 },
             },

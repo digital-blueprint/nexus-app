@@ -4,6 +4,7 @@ import {classMap} from 'lit/directives/class-map.js';
 import * as commonStyles from '@dbp-toolkit/common/styles';
 import {getIconSVGURL} from './utils.js';
 import {send} from '@dbp-toolkit/common/notification';
+import {Icon} from '@dbp-toolkit/common';
 
 const TYPESENSE_COLLECTION = 'nexus--current';
 export class NexusAppShell extends AppShell {
@@ -19,6 +20,13 @@ export class NexusAppShell extends AppShell {
         return {
             ...super.properties,
             favoriteActivities: {type: Object, attribute: false},
+        };
+    }
+
+    static get scopedElements() {
+        return {
+            ...super.scopedElements,
+            'dbp-icon': Icon,
         };
     }
 

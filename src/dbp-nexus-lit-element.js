@@ -1,9 +1,9 @@
 import DBPLitElement from '@dbp-toolkit/common/dbp-lit-element';
-import {IconButton} from '@dbp-toolkit/common';
+import {IconButton, ScopedElementsMixin} from '@dbp-toolkit/common';
 import {Translated} from '@dbp-toolkit/common';
 import {createInstance} from './i18n';
 
-export default class DBPNexusLitElement extends DBPLitElement {
+export default class DBPNexusLitElement extends ScopedElementsMixin(DBPLitElement) {
     constructor() {
         super();
         this.auth = {};
