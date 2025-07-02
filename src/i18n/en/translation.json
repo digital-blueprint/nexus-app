@@ -1,10 +1,18 @@
 {
-    "typesense-schema": {
-
-    },
-    "nexus-search": {
-        "filters": "Filters"
-    },
+    "A-Z": "",
+    "contact": "",
     "error-login-message": "You need to be logged in to use this function!",
-    "search-nexus": "Search"
+    "imprint": "",
+    "loading-message": "",
+    "nexus-search": {
+        "filters": "Filters",
+        "refinement-date-after-text": "",
+        "refinement-date-before-text": "",
+        "refinement-delete-all-filters": "",
+        "refinement-delete-filter-button-text": ""
+    },
+    "page-not-found": "",
+    "privacy-policy": "",
+    "search-nexus": "Search",
+    "Z-A": ""
 }
