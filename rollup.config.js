@@ -307,6 +307,7 @@ Dependencies:
                                 'BSD-2-Clause',
                                 'BSD',
                                 '(MPL-2.0 OR Apache-2.0)',
+                                '0BSD',
                             ];
                             if (!licenses.includes(dependency.license)) {
                                 throw new Error(
