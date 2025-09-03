@@ -13,7 +13,13 @@ import license from 'rollup-plugin-license';
 import del from 'rollup-plugin-delete';
 import emitEJS from 'rollup-plugin-emit-ejs';
 import {getBabelOutputPlugin} from '@rollup/plugin-babel';
-import {getPackagePath, getBuildInfo, generateTLSConfig, getDistPath} from '@dbp-toolkit/dev-utils';
+import {
+    getPackagePath,
+    getBuildInfo,
+    generateTLSConfig,
+    getDistPath,
+    getCopyTargets,
+} from '@dbp-toolkit/dev-utils';
 import {createRequire} from 'node:module';
 
 const require = createRequire(import.meta.url);
@@ -376,13 +382,6 @@ Dependencies:
                             dest: 'dist/' + (await getDistPath(pkg.name)),
                         },
                         {
-                            src: await getPackagePath(
-                                'instantsearch.css',
-                                'themes/algolia-min.css',
-                            ),
-                            dest: 'dist/local/@digital-blueprint/cabinet-app/',
-                        },
-                        {
                             src: await getPackagePath('@fontsource/nunito-sans', '*'),
                             dest: 'dist/' + (await getDistPath(pkg.name, 'fonts/nunito-sans')),
                         },
@@ -402,10 +401,7 @@ Dependencies:
                             ),
                             dest: 'dist/' + (await getDistPath(pkg.name)),
                         },
-                        {
-                            src: await getPackagePath('@dbp-toolkit/common', 'assets/icons/*.svg'),
-                            dest: 'dist/' + (await getDistPath('@dbp-toolkit/common', 'icons')),
-                        },
+                        ...(await getCopyTargets(pkg.name, 'dist')),
                     ],
                 }),
             !whitelabel &&
@@ -485,10 +481,7 @@ Dependencies:
                             ),
                             dest: 'dist/' + (await getDistPath(pkg.name)),
                         },
-                        {
-                            src: await getPackagePath('@dbp-toolkit/common', 'assets/icons/*.svg'),
-                            dest: 'dist/' + (await getDistPath('@dbp-toolkit/common', 'icons')),
-                        },
+                        ...(await getCopyTargets(pkg.name, 'dist')),
                     ],
                 }),
 
