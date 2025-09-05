@@ -356,7 +356,10 @@ Dependencies:
                         {src: 'assets/icon-*.png', dest: 'dist/' + (await getDistPath(pkg.name))},
                         {src: 'assets/apple-*.png', dest: 'dist/' + (await getDistPath(pkg.name))},
                         {src: 'assets/safari-*.svg', dest: 'dist/' + (await getDistPath(pkg.name))},
-                        {src: 'assets/images/*', dest: 'dist/images'},
+                        {
+                            src: 'assets/images/*',
+                            dest: 'dist/' + (await getDistPath(pkg.name, 'images')),
+                        },
                         {
                             src: 'assets/icon/*',
                             dest: 'dist/' + (await getDistPath(pkg.name, 'icon')),
@@ -435,7 +438,10 @@ Dependencies:
                             src: customAssetsPath + 'safari-*.svg',
                             dest: 'dist/' + (await getDistPath(pkg.name)),
                         },
-                        {src: customAssetsPath + 'images/*', dest: 'dist/images'},
+                        {
+                            src: customAssetsPath + 'images/*',
+                            dest: 'dist/' + (await getDistPath(pkg.name, 'images')),
+                        },
                         {
                             src: customAssetsPath + 'icon/*',
                             dest: 'dist/' + (await getDistPath(pkg.name, 'icon')),
