@@ -25,6 +25,11 @@ import {name as pkgName} from '../package.json';
 import {preactRefReplaceElement} from './utils.js';
 import {createInstance} from './i18n.js';
 
+// rollup and rolldown resolve the import differently
+// https://github.com/rolldown/rolldown/issues/6438
+let TypesenseInstantSearchAdapterClass =
+    TypesenseInstantSearchAdapter.default ?? TypesenseInstantSearchAdapter;
+
 const TYPESENSE_COLLECTION = 'nexus--current';
 
 class HitElement extends LangMixin(DBPNexusLitElement, createInstance) {
@@ -403,7 +408,7 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
      * Create the Instantsearch instance
      */
     createInstantsearch() {
-        const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter(
+        const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapterClass(
             this.getTypesenseInstantsearchAdapterConfig(),
         );
 

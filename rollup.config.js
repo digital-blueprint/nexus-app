@@ -32,6 +32,7 @@ let useTerser = buildFull;
 let useBabel = buildFull;
 let checkLicenses = buildFull;
 let treeshake = buildFull;
+let isRolldown = process.argv.some((arg) => arg.includes('rolldown'));
 
 // if true, app assets and configs are whitelabel
 let whitelabel;
@@ -186,6 +187,9 @@ export default (async () => {
             }
             warn(warning);
         },
+        moduleTypes: {
+            '.css': 'js', // work around rolldown handling the CSS import before the URL plugin can
+        },
         plugins: [
             del({
                 targets: 'dist/*',
@@ -286,10 +290,11 @@ export default (async () => {
                 'process.env.NODE_ENV': JSON.stringify('production'),
                 preventAssignment: true,
             }),
-            resolve({
-                browser: true,
-                preferBuiltins: true,
-            }),
+            !isRolldown &&
+                resolve({
+                    browser: true,
+                    preferBuiltins: true,
+                }),
             checkLicenses &&
                 license({
                     banner: {
@@ -325,11 +330,12 @@ Dependencies:
                         },
                     },
                 }),
-            commonjs({
-                include: 'node_modules/**',
-                strictRequires: 'auto',
-            }),
-            json(),
+            !isRolldown &&
+                commonjs({
+                    include: 'node_modules/**',
+                    strictRequires: 'auto',
+                }),
+            !isRolldown && json(),
             urlPlugin(await getUrlOptions(pkg.name, 'shared')),
             whitelabel &&
                 copy({
