@@ -31,6 +31,7 @@ npm run watch-custom
 
 # run tests
 npm test
+```
 
 ### Typesense schema
 ```json
