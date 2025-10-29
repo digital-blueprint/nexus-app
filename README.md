@@ -34,99 +34,100 @@ npm test
 ```
 
 ### Typesense schema
+
 ```json
 {
-  "name": "nexus",
-  "fields": [
-    {
-      "name": "activityName",
-      "type": "string",
-      "facet": false,
-      "optional": false,
-      "index": true,
-      "sort": true,
-      "infix": false,
-      "locale": "",
-      "stem": false,
-      "store": true
-    },
-    {
-      "name": "activityDescription",
-      "type": "string",
-      "facet": false,
-      "optional": false,
-      "index": true,
-      "sort": false,
-      "infix": false,
-      "locale": "",
-      "stem": false,
-      "store": true
-    },
-    {
-      "name": "activityRoutingName",
-      "type": "string",
-      "facet": false,
-      "optional": false,
-      "index": false,
-      "sort": false,
-      "infix": false,
-      "locale": "",
-      "stem": false,
-      "store": true
-    },
-    {
-      "name": "activityModuleSrc",
-      "type": "string",
-      "facet": false,
-      "optional": false,
-      "index": false,
-      "sort": false,
-      "infix": false,
-      "locale": "",
-      "stem": false,
-      "store": true
-    },
-    {
-      "name": "activityPath",
-      "type": "string",
-      "facet": false,
-      "optional": false,
-      "index": false,
-      "sort": false,
-      "infix": false,
-      "locale": "",
-      "stem": false,
-      "store": true
-    },
-    {
-      "name": "activityTag",
-      "type": "string[]",
-      "facet": false,
-      "optional": false,
-      "index": true,
-      "sort": false,
-      "infix": false,
-      "locale": "",
-      "stem": false,
-      "store": true
-    },
-    {
-      "name": "activityIcon",
-      "type": "string",
-      "facet": false,
-      "optional": false,
-      "index": false,
-      "sort": false,
-      "infix": false,
-      "locale": "",
-      "stem": false,
-      "store": true
-    }
-  ],
-  "default_sorting_field": "",
-  "enable_nested_fields": false,
-  "symbols_to_index": [],
-  "token_separators": []
+    "name": "nexus",
+    "fields": [
+        {
+            "name": "activityName",
+            "type": "string",
+            "facet": false,
+            "optional": false,
+            "index": true,
+            "sort": true,
+            "infix": false,
+            "locale": "",
+            "stem": false,
+            "store": true
+        },
+        {
+            "name": "activityDescription",
+            "type": "string",
+            "facet": false,
+            "optional": false,
+            "index": true,
+            "sort": false,
+            "infix": false,
+            "locale": "",
+            "stem": false,
+            "store": true
+        },
+        {
+            "name": "activityRoutingName",
+            "type": "string",
+            "facet": false,
+            "optional": false,
+            "index": false,
+            "sort": false,
+            "infix": false,
+            "locale": "",
+            "stem": false,
+            "store": true
+        },
+        {
+            "name": "activityModuleSrc",
+            "type": "string",
+            "facet": false,
+            "optional": false,
+            "index": false,
+            "sort": false,
+            "infix": false,
+            "locale": "",
+            "stem": false,
+            "store": true
+        },
+        {
+            "name": "activityPath",
+            "type": "string",
+            "facet": false,
+            "optional": false,
+            "index": false,
+            "sort": false,
+            "infix": false,
+            "locale": "",
+            "stem": false,
+            "store": true
+        },
+        {
+            "name": "activityTag",
+            "type": "string[]",
+            "facet": false,
+            "optional": false,
+            "index": true,
+            "sort": false,
+            "infix": false,
+            "locale": "",
+            "stem": false,
+            "store": true
+        },
+        {
+            "name": "activityIcon",
+            "type": "string",
+            "facet": false,
+            "optional": false,
+            "index": false,
+            "sort": false,
+            "infix": false,
+            "locale": "",
+            "stem": false,
+            "store": true
+        }
+    ],
+    "default_sorting_field": "",
+    "enable_nested_fields": false,
+    "symbols_to_index": [],
+    "token_separators": []
 }
 ```
 
@@ -137,7 +138,6 @@ By default, the application is built using the assets in `assets/`. However, cus
 To use the Nextcloud functionality you need a running Nextcloud server with the
 [webapppassword](https://gitlab.tugraz.at/dbp/nextcloud/webapppassword) Nextcloud app like this
 [Nextcloud Development Environment](https://gitlab.tugraz.at/dbp/nextcloud/webapppassword/-/tree/master/docker).
-
 
 ## Using this app as pre-built package
 
@@ -175,17 +175,17 @@ npx @digital-blueprint/cli@latest update-app nexus
 
 You can add multiple attributes to the `<dbp-nexus>` tag.
 
-| attribute name | value | Link to description                                                                                                                 |
-|----------------|-------|-------------------------------------------------------------------------------------------------------------------------------------|
-| `provider-root` | Boolean | [app-shell](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/main/packages/app-shell#attributes)                          |
-| `lang`         | String | [language-select](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/main/packages/language-select#attributes)              |
-| `entry-point-url` | String | [app-shell](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/main/packages/app-shell#attributes)                          |
-| `keycloak-config` | Object | [app-shell](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/main/packages/app-shell#attributes)                          |
-| `base-path` | String | [app-shell](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/main/packages/app-shell#attributes)                          |
-| `src` | String | [app-shell](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/main/packages/app-shell#attributes)                          |
-| `html-overrides` | String | [common](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/main/packages/common#overriding-slots-in-nested-web-components) |
-| `themes` | Array | [theme-switcher](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/main/packages/theme-switcher#themes-attribute)          |
-| `darkModeThemeOverride` | String | [theme-switcher](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/main/packages/theme-switcher#themes-attribute)          |
+| attribute name          | value   | Link to description                                                                                                                 |
+| ----------------------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `provider-root`         | Boolean | [app-shell](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/main/packages/app-shell#attributes)                          |
+| `lang`                  | String  | [language-select](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/main/packages/language-select#attributes)              |
+| `entry-point-url`       | String  | [app-shell](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/main/packages/app-shell#attributes)                          |
+| `keycloak-config`       | Object  | [app-shell](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/main/packages/app-shell#attributes)                          |
+| `base-path`             | String  | [app-shell](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/main/packages/app-shell#attributes)                          |
+| `src`                   | String  | [app-shell](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/main/packages/app-shell#attributes)                          |
+| `html-overrides`        | String  | [common](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/main/packages/common#overriding-slots-in-nested-web-components) |
+| `themes`                | Array   | [theme-switcher](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/main/packages/theme-switcher#themes-attribute)          |
+| `darkModeThemeOverride` | String  | [theme-switcher](https://gitlab.tugraz.at/dbp/web-components/toolkit/-/tree/main/packages/theme-switcher#themes-attribute)          |
 
 #### Mandatory attributes
 
@@ -194,13 +194,11 @@ you need to manually add these attributes so that the topic will work properly:
 
 ```html
 <dbp-nexus
-  auth
-  requested-login-status
-  analytics-event
-  initial-file-handling-state
-  clipboard-files
->
-</dbp-nexus>
+    auth
+    requested-login-status
+    analytics-event
+    initial-file-handling-state
+    clipboard-files></dbp-nexus>
 ```
 
 ### Design
