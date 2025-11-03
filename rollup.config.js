@@ -1,14 +1,9 @@
 import url from 'node:url';
 import process from 'node:process';
 import {globSync} from 'node:fs';
-import resolve from '@rollup/plugin-node-resolve';
-import commonjs from '@rollup/plugin-commonjs';
-import replace from '@rollup/plugin-replace';
-import terser from '@rollup/plugin-terser';
-import json from '@rollup/plugin-json';
+import {replacePlugin} from 'rolldown/experimental';
 import serve from 'rollup-plugin-serve';
 import license from 'rollup-plugin-license';
-import del from 'rollup-plugin-delete';
 import emitEJS from 'rollup-plugin-emit-ejs';
 import {getBabelOutputPlugin} from '@rollup/plugin-babel';
 import {
@@ -25,11 +20,10 @@ const pkg = require('./package.json');
 const appEnv = typeof process.env.APP_ENV !== 'undefined' ? process.env.APP_ENV : 'local';
 const watch = process.env.ROLLUP_WATCH === 'true';
 const buildFull = (!watch && appEnv !== 'test') || process.env.FORCE_FULL !== undefined;
-let useTerser = buildFull;
 let useBabel = buildFull;
 let checkLicenses = buildFull;
 let treeshake = buildFull;
-let isRolldown = process.argv.some((arg) => arg.includes('rolldown'));
+let nodeEnv = buildFull ? 'production' : 'development';
 
 // if true, app assets and configs are whitelabel
 let whitelabel;
@@ -172,6 +166,8 @@ export default (async () => {
             chunkFileNames: 'shared/[name].[hash].js',
             format: 'esm',
             sourcemap: true,
+            minify: buildFull,
+            cleanDir: true,
         },
         treeshake: treeshake,
         onwarn: function (warning, warn) {
@@ -188,9 +184,6 @@ export default (async () => {
             '.css': 'js', // work around rolldown handling the CSS import before the URL plugin can
         },
         plugins: [
-            del({
-                targets: 'dist/*',
-            }),
             whitelabel &&
                 emitEJS({
                     src: 'assets',
@@ -281,17 +274,14 @@ export default (async () => {
                         // typesenseNexusCollection: config.typesenseNexus.collection,
                     },
                 }),
-            replace({
-                // If you would like DEV messages, specify 'development'
-                // Otherwise use 'production'
-                'process.env.NODE_ENV': JSON.stringify('production'),
-                preventAssignment: true,
-            }),
-            !isRolldown &&
-                resolve({
-                    browser: true,
-                    preferBuiltins: true,
-                }),
+            replacePlugin(
+                {
+                    'process.env.NODE_ENV': JSON.stringify(nodeEnv),
+                },
+                {
+                    preventAssignment: true,
+                },
+            ),
             checkLicenses &&
                 license({
                     banner: {
@@ -327,12 +317,6 @@ Dependencies:
                         },
                     },
                 }),
-            !isRolldown &&
-                commonjs({
-                    include: 'node_modules/**',
-                    strictRequires: 'auto',
-                }),
-            !isRolldown && json(),
             whitelabel &&
                 (await assetPlugin(pkg.name, 'dist', {
                     copyTargets: [
@@ -494,7 +478,6 @@ Dependencies:
                         ],
                     ],
                 }),
-            useTerser ? terser() : false,
             watch
                 ? serve({
                       contentBase: '.',
