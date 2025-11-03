@@ -356,8 +356,9 @@ Dependencies:
                             dest: 'dist/' + (await getDistPath(pkg.name)),
                         },
                         {
-                            src: await getPackagePath('@fontsource/nunito-sans', '*'),
-                            dest: 'dist/' + (await getDistPath(pkg.name, 'fonts/nunito-sans')),
+                            src: await getPackagePath('@fontsource/nunito-sans', '.'),
+                            dest: 'dist/' + (await getDistPath(pkg.name, 'fonts')),
+                            rename: 'nunito-sans',
                         },
                         {
                             src: await getPackagePath('@dbp-toolkit/common', 'src/spinner.js'),
@@ -438,8 +439,9 @@ Dependencies:
                             dest: 'dist/' + (await getDistPath(pkg.name)),
                         },
                         {
-                            src: await getPackagePath('@tugraz/font-source-sans-pro', 'files/*'),
-                            dest: 'dist/' + (await getDistPath(pkg.name, 'fonts/source-sans-pro')),
+                            src: await getPackagePath('@tugraz/font-source-sans-pro', 'files'),
+                            dest: 'dist/' + (await getDistPath(pkg.name, 'fonts')),
+                            rename: 'source-sans-pro',
                         },
                         {
                             src: await getPackagePath('@tugraz/web-components', 'src/spinner.js'),
