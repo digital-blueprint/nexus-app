@@ -182,7 +182,6 @@ export class NexusFacets extends ScopedElementsMixin(DBPNexusLitElement) {
                 const facet = this.generateFacet(facetConfig);
                 facets.push(facet());
             }
-            facetConfig = null;
         });
 
         return facets;
