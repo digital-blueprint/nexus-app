@@ -1,6 +1,5 @@
 {
     "extends": ["config:base", "group:allNonMajor", "schedule:weekly", "docker:disable"],
-    "ignorePresets": [":prHourlyLimit2"],
     "rangeStrategy": "update-lockfile",
     "postUpdateOptions": ["npmDedupe"],
     "composer": {
@@ -10,5 +9,12 @@
         "enabled": true
     },
     "cloneSubmodules": true,
-    "packageRules": []
+    "internalChecksFilter": "strict",
+    "minimumReleaseAge": "5 days",
+    "packageRules": [
+        {
+            "matchUpdateTypes": ["lockFileMaintenance"],
+            "minimumReleaseAge": null
+        }
+    ]
 }
