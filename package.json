@@ -51,7 +51,7 @@
         "instantsearch.js": "^4.65.0",
         "lit": "^3.0.0",
         "typesense": "^3.0.0",
-        "typesense-instantsearch-adapter": "^2.8.0"
+        "typesense-instantsearch-adapter": "^3.0.0"
     },
     "scripts": {
         "fix": "npm run eslint:fix && npm run prettier:fix && npm run i18next:fix",
