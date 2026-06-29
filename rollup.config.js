@@ -469,9 +469,7 @@ Dependencies:
                         [
                             '@babel/preset-env',
                             {
-                                loose: false,
                                 shippedProposals: true,
-                                bugfixes: true,
                                 modules: false,
                                 targets: {
                                     esmodules: true,
