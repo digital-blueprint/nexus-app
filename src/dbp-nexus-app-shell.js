@@ -634,8 +634,9 @@ export class NexusAppShell extends AppShell {
                                     class="${classMap({hidden: this.disableLayouts})}"
                                     subscribe="default-layout,disabled-layout,app-name"
                                     lang="${this.lang}"
-                                    @layout-changed="${this
-                                        .handleLayoutChange}"></dbp-layout-switcher>
+                                    @layout-changed="${
+                                        this.handleLayoutChange
+                                    }"></dbp-layout-switcher>
                                 <dbp-language-select
                                     id="lang-select"
                                     lang="${this.lang}"></dbp-language-select>

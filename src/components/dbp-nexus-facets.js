@@ -372,21 +372,23 @@ export class NexusFacets extends ScopedElementsMixin(DBPNexusLitElement) {
                     },
                     collapseButtonText(options, {html}) {
                         return html`
-                            ${options.collapsed
-                                ? html`
-                                      <img
-                                          src="${that.basePath}local/@digital-blueprint/nexus-app/icon/chevron-down.svg"
-                                          width="16"
-                                          height="16"
-                                          alt="chevron-down" />
-                                  `
-                                : html`
-                                      <img
-                                          src="${that.basePath}local/@digital-blueprint/nexus-app/icon/chevron-up.svg"
-                                          width="16"
-                                          height="16"
-                                          alt="chevron-up" />
-                                  `}
+                            ${
+                                options.collapsed
+                                    ? html`
+                                          <img
+                                              src="${that.basePath}local/@digital-blueprint/nexus-app/icon/chevron-down.svg"
+                                              width="16"
+                                              height="16"
+                                              alt="chevron-down" />
+                                      `
+                                    : html`
+                                          <img
+                                              src="${that.basePath}local/@digital-blueprint/nexus-app/icon/chevron-up.svg"
+                                              width="16"
+                                              height="16"
+                                              alt="chevron-up" />
+                                      `
+                            }
                         `;
                     },
                 },
