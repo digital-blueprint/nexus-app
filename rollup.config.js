@@ -9,9 +9,10 @@ import {getBabelOutputPlugin} from '@rollup/plugin-babel';
 import {
     getPackagePath,
     getBuildInfo,
-    generateTLSConfig,
     getDistPath,
     assetPlugin,
+    getPort,
+    getResolveModules,
 } from '@dbp-toolkit/dev-utils';
 import {createRequire} from 'node:module';
 
@@ -33,8 +34,6 @@ let customAssetsPath;
 let devPath = 'assets_custom/dbp-nexus/assets/';
 // deployment path
 let deploymentPath = '../assets/';
-
-let useHTTPS = true;
 
 // set whitelabel bool according to used environment
 if (
@@ -168,6 +167,9 @@ export default (async () => {
             sourcemap: true,
             minify: buildFull,
             cleanDir: true,
+        },
+        resolve: {
+            modules: getResolveModules(),
         },
         treeshake: treeshake,
         onwarn: function (warning, warn) {
@@ -482,9 +484,8 @@ Dependencies:
                 ? serve({
                       contentBase: '.',
                       host: '127.0.0.1',
-                      port: 8001,
+                      port: await getPort('127.0.0.1', [8001, 8004]),
                       historyApiFallback: config.basePath + pkg.internalName + '.html',
-                      https: useHTTPS ? await generateTLSConfig() : false,
                       headers: {
                           'Content-Security-Policy': config.CSP,
                       },
