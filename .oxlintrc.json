@@ -4,6 +4,9 @@
     "categories": {
         "correctness": "error"
     },
+    "options": {
+        "typeAware": true
+    },
     "env": {
         "browser": true,
         "mocha": true
@@ -11,6 +14,21 @@
     "ignorePatterns": ["/vendor/"],
     "rules": {
         "no-unused-vars": ["error", {"args": "none"}],
+        "typescript/ban-ts-comment": "error",
+        "typescript/no-empty-object-type": "error",
+        "typescript/no-explicit-any": "error",
+        "typescript/no-misused-promises": "error",
+        "typescript/no-namespace": "error",
+        "typescript/no-require-imports": "error",
+        "typescript/no-unnecessary-type-assertion": "off",
+        "typescript/no-unnecessary-type-constraint": "error",
+        "typescript/no-unsafe-enum-comparison": "error",
+        "typescript/no-unsafe-function-type": "error",
+        "typescript/only-throw-error": "error",
+        "typescript/prefer-promise-reject-errors": "error",
+        "typescript/require-await": "error",
+        "typescript/restrict-plus-operands": "error",
+        "typescript/unbound-method": "off",
         "jsdoc/check-access": "warn",
         "jsdoc/check-property-names": "warn",
         "jsdoc/check-tag-names": "warn",
