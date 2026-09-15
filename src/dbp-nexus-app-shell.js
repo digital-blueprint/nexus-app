@@ -36,16 +36,19 @@ export class NexusAppShell extends AppShell {
         document.addEventListener('click', this.boundOpenActivityHandler);
         document.addEventListener('dbp-favorized', this.boundActivityFavorized);
 
-        this.favoriteActivities =
-            JSON.parse(localStorage.getItem('nexus-favorite-activities')) || [];
+        this.favoriteActivities = JSON.parse(
+            localStorage.getItem('nexus-favorite-activities') ?? '[]',
+        );
     }
 
     disconnectedCallback() {
         document.removeEventListener('click', this.boundOpenActivityHandler);
         document.removeEventListener('dbp-favorized', this.boundActivityFavorized);
+        super.disconnectedCallback();
     }
 
-    async waitForAuth() {
+    /** @returns {Promise<void>} */
+    waitForAuth() {
         return new Promise((resolve) => {
             const checkAuth = () => {
                 if (this.auth && this.auth.token) {
@@ -574,8 +577,8 @@ export class NexusAppShell extends AppShell {
 
         if (!appHidden) {
             // if app is loaded correctly, remove spinner
-            this.updateComplete.then(() => {
-                const slot = this.shadowRoot.querySelector('slot:not([name])');
+            void this.updateComplete.then(() => {
+                const slot = this.renderRoot.querySelector('slot:not([name])');
 
                 // remove for safari 12 support. safari 13+ supports display: none on slots.
                 if (slot) slot.remove();
@@ -600,7 +603,6 @@ export class NexusAppShell extends AppShell {
         }
 
         const kc = this.keycloakConfig;
-        const wideLayout = this.currentLayout === 'wide';
         return html`
             <slot class="${slotClassMap}"></slot>
             <dbp-auth-keycloak
@@ -622,7 +624,7 @@ export class NexusAppShell extends AppShell {
                 site-id="${this.matomoSiteId}"
                 git-info="${this.gitInfo}"></dbp-matomo>
             <div class="${mainClassMap}" id="root">
-                <div id="main" class="${classMap({'wide-layout': wideLayout})}">
+                <div id="main">
                     <dbp-notification id="dbp-notification" lang="${this.lang}"></dbp-notification>
                     <header>
                         <slot name="header">
@@ -630,13 +632,6 @@ export class NexusAppShell extends AppShell {
                                 <dbp-theme-switcher
                                     subscribe="themes,dark-mode-theme-override"
                                     lang="${this.lang}"></dbp-theme-switcher>
-                                <dbp-layout-switcher
-                                    class="${classMap({hidden: this.disableLayouts})}"
-                                    subscribe="default-layout,disabled-layout,app-name"
-                                    lang="${this.lang}"
-                                    @layout-changed="${
-                                        this.handleLayoutChange
-                                    }"></dbp-layout-switcher>
                                 <dbp-language-select
                                     id="lang-select"
                                     lang="${this.lang}"></dbp-language-select>

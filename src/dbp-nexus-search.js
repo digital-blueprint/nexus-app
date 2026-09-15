@@ -25,10 +25,7 @@ import {name as pkgName} from '../package.json';
 import {preactRefReplaceElement} from './utils.js';
 import {createInstance} from './i18n.js';
 
-// rollup and rolldown resolve the import differently
-// https://github.com/rolldown/rolldown/issues/6438
-let TypesenseInstantSearchAdapterClass =
-    TypesenseInstantSearchAdapter.default ?? TypesenseInstantSearchAdapter;
+/** @typedef {import('instantsearch.js/es/widgets/configure/configure').ConfigureWidgetParams & {hitsPerPage: number}} NexusConfigureWidgetParams */
 
 const TYPESENSE_COLLECTION = 'nexus--current';
 
@@ -41,12 +38,14 @@ class HitElement extends LangMixin(DBPNexusLitElement, createInstance) {
 
     static get scopedElements() {
         return {
+            ...super.scopedElements,
             'dbp-icon': Icon,
         };
     }
 
     static get properties() {
         return {
+            ...super.properties,
             hitData: {type: Object, attribute: false},
             isFavorite: {type: Boolean, attribute: 'is-favorite'},
         };
@@ -190,10 +189,12 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
         this.search = null;
         this.configureWidget = null;
         this.favoriteActivities = [];
+        this.loadingTranslations = false;
     }
 
     static get scopedElements() {
         return {
+            ...super.scopedElements,
             'dbp-icon': Icon,
             'dbp-modal': Modal,
             'dbp-button': Button,
@@ -246,11 +247,6 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
                     // not before, or Instantsearch will break! Maybe there is some leaked stated between the two?
                     this.initTypesenseService();
                     break;
-
-                case 'favorite-activities':
-                    this.favoriteActivities = JSON.parse(this.favoriteActivities);
-                    this.requestUpdate();
-                    break;
             }
         });
 
@@ -277,13 +273,14 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
                 nodes: [
                     {
                         host: typesenseUrl.hostname,
-                        port:
+                        port: Number(
                             typesenseUrl.port ||
-                            (typesenseUrl.protocol === 'https:'
-                                ? '443'
-                                : typesenseUrl.protocol === 'http:'
-                                  ? '80'
-                                  : ''),
+                                (typesenseUrl.protocol === 'https:'
+                                    ? '443'
+                                    : typesenseUrl.protocol === 'http:'
+                                      ? '80'
+                                      : '0'),
+                        ),
                         path: typesenseUrl.pathname,
                         protocol: typesenseUrl.protocol.replace(':', ''),
                     },
@@ -359,9 +356,11 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
     }
 
     createConfigureWidget() {
-        this.configureWidget = configure({
+        /** @type {NexusConfigureWidgetParams} */
+        const searchParameters = {
             hitsPerPage: 12,
-        });
+        };
+        this.configureWidget = configure(searchParameters);
 
         return this.configureWidget;
     }
@@ -389,6 +388,9 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
      * Get the config for the Typesense Instantsearch adapter depending on the fuzzy search setting
      */
     getTypesenseInstantsearchAdapterConfig() {
+        if (!this.serverConfig) {
+            throw new Error('Typesense server configuration is not initialized');
+        }
         return {
             server: this.serverConfig,
             additionalSearchParameters: this.getSearchParameters(),
@@ -408,7 +410,7 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
      * Create the Instantsearch instance
      */
     createInstantsearch() {
-        const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapterClass(
+        const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter(
             this.getTypesenseInstantsearchAdapterConfig(),
         );
 
@@ -449,7 +451,9 @@ class NexusSearch extends ScopedElementsMixin(DBPNexusLitElement) {
                         (item) => item.name === hit.activityName,
                     );
 
-                    let hitElement = nexus.createScopedElement('dbp-nexus-hit-element');
+                    const hitElement = /** @type {HitElement} */ (
+                        nexus.createScopedElement('dbp-nexus-hit-element')
+                    );
                     hitElement.setAttribute('subscribe', 'lang');
                     hitElement.hitData = hit;
                     hitElement.isFavorite = isFavorite;

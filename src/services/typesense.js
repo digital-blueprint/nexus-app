@@ -11,7 +11,7 @@ export class TypesenseService {
     /**
      * Fetch an item by its Typesense ID
      * @param itemId
-     * @returns {Promise<object>}
+     * @returns {Promise<object | undefined>}
      */
     async fetchItem(itemId) {
         try {

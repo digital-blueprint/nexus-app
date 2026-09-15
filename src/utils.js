@@ -43,9 +43,10 @@ export const dataURLtoFile = (dataURL, filename) => {
  */
 export function renderFieldWithHighlight(hit, fieldName) {
     const fieldNameValue = fieldName + '.value';
-    const htmlContent = getNestedProperty(hit['_highlightResult'], fieldNameValue)
-        ? getNestedProperty(hit['_highlightResult'], fieldNameValue)
-        : getNestedProperty(hit, fieldName);
+    const htmlContent =
+        getNestedProperty(hit['_highlightResult'], fieldNameValue) ??
+        getNestedProperty(hit, fieldName) ??
+        '';
     const template = document.createElement('template');
     template.innerHTML = htmlContent;
 

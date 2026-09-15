@@ -10,6 +10,8 @@ export default class DBPNexusLitElement extends ScopedElementsMixin(DBPLitElemen
         this._i18n = createInstance();
         this.lang = this._i18n.language;
         this.entryPointUrl = '';
+        this.basePath = '';
+        this._loginState = [];
     }
 
     static get scopedElements() {
@@ -91,7 +93,7 @@ export default class DBPNexusLitElement extends ScopedElementsMixin(DBPLitElemen
      * Send a fetch to given url with given options
      * @param url
      * @param options
-     * @returns {object} response (error or result)
+     * @returns {Promise<object>} response (error or result)
      */
     async httpGetAsync(url, options) {
         let response = await fetch(url, options)

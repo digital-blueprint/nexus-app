@@ -10,6 +10,19 @@ import {connectCurrentRefinements, connectClearRefinements} from 'instantsearch.
 import {getIconSVGURL} from '../utils.js';
 import {createInstance} from '../i18n.js';
 
+/** @typedef {import('instantsearch.js/es/widgets/refinement-list/refinement-list').RefinementListWidgetParams} RefinementListWidgetParams */
+/** @typedef {import('instantsearch.js/es/connectors/refinement-list/connectRefinementList').RefinementListConnectorParams} RefinementListConnectorParams */
+/** @typedef {RefinementListWidgetParams & RefinementListConnectorParams & {fieldType: string}} NexusRefinementListOptions */
+
+/**
+ * @typedef {object} FacetConfig
+ * @property {string} groupId - ID of the group containing the facet.
+ * @property {string} schemaField - Typesense field used by the facet.
+ * @property {string} [schemaFieldType] - Type of facet control to render.
+ * @property {{panel?: object, facet?: object}} [facetOptions] - Widget option overrides.
+ * @property {boolean} [usePanel] - Whether to wrap the facet in an InstantSearch panel.
+ */
+
 class FacetLabel extends DBPLitElement {
     constructor() {
         super();
@@ -55,7 +68,7 @@ export class NexusFacets extends ScopedElementsMixin(DBPNexusLitElement) {
     constructor() {
         super();
         // this.search = null;
-        /** @type {HTMLElement} */
+        /** @type {HTMLElement | null} */
         this.searchResultsElement = null;
         this.search = null;
         this.facets = [];
@@ -80,8 +93,12 @@ export class NexusFacets extends ScopedElementsMixin(DBPNexusLitElement) {
         allFiltersContainer.append(currentRefinementsContainer);
         allFiltersContainer.append(clearRefinementsContainer);
 
-        this.searchResultsElement = /** @type {HTMLElement} */ (this.closest('.result-container'));
-        this.searchResultsElement.prepend(allFiltersContainer);
+        const searchResultsElement = this.closest('.result-container');
+        if (!(searchResultsElement instanceof HTMLElement)) {
+            throw new Error('Nexus facets must be inside a result container');
+        }
+        this.searchResultsElement = searchResultsElement;
+        searchResultsElement.prepend(allFiltersContainer);
     }
 
     static get scopedElements() {
@@ -150,13 +167,14 @@ export class NexusFacets extends ScopedElementsMixin(DBPNexusLitElement) {
     openFacetOnPersonSelect(facetName) {
         const facetID = facetName.replace('.', '-');
 
-        /** @type {HTMLElement} */
         const facet = this._(`#${facetID}`);
+        const panelElement = facet?.querySelector('.ais-Panel');
 
-        if (facet && facet.querySelector('.ais-Panel').classList.contains('ais-Panel--collapsed')) {
-            /** @type {HTMLElement} */
+        if (panelElement?.classList.contains('ais-Panel--collapsed')) {
             const facetHeader = facet.querySelector('.ais-Panel-header');
-            facetHeader.click();
+            if (facetHeader instanceof HTMLElement) {
+                facetHeader.click();
+            }
         }
     }
 
@@ -224,15 +242,16 @@ export class NexusFacets extends ScopedElementsMixin(DBPNexusLitElement) {
     createCurrentRefinements = () => {
         const customCurrentRefinements = connectCurrentRefinements(this.renderCurrentRefinements);
 
-        return customCurrentRefinements({
-            container: this.searchResultsElement.querySelector('#current-filters'),
-        });
+        return customCurrentRefinements({});
     };
 
     renderCurrentRefinements = (renderOptions) => {
         const i18n = this._i18n;
-        const {items, refine, widgetParams} = renderOptions;
-        const container = widgetParams.container;
+        const {items, refine} = renderOptions;
+        const container = this.searchResultsElement?.querySelector('#current-filters');
+        if (!(container instanceof HTMLElement)) {
+            return;
+        }
 
         // Render the widget
         let listItems = items.map((item) => {
@@ -316,27 +335,27 @@ export class NexusFacets extends ScopedElementsMixin(DBPNexusLitElement) {
                 refine();
             });
             this.searchResultsElement
-                .querySelector('.clear-refinement-container')
-                .appendChild(clearButton);
+                ?.querySelector('.clear-refinement-container')
+                ?.appendChild(clearButton);
         }
 
-        this.searchResultsElement
-            .querySelector('.clear-refinement-container')
-            .querySelector('button').disabled = !canRefine;
+        const clearButton = this.searchResultsElement?.querySelector(
+            '.clear-refinement-container button',
+        );
+        if (clearButton instanceof HTMLButtonElement) {
+            clearButton.disabled = !canRefine;
+        }
     };
 
     createClearRefinements = () => {
         const customClearRefinements = connectClearRefinements(this.renderClearRefinements);
 
-        return customClearRefinements({
-            container: this.searchResultsElement.querySelector('#clear-filters'),
-        });
+        return customClearRefinements({});
     };
 
     /**
      * Generate facets based on schema name
-     * @param {object} facetConfig - configuration for the facet
-     * @returns {function(): *}
+     * @param {FacetConfig} facetConfig - configuration for the facet
      */
     generateFacet(facetConfig) {
         const i18n = this._i18n;
@@ -404,6 +423,7 @@ export class NexusFacets extends ScopedElementsMixin(DBPNexusLitElement) {
             };
 
             if (schemaFieldType === 'checkbox') {
+                /** @type {NexusRefinementListOptions} */
                 const defaultRefinementListOptions = {
                     fieldType: schemaFieldType,
                     container: that._(`#${cssClass}`),
@@ -411,7 +431,6 @@ export class NexusFacets extends ScopedElementsMixin(DBPNexusLitElement) {
                     sortBy: ['isRefined:desc', 'count:desc', 'name:asc'],
                     limit: 12,
                     searchable: true,
-                    searchableShowReset: false,
                     templates: {
                         item(item, {html}) {
                             return html`
@@ -441,6 +460,7 @@ export class NexusFacets extends ScopedElementsMixin(DBPNexusLitElement) {
                         },
                     },
                 };
+                /** @type {NexusRefinementListOptions} */
                 const refinementListOptions = {
                     ...defaultRefinementListOptions,
                     ...(facetOptions.facet || {}),
@@ -495,11 +515,13 @@ export class NexusFacets extends ScopedElementsMixin(DBPNexusLitElement) {
                 const facetCount = facetItems.length;
 
                 // Toggle is-expanded class on showMoreButton click
-                if (showMoreButton && showMoreButton.getAttribute('data-event-added') === null) {
+                if (
+                    showMoreButton &&
+                    facetList &&
+                    showMoreButton.getAttribute('data-event-added') === null
+                ) {
                     showMoreButton.addEventListener('click', () => {
-                        widget
-                            .querySelector('.ais-RefinementList-list')
-                            .classList.toggle('is-expanded');
+                        facetList.classList.toggle('is-expanded');
                     });
                     showMoreButton.setAttribute('data-event-added', 'true');
                 }
